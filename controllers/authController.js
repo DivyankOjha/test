@@ -17,6 +17,20 @@ const signToken = (id) => {
 
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
+  //converting to miliseconds  90 days *24 hrs *60 min * 60 sec *1000 ms
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    //secure: true,
+    httpOnly: true, // cookie can not be accessed or modify by the browser , prevent cross site attacks
+  };
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+  res.cookie('jwt', token, cookieOptions);
+
+  //remove the password from the output
+  user.password = undefined;
 
   res.status(statusCode).json({
     status: 'success',
@@ -171,6 +185,14 @@ exports.login = catchAsync(async (req, res, next) => {
     mobilenumber: currentUser.mobilenumber,
   });
 });
+
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({ status: 'success' });
+};
 
 exports.protect = catchAsync(async (req, res, next) => {
   //1. getting token and check if its there/exists
