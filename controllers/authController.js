@@ -66,7 +66,7 @@ exports.signup = catchAsync(async (req, res, next) => {
       pass: 'WELCOME@18',
     },
   });
-  const url = `http://localhost:3000/api/users/confirmation/${token}`;
+  const url = `http://localhost:3002/api/users/confirmation/${token}`;
   var mailOptions = {
     from: 'Rahul Dhingra <rahul.dhingra@digimonk.in>',
     to: newUser.email,

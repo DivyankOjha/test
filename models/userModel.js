@@ -1,13 +1,23 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const { urlencoded } = require('body-parser');
+
 const crypto = require('crypto');
-const { stringify } = require('querystring');
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: [true, 'Please Tell us your name'] },
-
+  subscription: {
+    usedPoints: { type: Number, default: 0 },
+    totalPoints: { type: Number, default: 1500 },
+  },
+  flipbook: [
+    {
+      propertyName: String,
+    },
+    {
+      coverPhoto: String,
+    },
+  ],
   email: {
     type: String,
     required: [true, 'Please provide your email'],
