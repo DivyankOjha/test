@@ -5,7 +5,6 @@ const helmet = require('helmet');
 const userRouter = require('./routes/user');
 const houseRouter = require('./routes/house');
 const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
 
 const app = express();
 // 1) MIDDLEWARES
@@ -42,6 +41,20 @@ app.use(express.static(`${__dirname}/public`));
 //test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  next();
+});
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PATCH, PUT, DELETE, OPTIONS'
+  );
+
   next();
 });
 
