@@ -2,9 +2,11 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+
 const userRouter = require('./routes/user');
 const houseRouter = require('./routes/house');
-const mongoSanitize = require('express-mongo-sanitize');
+const inquiryRoutes = require('./routes/inquiry');
 
 const app = express();
 
@@ -62,4 +64,6 @@ app.use((req, res, next) => {
 
 app.use('/api/users', userRouter);
 app.use('/api/house', houseRouter);
+app.use('/api/inquiry', inquiryRoutes);
+
 module.exports = app;

@@ -26,8 +26,7 @@ const userSchema = new mongoose.Schema({
     validate: [validator.isEmail, 'Please provide a valid email'],
   },
   mobilenumber: Number,
-  address: String,
-  zipcode: Number,
+
   role: {
     type: String,
     enum: ['user', 'admin', 'superadmin'],

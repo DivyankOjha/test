@@ -6,4 +6,6 @@ const houseController = require('./../controllers/houseController');
 router.post('/house', houseController.house);
 router.get('/housedata', houseController.getAllHouse);
 
+router.post('/land', houseController.land);
+router.get('/land', houseController.getAllland);
 module.exports = router;
