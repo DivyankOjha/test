@@ -80,7 +80,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     //   token +
     //   '.\n',
   };
-  transporter.sendMail(mailOptions, function (err) {
+  await transporter.sendMail(mailOptions, function (err) {
     if (err) {
       return res.status(500).send({ msg: err.message });
     }
