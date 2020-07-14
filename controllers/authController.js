@@ -81,12 +81,12 @@ exports.signup = catchAsync(async (req, res, next) => {
     //   '.\n',
   };
   await transporter.sendMail(mailOptions, function (err) {
-    if (err) {
-      return res.status(500).send({ msg: err.message });
-    }
-    //res
-    // .status(200)
-    //  .send('A verification email has been sent to ' + user.email + '.');
+    // if (err) {
+    //   return res.status(500).send({ msg: err.message });
+    // }
+    res
+      .status(200)
+      .send('A verification email has been sent to ' + user.email + '.');
   });
 
   // res.status(201).json({
