@@ -9,6 +9,10 @@ const userSchema = new mongoose.Schema({
   subscription: {
     usedPoints: { type: Number, default: 0 },
     totalPoints: { type: Number, default: 1500 },
+    type: {
+      buy: { type: String, default: false },
+      rent: { type: String, default: false },
+    },
   },
   flipbook: [
     {

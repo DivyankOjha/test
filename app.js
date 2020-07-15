@@ -7,6 +7,8 @@ const mongoSanitize = require('express-mongo-sanitize');
 const userRouter = require('./routes/user');
 const houseRouter = require('./routes/house');
 const inquiryRoutes = require('./routes/inquiry');
+const subscriptionRoutes = require('./routes/subscription');
+const propertyRoutes = require('./routes/property');
 
 const app = express();
 
@@ -65,5 +67,7 @@ app.use((req, res, next) => {
 app.use('/api/users', userRouter);
 app.use('/api/house', houseRouter);
 app.use('/api/inquiry', inquiryRoutes);
+app.use('/api/subscription', subscriptionRoutes);
+app.use('/api/property', propertyRoutes);
 
 module.exports = app;

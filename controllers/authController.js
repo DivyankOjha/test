@@ -63,7 +63,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     service: 'gmail',
     auth: {
       user: 'diviojha6@gmail.com',
-      pass: 'WELCOME@18',
+      pass: 'WELCOME@20',
     },
   });
   const url = `http://localhost:3002/api/users/confirmation/${token}`;
@@ -82,13 +82,16 @@ exports.signup = catchAsync(async (req, res, next) => {
   };
   transporter.sendMail(mailOptions, function (err) {
     if (err) {
-      return res.status(500).send({ msg: err.message });
+      console.log('ERRor sending mail: ' + err);
+    } else {
+      console.log('Mail sent to: ' + newUser.email);
     }
-    res
-      .status(200)
-      .send('A verification email has been sent to ' + newUser.email + '.');
-    // .send('A verification email has been sent to ' + user.email + '.');
   });
+  //  res
+  //    .status(200)
+  // .send('A verification email has been sent to ' + newUser.email + '.');
+  // .send('A verification email has been sent to ' + user.email + '.');
+
   createSendToken(newUser, 201, res);
 
   // res.status(201).json({
