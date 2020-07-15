@@ -84,9 +84,9 @@ exports.signup = catchAsync(async (req, res, next) => {
     if (err) {
       return res.status(500).send({ msg: err.message });
     }
-    res
-      .status(200)
-      .send('A verification email has been sent to ' + newUser.email + '.');
+   // res
+      //.status(200)
+     // .send('A verification email has been sent to ' + newUser.email + '.');
     // .send('A verification email has been sent to ' + user.email + '.');
   });
   createSendToken(newUser, 201, res);
