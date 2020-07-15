@@ -43,7 +43,7 @@ const createSendToken = (user, statusCode, res) => {
 
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
-  createSendToken(newUser, 201, res);
+  // createSendToken(newUser, 201, res);
   // const newUser = await User.create({
   //   //User.save
   //   name: req.body.name,
@@ -89,6 +89,7 @@ exports.signup = catchAsync(async (req, res, next) => {
       .send('A verification email has been sent to ' + newUser.email + '.');
     // .send('A verification email has been sent to ' + user.email + '.');
   });
+  createSendToken(newUser, 201, res);
 
   // res.status(201).json({
   //   status: 'success',
