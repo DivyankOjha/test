@@ -63,7 +63,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     service: 'gmail',
     auth: {
       user: 'diviojha6@gmail.com',
-      pass: 'WELCOME@18',
+      pass: 'WELCOME@20',
     },
   });
   const url = `http://localhost:3002/api/users/confirmation/${token}`;
