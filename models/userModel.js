@@ -3,9 +3,11 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
 const crypto = require('crypto');
+const { pathToFileURL } = require('url');
 
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: [true, 'Please Tell us your name'] },
+  firstname: { type: String, required: [true, 'Please Tell us your name'] },
+  lastname: { type: String, required: [true, 'Please Tell us your last name'] },
   subscription: {
     usedPoints: { type: Number, default: 0 },
     totalPoints: { type: Number, default: 1500 },
@@ -14,7 +16,7 @@ const userSchema = new mongoose.Schema({
       rent: { type: String, default: false },
     },
   },
-  imagepath: String,
+  imagepath: { type: String }, //we can set a default profile image for the user ???
   flipbook: {
     propertyName: String,
     coverPhoto: String,
