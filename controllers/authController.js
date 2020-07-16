@@ -66,7 +66,10 @@ exports.signup = catchAsync(async (req, res, next) => {
       pass: 'WELCOME@20',
     },
   });
-  const url = `http://localhost:3002/api/users/confirmation/${token}`;
+  const url = `${req.protocol}://${req.get(
+    'host'
+  )}/api/users/confirmation/${token}`;
+  //const url = `http://localhost:3002/api/users/confirmation/${token}`;
   var mailOptions = {
     from: 'Rahul Dhingra <rahul.dhingra@digimonk.in>',
     to: newUser.email,
@@ -162,8 +165,12 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!email || !password) {
     return next(new AppError('Please provie email and password!', 400));
   }
+  // const user = await User.findOne({ email });
   //user exists??
   const user = await User.findOne({ email }).select('+password');
+  if (!user) {
+    return next(new AppError('User not found'));
+  }
   if (!user.isActive) {
     //throw new Error('Please confirm your email to login');
     return next(new AppError('Please confirm your email to login'));
@@ -208,19 +215,28 @@ exports.protect = catchAsync(async (req, res, next) => {
   ) {
     token = req.headers.authorization.split(' ')[1];
   }
+  // } else if (req.cookies.jwt) {
+  //   token = req.cookies.jwt;
+  // }
 
-  //console.log(token);
+  //console.log(('token', token));
 
   if (!token) {
     return next(
       new AppError('You are not logged in! Please log in to continue', 401)
     );
   }
+  // if (token == null) {
+  //   return next(
+  //     new AppError('You are not logged in! Please log in to continue', 401)
+  //   );
+  // }
   //2. Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
   //console.log(decoded);
   //3. check if user still exists
   const currentUser = await User.findById(decoded.id);
+
   if (!currentUser) {
     return next(
       new AppError('The user belonging to the token does no longer exist', 401)
@@ -329,6 +345,47 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   // 4) Log user in, send JWT
   createSendToken(user, 200, res);
+});
+
+exports.editUserProfile = catchAsync(async (req, res, next) => {
+  //const user = await User.findById(req.user.id);
+  // console.log(user);
+  const user = await User.findByIdAndUpdate(req.user.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!user) {
+    return next(new AppError('No user found with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user,
+    },
+  });
+  // if (user) {
+  //   const email = { $set: { email: req.body.email } };
+  //   const user = await User.updateOne(email);
+  //   createSendToken(user, 200, res);
+  // } else {
+  //   return next(new AppError('User not found!'));
+  // }
+
+  // const email = { $set: { email: req.body.email } };
+  // console.log(req.params.id);
+  // console.log(email);
+  // const user = await User.updateOne({ _id: req.params.id }, email);
+  //const user = await User.updateMany({ _id: req.params.id }, user1);
+
+  // user.name = req.body.name;
+  // user.email = req.body.email;
+  // user.mobilenumber = req.body.mobilenumber;
+  //await user.save();
+  // console.log(user);
+
+  //createSendToken(user, 200, res);
 });
 
 //user.isActive = true;

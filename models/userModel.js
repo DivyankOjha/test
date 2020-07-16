@@ -14,14 +14,12 @@ const userSchema = new mongoose.Schema({
       rent: { type: String, default: false },
     },
   },
-  flipbook: [
-    {
-      propertyName: String,
-    },
-    {
-      coverPhoto: String,
-    },
-  ],
+  imagepath: String,
+  flipbook: {
+    propertyName: String,
+    coverPhoto: String,
+  },
+
   email: {
     type: String,
     required: [true, 'Please provide your email'],

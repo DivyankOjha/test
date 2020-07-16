@@ -14,11 +14,11 @@ const Currency = mongoose.Types.Currency;
 // );
 
 const houseSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'User',
-    required: true,
-  },
+  // user: {
+  //   type: mongoose.Schema.ObjectId,
+  //   ref: 'User',
+  //   required: true,
+  // },
   area: { type: Number },
   minPrice: { type: Currency },
   maxPrice: { type: Currency },
