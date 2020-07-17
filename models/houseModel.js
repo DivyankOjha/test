@@ -99,6 +99,29 @@ const houseSchema = new mongoose.Schema({
     min: 0,
     max: 500,
   },
+  //page 3
+  sellername: String,
+  sellerContactNumber: Number,
+  sellerofficeaddress: String,
+  selleremail: String,
+  sellertype: {
+    owner: { type: String, default: false },
+    agent: { type: String, default: false },
+  },
+  selleraltnumber: Number,
+  selleraltemail: String,
+  sellerwebsite: String,
+  sellerlogo: String, //image path
+  //remaining from doc
+  maximumprice: Number,
+  minimumprice: Number,
+  location: String, //address
+  description: String, // this point - !cleared
+  maplink: String,
+  nearestplace: {
+    placename: String,
+    kms: String,
+  },
 });
 
 const House = mongoose.model('House', houseSchema);

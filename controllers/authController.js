@@ -7,8 +7,6 @@ const sendEmail = require('./../utils/email');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
-const { db } = require('./../models/userModel');
-
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -74,7 +72,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     from: 'Rahul Dhingra <rahul.dhingra@digimonk.in>',
     to: newUser.email,
     subject: 'Account Verification Token',
-    html: `Please click this link to confirm you email: <a href="${url}">${url}</a>`,
+    html: `Please click this link to confirm you email: <a href="${url}">${url}</a>  <br>
+    <p>click here to verify your email : <a href="${url}" target="_blank"><button>Verify!</button></a></p>`,
     // text:
     //   'Hello,\n\n' +
     //   'Please verify your account by clicking the link: \nhttp://' +

@@ -49,6 +49,29 @@ const hotelSchema = new mongoose.Schema({
   kmtotarmac: { type: Number },
   kmtowater: { type: Number },
   electricity: { type: Number },
+  //page 3
+  sellername: String,
+  sellerContactNumber: Number,
+  sellerofficeaddress: String,
+  selleremail: String,
+  sellertype: {
+    owner: { type: String, default: false },
+    agent: { type: String, default: false },
+  },
+  selleraltnumber: Number,
+  selleraltemail: String,
+  sellerwebsite: String,
+  sellerlogo: String, //image path
+  //remaining from doc
+  maximumprice: Number,
+  minimumprice: Number,
+  location: String, //address
+  description: String, // this point - !cleared
+  maplink: String,
+  nearestplace: {
+    placename: String,
+    kms: String,
+  },
 });
 
 const Hotel = mongoose.model('Hotel', hotelSchema);
