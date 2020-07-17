@@ -73,7 +73,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     to: newUser.email,
     subject: 'Account Verification Token',
     html: `Please click this link to confirm you email: <a href="${url}">${url}</a>  <br>
-    <p>click here to verify your email : <a href="${url}" target="_blank"><button>Verify!</button></a></p>`,
+    <p>click here to verify your email : <a href="${url}" target="_blank"><button style="background-color:rgb(72, 21, 192); color:aliceblue">Verify!</p>`,
     // text:
     //   'Hello,\n\n' +
     //   'Please verify your account by clicking the link: \nhttp://' +
