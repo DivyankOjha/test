@@ -3,7 +3,6 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
 const crypto = require('crypto');
-const { pathToFileURL } = require('url');
 
 const userSchema = new mongoose.Schema({
   firstname: { type: String, required: [true, 'Please Tell us your name'] },

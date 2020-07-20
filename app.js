@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -9,6 +10,7 @@ const houseRouter = require('./routes/house');
 const inquiryRoutes = require('./routes/inquiry');
 const subscriptionRoutes = require('./routes/subscription');
 const propertyRoutes = require('./routes/property');
+const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();
 
@@ -49,7 +51,9 @@ app.use(mongoSanitize());
 //app.use(express.json({ limit: '10kb' }));
 app.use(express.json());
 
-app.use(express.static(`${__dirname}/public`));
+//app.use(express.static(`${__dirname}/public`));
+// Serving static files
+app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use((req, res, next) => {
 //   console.log('Hello from the middleware 👋');
@@ -69,5 +73,6 @@ app.use('/api/house', houseRouter);
 app.use('/api/inquiry', inquiryRoutes);
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/property', propertyRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 module.exports = app;
