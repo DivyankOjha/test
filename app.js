@@ -11,6 +11,7 @@ const inquiryRoutes = require('./routes/inquiry');
 const subscriptionRoutes = require('./routes/subscription');
 const propertyRoutes = require('./routes/property');
 const dashboardRoutes = require('./routes/dashboard');
+const userProfileRoutes = require('./routes/userProfile');
 
 const app = express();
 
@@ -40,16 +41,24 @@ app.use(helmet());
 app.use(morgan('dev'));
 
 //body parser - reading data from the body into req.body
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
 
-app.use(bodyParser.urlencoded({ extended: false }, { limit: '50mb' }));
+//app.use(bodyParser.urlencoded({ extended: false }, { limit: '50mb' }));
+app.use(
+  bodyParser.urlencoded({
+    limit: '50mb',
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
+//app.use(express.json({ limit: '50mb' }));
 
 //Data Sanitization against NoSql Query Injection
 app.use(mongoSanitize());
 //Data sanitization against xss
 
 //app.use(express.json({ limit: '10kb' }));
-app.use(express.json());
+//app.use(express.json());
 
 //app.use(express.static(`${__dirname}/public`));
 // Serving static files
@@ -74,5 +83,6 @@ app.use('/api/inquiry', inquiryRoutes);
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/property', propertyRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/userprofile', userProfileRoutes);
 
 module.exports = app;

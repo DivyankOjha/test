@@ -37,13 +37,13 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: [true, 'Provide a password'],
+    // required: [true, 'Provide a password'],
     minlength: 8,
     select: false,
   },
   passwordConfirm: {
     type: String,
-    required: [true, 'Please confirm your password'],
+    //required: [true, 'Please confirm your password'],
     validate: {
       //This only works on create and SAVE
       validator: function (el) {

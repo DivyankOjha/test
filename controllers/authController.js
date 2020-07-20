@@ -13,21 +13,18 @@ const signToken = (id) => {
   });
 };
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
-  //converting to miliseconds  90 days *24 hrs *60 min * 60 sec *1000 ms
-  const cookieOptions = {
+
+  res.cookie('jwt', token, {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-    //secure: true,
-    httpOnly: true, // cookie can not be accessed or modify by the browser , prevent cross site attacks
-  };
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+    httpOnly: true,
+    //secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+  });
 
-  res.cookie('jwt', token, cookieOptions);
-
-  //remove the password from the output
+  // Remove password from output
   user.password = undefined;
 
   res.status(statusCode).json({
@@ -161,41 +158,73 @@ exports.activateAccount = catchAsync(async (req, res, next) => {
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
-  //checking email pass exists?
+  // 1) Check if email and password exist
   if (!email || !password) {
-    return next(new AppError('Please provie email and password!', 400));
+    return next(new AppError('Please provide email and password!', 400));
   }
-  // const user = await User.findOne({ email });
-  //user exists??
+  // 2) Check if user exists && password is correct
   const user = await User.findOne({ email }).select('+password');
-  if (!user) {
-    return next(new AppError('User not found'));
-  }
-  if (!user.isActive) {
-    //throw new Error('Please confirm your email to login');
-    return next(new AppError('Please confirm your email to login'));
-  }
 
-  //console.log(user);
-  //pass correct??
-  // const correct = await user.correctPassword(password, user.password);
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
   }
 
-  //everything is ok, send token
-  const token = signToken(user._id);
-  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  const currentUser = await User.findById(decoded.id);
-  //console.log(decoded);
-  res.status(200).json({
-    status: 'success',
-    token,
-    id: currentUser._id,
-    name: currentUser.name,
-    email: currentUser.email,
-    mobilenumber: currentUser.mobilenumber,
-  });
+  // 3) If everything ok, send token to client
+  createSendToken(user, 200, req, res);
+});
+
+// for google and facebook login
+exports.extSignup = catchAsync(async (req, res, next) => {
+  const { firstname, lastname, email } = req.body;
+
+  // 1) Check if email  exist
+  if (!email) {
+    return next(new AppError('Please provide email ', 400));
+  }
+  // if (!user) {
+  //   return next(new AppError('Incorrect email', 401));
+  // }
+
+  const newUser = await User.create(req.body);
+  console.log(newUser._id);
+
+  const user = await User.findByIdAndUpdate(
+    {
+      _id: newUser._id,
+    },
+    {
+      $set: {
+        isActive: true,
+      },
+    }
+  );
+  console.log(user);
+  console.log('newUser:' + newUser);
+
+  const token = signToken(newUser._id);
+
+  // 3) If everything ok, send token to client
+  createSendToken(user, 200, req, res);
+});
+
+// for google and facebook login
+exports.extLogin = catchAsync(async (req, res, next) => {
+  const { email } = req.body;
+
+  // 1) Check if email exist
+  if (!email) {
+    return next(new AppError('Please provide email ', 400));
+  }
+  // 2) Check if user exists && password is correct
+  const user = await User.findOne({ email });
+  console.log(user._id);
+
+  if (!user) {
+    return next(new AppError('Incorrect email', 401));
+  }
+
+  // 3) If everything ok, send token to client
+  createSendToken(user, 200, req, res);
 });
 
 exports.logout = (req, res) => {
