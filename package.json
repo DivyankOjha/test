@@ -19,7 +19,6 @@
     "express": "^4.17.1",
     "express-mongo-sanitize": "^2.0.0",
     "helmet": "^3.23.3",
-    "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
     "mailgun-js": "^0.22.0",
     "mongoose": "^5.9.22",
