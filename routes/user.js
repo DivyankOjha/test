@@ -31,8 +31,9 @@ router.patch(
   authController.editUserProfile
 );
 
-router.get('/filter', adminController.filterbydate);
-router.get('/searchuser', adminController.searchUser);
+//router.get('/newusers', adminController.getnewUsers);
+//router.get('/filter', adminController.filterbydate);
+//router.get('/searchuser', adminController.searchUser);
 
 router.delete('/deleteuser/:id', adminController.deleteUser);
 
