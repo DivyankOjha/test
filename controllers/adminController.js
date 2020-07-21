@@ -22,7 +22,7 @@ exports.getnewUsers = catchAsync(async (req, res) => {
     // createdAt: { $lt: endDate },
   })
     .sort({ createdAt: -1 })
-    .limit(1);
+    .limit(10);
   // console.log('users: ' + users);
 
   res.status(200).json({
