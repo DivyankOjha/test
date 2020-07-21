@@ -31,9 +31,9 @@ router.patch(
   authController.editUserProfile
 );
 
-//router.get('/newusers', adminController.getnewUsers);
-//router.get('/filter', adminController.filterbydate);
-//router.get('/searchuser', adminController.searchUser);
+router.get('/newusers', adminController.getnewUsers);
+router.get('/filter', adminController.filterbydate);
+router.get('/searchuser', adminController.searchUser);
 
 router.delete('/deleteuser/:id', adminController.deleteUser);
 
@@ -41,7 +41,7 @@ router.delete('/deleteuser/:id', adminController.deleteUser);
 
 router
   .route('/')
-  .get(authController.protect, userController.getAllUsers)
+  .get(adminController.getAllUsers)
   .post(userController.createUser);
 
 router.get('/:id'), userController.getUser;
