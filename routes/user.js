@@ -2,6 +2,7 @@ const express = require('express');
 const userController = require('./../controllers/userControler');
 const authController = require('./../controllers/authController');
 const adminController = require('./../controllers/adminController');
+const profile = require('./../controllers/userProfileController');
 
 const router = express.Router();
 
@@ -31,18 +32,18 @@ router.patch(
   authController.editUserProfile
 );
 
+router.get('/userprofile', profile.getuser);
+
 router.get('/newusers', adminController.getnewUsers);
-router.get('/filter', adminController.filterbydate);
+router.get('/admin/filter', adminController.filterbydate);
 router.get('/searchuser', adminController.searchUser);
 
 router.delete('/deleteuser/:id', adminController.deleteUser);
 
 //app.post('/resend', userController.resendTokenPost);
 
-router
-  .route('/')
-  .get(adminController.getAllUsers)
-  .post(userController.createUser);
+router.route('/admin/allusers').get(adminController.getAllUsers);
+// .post(userController.createUser);
 
 router.get('/:id'), userController.getUser;
 // .patch(userController.updateUser)

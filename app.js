@@ -11,7 +11,6 @@ const inquiryRoutes = require('./routes/inquiry');
 const subscriptionRoutes = require('./routes/subscription');
 const propertyRoutes = require('./routes/property');
 const dashboardRoutes = require('./routes/dashboard');
-const userProfileRoutes = require('./routes/userProfile');
 
 const app = express();
 
@@ -82,7 +81,6 @@ app.use('/api/house', houseRouter);
 app.use('/api/inquiry', inquiryRoutes);
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/property', propertyRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/userprofile', userProfileRoutes);
+app.use('/api/admin/dashboard', dashboardRoutes);
 
 module.exports = app;

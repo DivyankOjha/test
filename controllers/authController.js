@@ -348,7 +348,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   //3. Update changedPasswordAt property for the user
   //4. log the user in, send JWT
-  createSendToken(user, 201, res);
+  createSendToken(user, 201, req, res);
   // const token = signToken(user._id);
 
   // res.status(200).json({
@@ -373,7 +373,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // User.findByIdAndUpdate will NOT work as intended!
 
   // 4) Log user in, send JWT
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
 });
 
 exports.editUserProfile = catchAsync(async (req, res, next) => {
