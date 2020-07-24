@@ -11,6 +11,7 @@ const inquiryRoutes = require('./routes/inquiry');
 const subscriptionRoutes = require('./routes/subscription');
 const propertyRoutes = require('./routes/property');
 const dashboardRoutes = require('./routes/dashboard');
+const flipbookRoutes = require('./routes/flipbook');
 
 const app = express();
 
@@ -82,5 +83,6 @@ app.use('/api/inquiry', inquiryRoutes);
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/property', propertyRoutes);
 app.use('/api/admin/dashboard', dashboardRoutes);
+app.use('/api/flipbook', flipbookRoutes);
 
 module.exports = app;

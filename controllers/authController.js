@@ -61,9 +61,8 @@ exports.signup = catchAsync(async (req, res, next) => {
       pass: 'WELCOME@20',
     },
   });
-  const url = `${req.protocol}://${req.get(
-    'host'
-  )}/api/users/confirmation/${token}`;
+  const url = `http://54.164.209.42/login/${token}`;
+  //const url = `${req.protocol}://${req.get('host')}/api/login/${token}`;
   //const url = `http://localhost:3002/api/users/confirmation/${token}`;
   var mailOptions = {
     from: 'Rahul Dhingra <rahul.dhingra@digimonk.in>',
@@ -175,7 +174,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
 // for google and facebook login
 exports.extSignup = catchAsync(async (req, res, next) => {
-  const { firstname, lastname, email } = req.body;
+  const { firstname, lastname, email, imagepath } = req.body;
 
   // 1) Check if email  exist
   if (!email) {
@@ -206,6 +205,7 @@ exports.extSignup = catchAsync(async (req, res, next) => {
   // 3) If everything ok, send token to client
   createSendToken(user, 200, req, res);
 });
+// firstname last,email.,image, email-required, check email exists? true, if false then register.
 
 // for google and facebook login
 exports.extLogin = catchAsync(async (req, res, next) => {
@@ -225,6 +225,39 @@ exports.extLogin = catchAsync(async (req, res, next) => {
 
   // 3) If everything ok, send token to client
   createSendToken(user, 200, req, res);
+});
+
+exports.SignupLogin = catchAsync(async (req, res, next) => {
+  const { firstname, lastname, email, imagepath } = req.body;
+  console.log(firstname, lastname, email, imagepath);
+
+  if (!email) {
+    return next(new AppError('Please provide email ', 400));
+  }
+  const user = await User.findOne({ email });
+  console.log(user);
+
+  if (user) {
+    console.log('user found');
+    // res.status(200).json({ message: 'found' });
+    createSendToken(user, 200, req, res);
+  }
+
+  if (!user) {
+    console.log('registering user');
+    const user = await User.create(req.body);
+    const updateuser = await User.findByIdAndUpdate(
+      {
+        _id: user._id,
+      },
+      {
+        $set: {
+          isActive: true,
+        },
+      }
+    );
+    createSendToken(user, 200, req, res);
+  }
 });
 
 exports.logout = (req, res) => {
@@ -291,16 +324,26 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false }); // this will disable all the validations in schema
   //3. send it to user's email
-  const resetUrl = `${req.protocol}://${req.get(
-    'host'
-  )}/api/users/resetPassword/${resetToken}`;
 
-  const message = `forgot your password? Submit a PATCH request with you new password and passwordconfirm to: ${resetUrl}.\nIf you didn't forget your password, Please ignore this email!`;
+  const resetUrl = `http://54.164.209.42/reset-password/${resetToken}`;
+  // const resetUrl = `${req.protocol}://${req.get(
+  //   'host'
+  // )}/api/users/resetPassword/${resetToken}`;
 
+  //const message = `forgot your password? Submit a PATCH request with you new password and passwordconfirm to: ${resetUrl}.\nIf you didn't forget your password, Please ignore this email!`;
+  const message = `<p>We have recieved a request to have your password reset for <b>Cuboid</b>. If you did not make this request, please ignore this email.  <br> 
+      <br> To reset your password, please <a href = "${resetUrl}"> <b>Visit this link</b> </a> </p> <hr>  
+      <h3> <b>Having Trouble? </b> </h3> 
+      <p>If the above link does not work try copying this link into your browser. </p> 
+      <p>${resetUrl}</p>  <hr>
+      <h3><b> Questions? <b> </h3>
+      <p>Please let us know if there's anything we can help you with by replying to this email or by emailing <b>support@cuboid.com</b></p>
+      `;
   try {
     await sendEmail({
       email: user.email,
-      subject: 'Your password reset token (valid for 10 min)',
+      subject: `Hi, ${user.firstname}, here's how to reset your password. (Valid for 10 mins)`,
+      //  subject: 'Your password reset token (valid for 10 min)',
       message,
     });
 

@@ -12,6 +12,7 @@ router.post('/login', authController.login);
 
 router.post('/google-facebook-signup', authController.extSignup);
 router.post('/google-facebook-login', authController.extLogin);
+router.post('/loginsignup', authController.SignupLogin);
 
 router.get('/logout', authController.logout);
 
