@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
   imagepath: { type: String }, //we can set a default profile image for the user ???
   flipbook: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User',
+    ref: 'Flipbook',
   },
   email: {
     type: String,

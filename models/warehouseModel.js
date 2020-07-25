@@ -1,6 +1,18 @@
 const mongoose = require('mongoose');
 
 const warehouseSchema = new mongoose.Schema({
+  //page1 in admin add property details
+  propertyName: String,
+  propertyFor: {
+    rent: { type: String, default: false },
+    buy: { type: String, default: false },
+  },
+  propertyDescription: String,
+  propertyType: String,
+  otherDetails: String,
+  mapLink: String,
+  selectSimilarProperties: String, //this field not clear image icon is displayed in design
+
   type: {
     godown: { type: Boolean, defult: false },
     commspace: { type: Boolean, defult: false },
@@ -72,6 +84,30 @@ const warehouseSchema = new mongoose.Schema({
     none: { type: Boolean, defult: false },
     free: { type: Boolean, defult: false },
     paid: { type: Boolean, defult: false },
+  },
+
+  //page 3
+  sellername: String,
+  sellerContactNumber: Number,
+  sellerofficeaddress: String,
+  selleremail: String,
+  sellertype: {
+    owner: { type: String, default: false },
+    agent: { type: String, default: false },
+  },
+  selleraltnumber: Number,
+  selleraltemail: String,
+  sellerwebsite: String,
+  sellerlogo: String, //image path
+  //remaining from doc
+  maximumprice: Number,
+  minimumprice: Number,
+  location: String, //address
+  description: String, // this point - !cleared
+  maplink: String,
+  nearestplace: {
+    placename: String,
+    kms: String,
   },
 });
 

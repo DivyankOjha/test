@@ -8,5 +8,6 @@ router.get('/propertydetails', dashboardController.getpropertylist);
 router.get('/popertyattributes', dashboardController.attributes);
 router.post('/popertyattributes', dashboardController.addattributes);
 router.post('/addfield', dashboardController.addfield);
+router.post('/delfield', dashboardController.deletefield);
 
 module.exports = router;

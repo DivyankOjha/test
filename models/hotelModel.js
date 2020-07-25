@@ -3,6 +3,18 @@ require('mongoose-currency').loadType(mongoose);
 const Currency = mongoose.Types.Currency;
 
 const hotelSchema = new mongoose.Schema({
+  //page1 in admin add property details
+  propertyName: String,
+  propertyFor: {
+    rent: { type: String, default: false },
+    buy: { type: String, default: false },
+  },
+  propertyDescription: String,
+  propertyType: String,
+  otherDetails: String,
+  mapLink: String,
+  selectSimilarProperties: String, //this field not clear image icon is displayed in design
+
   class: {
     worldclass: { type: Boolean, defult: false },
     midrange: { type: Boolean, defult: false },
@@ -30,13 +42,6 @@ const hotelSchema = new mongoose.Schema({
   barlounge: { type: Boolean, default: false },
   hairsalon: { type: Boolean, default: false },
   petsallowed: { type: Boolean, default: false },
-
-  //   road: [
-  //     { tarmac: { type: Boolean, default: false } },
-  //     { murram: { type: Boolean, default: false } },
-  //     { allweather: { type: Boolean, default: false } },
-  //     { noroad: { type: Boolean, default: false } },
-  //   ],
 
   road: {
     tarmac: { type: Boolean, default: false },

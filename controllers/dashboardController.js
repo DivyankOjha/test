@@ -68,33 +68,73 @@ exports.addattributes = catchAsync(async (req, res) => {
 });
 
 exports.addfield = catchAsync(async (req, res) => {
-  // const attributes = await Attributes.aggregate([
-  //   {
-  //     $addFields: {
-  //       Total_Loc: 'IT',
-  //     },
-  //   },
-  // ]);
-  const attributes = new Attributes({
-    food: true,
-    $set: { test: false },
-    multi: true,
-    upsert: true,
-  });
-  await attributes.save();
-  // const attributes = await Attributes.updateOne(
-  //   {
-  //     food: true,
-  //   },
+  const newfield = req.body.pool;
+  const newfield1 = req.body;
+  console.log(newfield);
+  console.log(newfield1);
+  const attributes = await Attributes.updateOne(
+    { _id: '5f1bba106200eb41bc2635e7' },
+    [
+      {
+        $addFields: newfield1,
+      },
+    ],
+    {
+      $out: 'newattributes',
+    }
+  );
 
-  //   { $set: { test: false } },
+  // const attributes = new Attributes({
+  //   _id: '5f1ac1be132d6e04b40bbbd9',
+  //   $set: { test: false },
 
+  //   multi: true,
+  //   upsert: true,
+  // });
+  // await attributes.save();
+  // const attributes = await Attributes.insertMany(
   //   {
-  //     multi: true,
-  //   }
+  //     $setOnInsert: { defaultQty: 100 },
+  //   },
+  //   { upsert: true }
   // );
+  //console.log(attributes);
   res.status(200).json({
     status: 'success',
-    data: { attributes },
+    attributes,
+  });
+});
+
+exports.deletefield = catchAsync(async (req, res) => {
+  const newfield = req.body;
+  const newfield1 = req.body;
+  console.log(newfield);
+  console.log(newfield1);
+  const attributes = await Attributes.updateOne(
+    { _id: '5f1ac1be132d6e04b40bbbd9' },
+
+    {
+      $unset: 'newfield',
+    }
+  );
+
+  // const attributes = new Attributes({
+  //   _id: '5f1ac1be132d6e04b40bbbd9',
+  //   $set: { test: false },
+
+  //   multi: true,
+  //   upsert: true,
+  // });
+  // await attributes.save();
+  // const attributes = await Attributes.insertMany(
+  //   {
+  //     $setOnInsert: { defaultQty: 100 },
+  //   },
+  //   { upsert: true }
+  // );
+  //console.log(attributes);
+  res.status(200).json({
+    status: 'success',
+    attributes,
   });
 });

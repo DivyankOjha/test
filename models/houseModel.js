@@ -14,6 +14,18 @@ const Currency = mongoose.Types.Currency;
 // );
 
 const houseSchema = new mongoose.Schema({
+  //page1 in admin add property details
+  propertyName: String,
+  propertyFor: {
+    rent: { type: String, default: false },
+    buy: { type: String, default: false },
+  },
+  propertyDescription: String,
+  propertyType: String,
+  otherDetails: String,
+  mapLink: String,
+  selectSimilarProperties: String, //this field not clear image icon is displayed in design
+
   // user: {
   //   type: mongoose.Schema.ObjectId,
   //   ref: 'User',
@@ -23,7 +35,6 @@ const houseSchema = new mongoose.Schema({
   minPrice: { type: Currency },
   maxPrice: { type: Currency },
 
-  //IFMISFile: { type: mongoose.Schema.ObjectId, ref: 'ifmisFile' },
   buy: {
     buy: { type: Boolean, default: false },
     subcategory: {
@@ -32,14 +43,7 @@ const houseSchema = new mongoose.Schema({
       apartment: { type: Boolean, default: false },
     },
   },
-  // buy: {
-  //   buy: { type: Boolean, default: false },
-  //   subcategory: {
-  //     gated: { type: Boolean, default: false },
-  //     standAlone: { type: Boolean, default: false },
-  //     apartment: { type: Boolean, default: false },
-  //   },
-  // },
+
   let: {
     let: { type: Boolean, default: false },
     subcategory: {

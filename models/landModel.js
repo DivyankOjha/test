@@ -3,10 +3,23 @@ require('mongoose-currency').loadType(mongoose);
 const Currency = mongoose.Types.Currency;
 
 const landSchema = new mongoose.Schema({
+  //page1 in admin add property details
+  propertyName: String,
+  propertyFor: {
+    rent: { type: String, default: false },
+    buy: { type: String, default: false },
+  },
+  propertyDescription: String,
+  propertyType: String,
+  otherDetails: String,
+  mapLink: String,
+  selectSimilarProperties: String, //this field not clear image icon is displayed in design
+
   minimumcost: { type: Currency, default: 5 },
   maximumcost: { type: Currency, default: 500 },
   sizeinacres: { type: Number, default: 50 }, // need to set min max ??
   freehold: { type: Boolean, default: false },
+  lease: { type: Boolean, default: false },
   councilwater: { type: Boolean, default: false },
   electricity: { type: Boolean, default: false },
   borehole: { type: Boolean, default: false },
@@ -14,7 +27,7 @@ const landSchema = new mongoose.Schema({
   controlleddevelopment: { type: Boolean, default: false },
   waterfront: { type: Boolean, default: false },
   gated: { type: Boolean, default: false },
-  // soiltype: ['red', 'blackcotton', 'murram'],
+
   soiltype: {
     red: { type: Boolean, defult: false },
     blackcotton: { type: Boolean, defult: false },
@@ -25,12 +38,6 @@ const landSchema = new mongoose.Schema({
     commercial: { type: Boolean, default: false },
     industrial: { type: Boolean, default: false },
   },
-  //   road: [
-  //     { tarmac: { type: Boolean, default: false } },
-  //     { murram: { type: Boolean, default: false } },
-  //     { allweather: { type: Boolean, default: false } },
-  //     { noroad: { type: Boolean, default: false } },
-  //   ],
 
   road: {
     tarmac: { type: Boolean, default: false },

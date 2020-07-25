@@ -13,6 +13,7 @@ const propertyRoutes = require('./routes/property');
 const dashboardRoutes = require('./routes/dashboard');
 const flipbookRoutes = require('./routes/flipbook');
 
+const globalErrorHandler = require('./controllers/errorController');
 const app = express();
 
 app.use((req, res, next) => {
@@ -84,5 +85,7 @@ app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/property', propertyRoutes);
 app.use('/api/admin/dashboard', dashboardRoutes);
 app.use('/api/flipbook', flipbookRoutes);
+
+app.use(globalErrorHandler);
 
 module.exports = app;
