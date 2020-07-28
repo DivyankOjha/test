@@ -25,7 +25,8 @@ const createSendToken = (user, statusCode, req, res) => {
   });
 
   // Remove password from output
-  user.password = undefined;
+  // user.password = undefined;
+  user.imagepath = undefined;
 
   res.status(statusCode).json({
     status: 'success',
@@ -163,6 +164,15 @@ exports.login = catchAsync(async (req, res, next) => {
   }
   // 2) Check if user exists && password is correct
   const user = await User.findOne({ email }).select('+password');
+
+  // if (user.isActive === false) {
+  //   return next(
+  //     new AppError(
+  //       'email is not verified , Please verify your email to login',
+  //       401
+  //     )
+  //   );
+  // }
 
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));

@@ -1,5 +1,5 @@
-const catchAsync = require('./../utils/catchAsync');
-const User = require('./../models/userModel');
+const catchAsync = require('../../utils/catchAsync');
+
 const path = require('path');
 const mime = require('mime');
 const fs = require('fs');
@@ -37,7 +37,18 @@ exports.upload = catchAsync(async (req, res, next) => {
   // console.log(filename, localPath);
 
   // //return res.send(filename, localPath);
+  var propertyname = req.body.name;
+  console.log(propertyname);
+  var prop = [];
+  prop = req.body.image;
 
+  console.log('prop ' + prop);
+
+  for (var i in prop) {
+    console.log(prop[i]);
+  }
+  var match = prop[0];
+  console.log('match:' + match);
   var matches = await req.body.image.match(
       /^data:([A-Za-z-+\/]+);base64,(.+)$/
     ),
@@ -47,7 +58,7 @@ exports.upload = catchAsync(async (req, res, next) => {
     return new Error('Invalid input string');
   }
   response.type = matches[1];
-  console.log(response.type);
+  console.log('responseType:' + response.type);
   response.data = new Buffer.from(matches[2], 'base64');
   let decodedImg = response;
   let imageBuffer = decodedImg.data;
@@ -60,15 +71,15 @@ exports.upload = catchAsync(async (req, res, next) => {
   console.log(extension);
   const rand = Math.ceil(Math.random() * 1000);
   //Random photo name with timeStamp so it will not overide previous images.
-  const fileName = `${req.user.firstname}.${extension}`;
+  const fileName = `${propertyname}_${Date.now()}_.${extension}`;
   //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
   // let fileName = name1 ++ '.' + extension;
   // console.log(filename);
   let abc = 'abc';
-  path3 = path.resolve(`./public/media/profilepictures/`);
+  path3 = path.resolve(`./public/media/propertyimages/`);
 
-  let localpath = `${path3}/${req.user._id}/`;
+  let localpath = `${path3}/${propertyname}/`;
   console.log(localpath);
 
   if (!fs.existsSync(localpath)) {
@@ -76,14 +87,11 @@ exports.upload = catchAsync(async (req, res, next) => {
   }
   console.log(localpath);
 
-  fs.writeFileSync(`${path3}/${req.user._id}/` + fileName, imageBuffer, 'utf8');
+  fs.writeFileSync(`${localpath}/` + fileName, imageBuffer, 'utf8');
 
-  const url = `${req.protocol}://${req.get('host')}/media/${
-    req.user.firstname
-  }/${fileName}`;
-  const updating = await User.findByIdAndUpdate(req.user._id, {
-    $set: { imagepath: url },
-  });
+  const url = `${req.protocol}://${req.get(
+    'host'
+  )}/media/profilepictures/${propertyname}/${fileName}`;
   // console.log(path3);
   // const imagePath = fs.writeFileSync(
   //   path3 + '/' + fileName,
@@ -97,7 +105,7 @@ exports.upload = catchAsync(async (req, res, next) => {
   // const url = `${req.protocol}://${req.get('host')}/media/${fileName}`;
   // console.log('url: ' + url);
   return res.status(200).json({
-    status: 'success',
+    url,
   });
 });
 

@@ -21,7 +21,7 @@ router.patch('/resetPassword/:token', authController.resetPassword);
 
 // Protect all routes after this middleware
 //router.use(authController.protect);
-router.post('/upload', userController.upload);
+router.post('/upload', authController.protect, userController.upload);
 router.patch(
   '/updateMyPassword',
   authController.protect,

@@ -7,6 +7,10 @@ const mongoSanitize = require('express-mongo-sanitize');
 
 const userRouter = require('./routes/user');
 const houseRouter = require('./routes/house');
+const landRouter = require('./routes/land');
+const hotelRouter = require('./routes/hotel');
+const warehouseRouter = require('./routes/warehouse');
+
 const inquiryRoutes = require('./routes/inquiry');
 const subscriptionRoutes = require('./routes/subscription');
 const propertyRoutes = require('./routes/property');
@@ -80,6 +84,10 @@ app.use((req, res, next) => {
 
 app.use('/api/users', userRouter);
 app.use('/api/house', houseRouter);
+app.use('/api/land', landRouter);
+app.use('/api/hotel', hotelRouter);
+app.use('/api/warehouse', warehouseRouter);
+
 app.use('/api/inquiry', inquiryRoutes);
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/property', propertyRoutes);
