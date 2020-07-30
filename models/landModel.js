@@ -53,6 +53,7 @@ const landSchema = new mongoose.Schema({
     kmtoneighbour: { type: Number },
     kmtotarmac: { type: Number },
     kmtowater: { type: Number },
+    kmtoelectricity: { type: Number },
   },
   //page 3
   sellerDetails: {

@@ -78,12 +78,13 @@ exports.upload = catchAsync(async (req, res, next) => {
 
   fs.writeFileSync(`${path3}/${req.user._id}/` + fileName, imageBuffer, 'utf8');
 
-  const url = `${req.protocol}://${req.get('host')}/media/${
-    req.user.firstname
+  const url = `${req.protocol}://${req.get('host')}/media/profilepictures/${
+    req.user._id
   }/${fileName}`;
   const updating = await User.findByIdAndUpdate(req.user._id, {
     $set: { imagepath: url },
   });
+  console.log(url);
   // console.log(path3);
   // const imagePath = fs.writeFileSync(
   //   path3 + '/' + fileName,
@@ -98,6 +99,7 @@ exports.upload = catchAsync(async (req, res, next) => {
   // console.log('url: ' + url);
   return res.status(200).json({
     status: 'success',
+    url,
   });
 });
 

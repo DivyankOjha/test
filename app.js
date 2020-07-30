@@ -46,13 +46,14 @@ app.use(helmet());
 app.use(morgan('dev'));
 
 //body parser - reading data from the body into req.body
+
 app.use(bodyParser.json({ limit: '50mb' }));
 
 //app.use(bodyParser.urlencoded({ extended: false }, { limit: '50mb' }));
 app.use(
   bodyParser.urlencoded({
     limit: '50mb',
-    extended: true,
+    extended: false,
     parameterLimit: 50000,
   })
 );
@@ -94,6 +95,6 @@ app.use('/api/property', propertyRoutes);
 app.use('/api/admin/dashboard', dashboardRoutes);
 app.use('/api/flipbook', flipbookRoutes);
 
-app.use(globalErrorHandler);
+//app.use(globalErrorHandler);
 
 module.exports = app;

@@ -6,8 +6,8 @@ const postPropertySchema = new mongoose.Schema({
   phonenumber: Number,
   address: String,
   propertyDetails: String,
-  uploadNationalId: String, // image field
-  uploadPropertyImages: String, // 5 image fields
+  nationalidimage: String, // image field
+  propertyimage: [], // 5 image fields
 });
 
 const PostProperty = mongoose.model('PostProperty', postPropertySchema);
