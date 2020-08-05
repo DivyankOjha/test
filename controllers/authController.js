@@ -25,7 +25,7 @@ const createSendToken = (user, statusCode, req, res) => {
   });
 
   // Remove password from output
-  // user.password = undefined;
+  user.password = undefined;
   user.imagepath = undefined;
 
   res.status(statusCode).json({

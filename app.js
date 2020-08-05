@@ -3,6 +3,8 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
 
 const userRouter = require('./routes/user');
@@ -10,6 +12,8 @@ const houseRouter = require('./routes/house');
 const landRouter = require('./routes/land');
 const hotelRouter = require('./routes/hotel');
 const warehouseRouter = require('./routes/warehouse');
+
+const searchRoutes = require('./routes/search');
 
 const inquiryRoutes = require('./routes/inquiry');
 const subscriptionRoutes = require('./routes/subscription');
@@ -45,6 +49,14 @@ app.use(helmet());
 
 app.use(morgan('dev'));
 
+// Limit requests from same API
+const limiter = rateLimit({
+  max: 1000,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from this IP, please try again in an hour!',
+});
+app.use('/api', limiter);
+
 //body parser - reading data from the body into req.body
 
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -54,9 +66,10 @@ app.use(
   bodyParser.urlencoded({
     limit: '50mb',
     extended: false,
-    parameterLimit: 50000,
+    parameterLimit: 5000,
   })
 );
+app.use(cookieParser());
 //app.use(express.json({ limit: '50mb' }));
 
 //Data Sanitization against NoSql Query Injection
@@ -78,23 +91,26 @@ app.use(express.static(path.join(__dirname, 'public')));
 //test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  // console.log(res.cookies);
   next();
 });
 
 // 3) ROUTES
 
 app.use('/api/users', userRouter);
-app.use('/api/house', houseRouter);
-app.use('/api/land', landRouter);
-app.use('/api/hotel', hotelRouter);
-app.use('/api/warehouse', warehouseRouter);
+app.use('/api/admin/house', houseRouter);
+app.use('/api/admin/land', landRouter);
+app.use('/api/admin/hotel', hotelRouter);
+app.use('/api/admin/warehouse', warehouseRouter);
+
+app.use('/api/search', searchRoutes);
 
 app.use('/api/inquiry', inquiryRoutes);
 app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/property', propertyRoutes);
 app.use('/api/admin/dashboard', dashboardRoutes);
-app.use('/api/flipbook', flipbookRoutes);
+app.use('/api/admin/flipbook', flipbookRoutes);
 
-//app.use(globalErrorHandler);
+app.use(globalErrorHandler);
 
 module.exports = app;

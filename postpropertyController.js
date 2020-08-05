@@ -13,7 +13,7 @@ exports.addProperty = catchAsync(async (req, res, next) => {
     address: req.body.address,
     propertyDetails: req.body.propertyDetails,
   };
-  const ip = '54.164.209.42';
+
   const newproperty = await postProperty.create(body);
 
   const propertyName = newproperty.email + '_' + newproperty._id;
@@ -65,9 +65,9 @@ exports.addProperty = catchAsync(async (req, res, next) => {
     'utf8'
   );
 
-  const urlpath = `${
-    req.protocol
-  }://${ip}/media/propertyimages/${propertyName}/${'National_id_' + fileName}`;
+  const urlpath = `${req.protocol}://${req.get(
+    'host'
+  )}/media/propertyimages/${propertyName}/${'National_id_' + fileName}`;
 
   const updatingnationalidimage = await postProperty.findByIdAndUpdate(
     newproperty._id,
@@ -163,7 +163,9 @@ exports.addProperty = catchAsync(async (req, res, next) => {
 
     fs.writeFileSync(`${localpath}/` + fileName, imageBuffer, 'utf8');
 
-    const url = `${req.protocol}://${ip}/media/propertyimages/${propertyName}/${fileName}`;
+    const url = `${req.protocol}://${req.get(
+      'host'
+    )}/media/propertyimages/${propertyName}/${fileName}`;
 
     propertylinks.push(url);
     //console.log(path3);

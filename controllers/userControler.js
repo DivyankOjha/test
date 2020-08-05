@@ -16,6 +16,8 @@ const fs = require('fs');
 // });
 
 exports.upload = catchAsync(async (req, res, next) => {
+  console.log(req.protocol);
+  console.log(req.get('host'));
   //const user = req.user.firstname;
   // console.log(user);
   /*Download the base64 image in the server and returns the filename and path of image.*/
@@ -69,18 +71,20 @@ exports.upload = catchAsync(async (req, res, next) => {
   path3 = path.resolve(`./public/media/profilepictures/`);
 
   let localpath = `${path3}/${req.user._id}/`;
-  console.log(localpath);
+  //console.log(localpath);
 
   if (!fs.existsSync(localpath)) {
     fs.mkdirSync(localpath);
   }
-  console.log(localpath);
+  //console.log(localpath);
 
-  fs.writeFileSync(`${path3}/${req.user._id}/` + fileName, imageBuffer, 'utf8');
+  fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+  ip = '54.164.209.42';
+  //console.log(ip);
+  const url = `${req.protocol}://${ip}/media/profilepictures/${req.user._id}/${fileName}`;
 
-  const url = `${req.protocol}://${req.get('host')}/media/profilepictures/${
-    req.user._id
-  }/${fileName}`;
+  //const imagepath2 = fs.readFileSync(localpath + fileName);
+  //console.log('imagepath2  ' + imagepath2);
   const updating = await User.findByIdAndUpdate(req.user._id, {
     $set: { imagepath: url },
   });
@@ -97,6 +101,7 @@ exports.upload = catchAsync(async (req, res, next) => {
   // console.log(path3 + '/' + 'image.png');
   // const url = `${req.protocol}://${req.get('host')}/media/${fileName}`;
   // console.log('url: ' + url);
+
   return res.status(200).json({
     status: 'success',
     url,

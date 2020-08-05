@@ -21,3 +21,13 @@ exports.getAllInquiry = catchAsync(async (req, res) => {
     },
   });
 });
+exports.deleteInquiry = catchAsync(async (req, res) => {
+  const inquiry = await Inquiry.find();
+  res.status(200).json({
+    status: 'success',
+    results: inquiry.length,
+    data: {
+      inquiry,
+    },
+  });
+});

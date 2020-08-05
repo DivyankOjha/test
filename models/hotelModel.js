@@ -19,9 +19,9 @@ const hotelSchema = new mongoose.Schema({
 
   attributes: {
     class: {
-      worldclass: { type: Boolean, defult: false },
-      midrange: { type: Boolean, defult: false },
-      budget: { type: Boolean, defult: false },
+      worldclass: { type: Boolean, default: false },
+      midrange: { type: Boolean, default: false },
+      budget: { type: Boolean, default: false },
     },
     locality: {
       city: { type: Boolean, default: false },

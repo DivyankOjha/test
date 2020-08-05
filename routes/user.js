@@ -35,11 +35,12 @@ router.patch(
 
 router.get('/userprofile', profile.getuser);
 
-router.get('/newusers', adminController.getnewUsers);
+router.get('/admin/newusers', adminController.getnewUsers);
 router.get('/admin/filter', adminController.filterbydate);
 router.get('/searchuser', adminController.searchUser);
 
 router.delete('/deleteuser/:id', adminController.deleteUser);
+router.delete('/deletemany', adminController.deleteManyUsers);
 
 //app.post('/resend', userController.resendTokenPost);
 

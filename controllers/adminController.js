@@ -208,9 +208,26 @@ exports.updateUser = (req, res) => {
 
 exports.deleteUser = catchAsync(async (req, res) => {
   console.log(req.params.id);
+
   await User.findByIdAndDelete({ _id: req.params.id });
   res.status(200).json({
     status: 'success',
     result: 'Deleted Successfully',
+  });
+});
+
+exports.deleteManyUsers = catchAsync(async (req, res) => {
+  // console.log(req.body);
+  var ids = req.body.deleteuser;
+  console.log(ids);
+
+  const deletemany = await User.deleteMany({
+    _id: { $in: ids },
+  });
+
+  res.status(200).json({
+    status: 'success',
+    result: 'Deleted Successfully',
+    deletemany,
   });
 });
