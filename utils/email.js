@@ -19,12 +19,18 @@ const nodemailer = require('nodemailer');
 //       });
 //     }
 const sendEmail = async (options) => {
+  const emailsettings = await Email.findById({
+    _id: '5f2e3d86d15a133adc74df50',
+  });
+  let host = emailsettings.host;
+  let user = emailsettings.username;
+  let pass = emailsettings.password;
   //1 transporter
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: host,
     auth: {
-      user: 'diviojha6@gmail.com',
-      pass: 'WELCOME@20',
+      user: user,
+      pass: pass,
     },
   });
 

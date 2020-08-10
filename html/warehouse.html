@@ -7,285 +7,117 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-      crossorigin="anonymous"
-    />
+
     <title>Bootstrap example</title>
   </head>
 
   <body>
-     <div class="container" style="margin-top: 20px;">
-      <div>
-        <button class="btn btn-primary">step 2</button>
-      </div>
+    <div>
+      <button>step 2</button>
 
       <br />
       <h6>Add Property Attributes</h6>
       <hr />
+
+      <h6>Type</h6>
+      <input type="radio" /> godown <input type="radio" /> commercial space
+
+      <br />
       <div>
-        <h6>Type</h6>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div>
-              <div><input type="radio" /> godown</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> commercial space</div>
-            </div>
-          </div>
-        </div>
+        <label
+          >Area
+          <input type="number" />
+        </label>
+        <label
+          >Cost
+          <input type="number" />
+        </label>
+        <label
+          >Size in ft
+          <input type="number" />
+        </label>
+      </div>
 
-        <br />
-        <div class="row">
-          <div>
-            <label
-              >Area
-              <input class="form-control" type="number" />
-            </label>
-          </div>
-          <div>
-            <label
-              >Cost
-              <input class="form-control" type="number" />
-            </label>
-          </div>
-          <div>
-            <label
-              >Size in ft
-              <input class="form-control" type="number" />
-            </label>
-          </div>
-        </div>
+      <hr />
+      <div>
+        <input type="checkbox" /> conference facilites
+        <input type="checkbox" /> freshout doors
+        <input type="checkbox" /> aircon <input type="checkbox" /> shared
+        secretary
+      </div>
 
-        <hr />
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div class="checkbox_inline">
-              <div class=""><input type="checkbox" /> conference facilites</div>
-            </div>
-            <div class="checkbox_inline" style="margin-left: 5rem;">
-              <div class=""><input type="checkbox" /> freshout doors</div>
-            </div>
-            <div class="checkbox_inline" style="margin-left: 5rem;">
-              <div class=""><input type="checkbox" /> aircon</div>
-            </div>
-            <div class="checkbox_inline" style="margin-left: 5rem;">
-              <div class=""><input type="checkbox" /> shared secretary</div>
-            </div>
-          </div>
-        </div>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div class="checkbox_inline">
-              <div class=""><input type="checkbox" /> fully furnished</div>
-            </div>
-            <div class="checkbox_inline" style="margin-left: 7.2rem;">
-              <div class=""><input type="checkbox" /> landscape garden</div>
-            </div>
-            <div class="checkbox_inline" style="margin-left: 3.6rem;">
-              <div class=""><input type="checkbox" /> wifi</div>
-            </div>
-          </div>
-        </div>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div class="checkbox_inline">
-              <div class=""><input type="checkbox" /> fresh out doors</div>
-            </div>
-            <div class="checkbox_inline" style="margin-left: 6.7rem;">
-              <div class=""><input type="checkbox" /> indoor pool</div>
-            </div>
-            <div class="checkbox_inline" style="margin-left: 6.2rem;">
-              <div class=""><input type="checkbox" /> disability access</div>
-            </div>
-          </div>
-        </div>
-        <hr />
+      <div>
+        <input type="checkbox" /> fully furnished
+        <input type="checkbox" /> landscape garden
+        <input type="checkbox" /> wifi
+      </div>
+      <div>
+        <input type="checkbox" /> fresh out doors
+        <input type="checkbox" /> indoor pool
+        <input type="checkbox" /> disability access
+      </div>
+      <hr />
 
-        <h6>zoning</h6>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div>
-              <div><input type="radio" /> commercial</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> industrial</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> residential</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> epz</div>
-            </div>
-          </div>
-        </div>
-        <hr />
-        <h6>Town Location</h6>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div>
-              <div><input type="radio" /> downtown</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> uptown</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> neartown</div>
-            </div>
-          </div>
-        </div>
-        <hr />
-        <h6>Access Road</h6>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div>
-              <div><input type="radio" /> tarmac</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> cabro</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> all weather</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> main</div>
-            </div>
-          </div>
-        </div>
-        <hr />
-        <h6>Tenants</h6>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div>
-              <div><input type="radio" /> mixed</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> specialized</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> processing</div>
-            </div>
-          </div>
-        </div>
-        <hr />
-        <h6>Elevator</h6>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div>
-              <div><input type="radio" /> none</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> goods</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> passenger</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> passenger and goods</div>
-            </div>
-          </div>
-        </div>
-        <hr />
-        <h6>Security</h6>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div>
-              <div><input type="radio" /> tight</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> maingate</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> main gate and floors</div>
-            </div>
-            <div style="margin-left: 5rem;">
-              <div><input type="radio" /> none</div>
-            </div>
-          </div>
-        </div>
+      <h6>zoning</h6>
+      <div>
+        <input type="radio" /> commercial <input type="radio" /> industrial
+        <input type="radio" /> residential <input type="radio" /> epz
+      </div>
 
-          <hr />
-          <h6>Vehicle Traffic</h6>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <div>
-                <div><input type="radio" /> very high</div>
-              </div>
-              <div style="margin-left: 5rem;">
-                <div><input type="radio" /> high</div>
-              </div>
-              <div style="margin-left: 5rem;">
-                <div><input type="radio" /> low</div>
-              </div>
-            </div>
-          </div>
-          <hr>
-       <h6>Human Traffic</h6>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <div>
-                <div><input type="radio" /> very high</div>
-              </div>
-              <div style="margin-left: 5rem;">
-                <div><input type="radio" /> high</div>
-              </div>
-              <div style="margin-left: 5rem;">
-                <div><input type="radio" /> low</div>
-              </div>
-            </div>
-          </div>
-          <hr>
-        <h6>Meeting Room</h6>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <div>
-                <div><input type="radio" /> none</div>
-              </div>
-              <div style="margin-left: 5rem;">
-                <div><input type="radio" /> free</div>
-              </div>
-              <div style="margin-left: 5rem;">
-                <div><input type="radio" /> paid</div>
-              </div>
-            </div>
-          </div>
-            <hr>
-            <h6>Parking</h6>
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <div>
-                        <div><input type="radio" /> none</div>
-                    </div>
-                    <div style="margin-left: 5rem;">
-                        <div><input type="radio" /> free</div>
-                    </div>
-                    <div style="margin-left: 5rem;">
-                        <div><input type="radio" /> paid</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <hr />
+      <h6>Town Location</h6>
+      <div><input type="radio" /> downtown <input type="radio" /> uptown</div>
+      <hr />
+      <h6>Access Road</h6>
+      <div>
+        <input type="radio" /> tarmac <input type="radio" /> cabro
+        <input type="radio" /> all weather <input type="radio" /> main
+      </div>
+      <hr />
+      <h6>Tenants</h6>
+      <div>
+        <input type="radio" /> mixed <input type="radio" /> specialized
+        <input type="radio" /> processing
+      </div>
+      <hr />
+      <h6>Elevator</h6>
+      <div>
+        <input type="radio" /> none <input type="radio" /> goods
+        <input type="radio" /> passenger <input type="radio" /> passenger and
+        goods
+      </div>
+      <hr />
+      <h6>Security</h6>
+      <div>
+        <input type="radio" /> tight <input type="radio" /> maingate
+        <input type="radio" /> main gate and floors <input type="radio" /> none
+      </div>
+
+      <hr />
+      <h6>Vehicle Traffic</h6>
+      <div>
+        <input type="radio" /> very high <input type="radio" /> high
+        <input type="radio" /> low
+      </div>
+      <hr />
+      <h6>Human Traffic</h6>
+      <div>
+        <input type="radio" /> very high <input type="radio" /> high
+        <input type="radio" /> low
+      </div>
+      <hr />
+      <h6>Meeting Room</h6>
+      <div>
+        <input type="radio" /> none <input type="radio" /> free
+        <input type="radio" /> paid
+      </div>
+
+      <hr />
+      <h6>Parking</h6>
+      <div>
+        <input type="radio" /> none <input type="radio" /> free
+        <input type="radio" /> paid
       </div>
     </div>
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script
-      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-      crossorigin="anonymous"
-    ></script>
   </body>
 </html>

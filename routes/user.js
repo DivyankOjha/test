@@ -35,16 +35,17 @@ router.patch(
 
 router.get('/userprofile', profile.getuser);
 
+router.patch('/admin/set-user-status/:id', adminController.ActiveInactive);
 router.get('/admin/newusers', adminController.getnewUsers);
-router.get('/admin/filter', adminController.filterbydate);
-router.get('/searchuser', adminController.searchUser);
+router.get('/admin/user-filter-by-date', adminController.filterbydate);
+router.get('/admin/search-user', adminController.searchUser);
 
 router.delete('/deleteuser/:id', adminController.deleteUser);
 router.delete('/deletemany', adminController.deleteManyUsers);
 
 //app.post('/resend', userController.resendTokenPost);
 
-router.route('/admin/allusers').get(adminController.getAllUsers);
+router.route('/admin/allusers-list').get(adminController.getAllUsers);
 // .post(userController.createUser);
 
 router.get('/:id'), userController.getUser;

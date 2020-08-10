@@ -1,6 +1,7 @@
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('./../models/userModel');
+const Email = require('./../models/emailModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const sendEmail = require('./../utils/email');
@@ -38,7 +39,11 @@ const createSendToken = (user, statusCode, req, res) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
+  //  console.log('email' + emailsettings.host);
   const newUser = await User.create(req.body);
+  const emailsettings = await Email.findById({
+    _id: '5f2e3d86d15a133adc74df50',
+  });
   // createSendToken(newUser, 201, res);
   // const newUser = await User.create({
   //   //User.save
@@ -54,12 +59,15 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   const token = signToken(newUser._id);
 
+  let host = emailsettings.host;
+  let user = emailsettings.username;
+  let pass = emailsettings.password;
   //const verify = verifyUser();
   var transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: host,
     auth: {
-      user: 'diviojha6@gmail.com',
-      pass: 'WELCOME@20',
+      user: user,
+      pass: pass,
     },
   });
   const url = `http://54.164.209.42/login/${token}`;

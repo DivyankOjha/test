@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
 
 const userRouter = require('./routes/user');
+const emailRouter = require('./routes/email');
 const houseRouter = require('./routes/house');
 const landRouter = require('./routes/land');
 const hotelRouter = require('./routes/hotel');
@@ -96,8 +97,8 @@ app.use((req, res, next) => {
 });
 
 // 3) ROUTES
-
 app.use('/api/users', userRouter);
+app.use('/api/admin/email', emailRouter);
 app.use('/api/admin/house', houseRouter);
 app.use('/api/admin/land', landRouter);
 app.use('/api/admin/hotel', hotelRouter);

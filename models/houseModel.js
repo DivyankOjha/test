@@ -59,7 +59,6 @@ const houseSchema = new mongoose.Schema({
   },
 
   //attributes page 2
-
   attributes: {
     opticalfiber: { type: Boolean, default: false },
     swimmingpool: { type: Boolean, default: false },
@@ -123,9 +122,9 @@ const houseSchema = new mongoose.Schema({
   },
   //FlipbookSchema
   flipbook: {
-    propertyName: String, //Title is property name ???
+    title: String, //Title is property name ???
     description: String,
-    flipbookImage: String, //Banner
+    flipbookBanner: String, //Banner
     //Property Details/Attributes
     gated: { type: Boolean, default: false },
     opticalfiber: { type: Boolean, default: false },
@@ -159,10 +158,10 @@ const houseSchema = new mongoose.Schema({
 
     //Pages
     //Second page
-    image2D: String,
+    image2D: { type: Array },
     image3D: String,
-    tour360Property: String,
-    floorPlan: String, //image field in design ?????
+    tour360Property: String, //link
+    floorPlan: { type: Array }, //image field in design ?????
     map: String,
     contactSeller: String,
     propertyAvailability: Boolean,

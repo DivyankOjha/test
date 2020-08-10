@@ -6,6 +6,7 @@ const Hotel = require('./../models/hotelModel');
 const WareHouse = require('./../models/warehouseModel');
 const Inquiry = require('./../models/inquiryModel');
 const Attributes = require('./../models/attributesSchema');
+const PostProperty = require('../models/postPropertyModel');
 
 exports.getAllproperty = catchAsync(async (req, res) => {
   const users = await User.find();
@@ -17,9 +18,17 @@ exports.getAllproperty = catchAsync(async (req, res) => {
   const land = await Land.find();
   const totalland = land.length;
   //console.log(land.length);
-  totalproperty = totalHouse + totalland;
+  const hotel = await Hotel.find();
+  const totalhotel = hotel.length;
+  const warehouse = await WareHouse.find();
+  const totalwarehouse = warehouse.length;
+  totalproperty = totalHouse + totalland + totalwarehouse + totalhotel;
+
   const inquiry = await Inquiry.find();
-  const totalinquiry = inquiry.length;
+  const totalcontactusinquiry = inquiry.length;
+
+  const postproperty = await PostProperty.find();
+  const totalPropertyInquiries = postproperty.length;
   //console.log(inquiry.length);
   // const date = Date();
   // console.log(date);
@@ -28,17 +37,15 @@ exports.getAllproperty = catchAsync(async (req, res) => {
     results: users.length,
     data: {
       totalMembers,
-      totalHouse,
-      totalland,
       totalproperty,
-      totalinquiry,
+      totalcontactusinquiry,
+      totalPropertyInquiries,
     },
   });
 });
 
 exports.getpropertylist = catchAsync(async (req, res) => {
   const house = await House.find();
-
   const land = await Land.find();
   const hotel = await Hotel.find();
   const warehouse = await WareHouse.find();

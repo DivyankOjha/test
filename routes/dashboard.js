@@ -4,7 +4,7 @@ const router = express.Router();
 const dashboardController = require('./../controllers/dashboardController');
 
 router.get('/summary', dashboardController.getAllproperty);
-router.get('/get-property-list', dashboardController.getpropertylist); //all 4 property details for admin
+router.get('/get-all-property-details', dashboardController.getpropertylist); //all 4 property details for admin
 
 router.get('/popertyattributes', dashboardController.attributes);
 router.post('/popertyattributes', dashboardController.addattributes);
