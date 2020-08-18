@@ -1,0 +1,82 @@
+div className="add-property-form">
+<div className="row">
+    <div className="col-md-6">
+        <div className="form-group">
+            <label>Cost</label>
+            <input class="form-control" name="cost" type="text" />
+
+        </div>
+    </div>
+    <div className="col-md-6">
+        <div className="form-group">
+            <label>Size in acres</label>
+            <input class="form-control" name="sizeinacres" type="text" />
+
+        </div>
+    </div>
+</div>
+
+<div className="attributes">
+    <ul>
+        <li><input type="checkbox" name="freehold" /> freehold</li>
+        <li><input type="checkbox" name="lease" /> lease</li>
+        <li><input type="checkbox" name="councilwater"/> council water</li>
+        <li><input type="checkbox" name="electricity"/> electricity</li>
+        <li><input type="checkbox" name="borehole"/> borehole</li>
+        <li><input type="checkbox" name="readyfence"/> readyfence</li>
+        <li><input type="checkbox" name="gated" /> gated</li>
+        <li><input type="checkbox" name="waterfront"/> waterfront</li>
+        <li><input type="checkbox" name="controlleddevelopment" /> controlleddevelopment</li>
+    </ul>
+</div>
+
+<h4 class="particilars"> Soil Type</h4>
+<div className="attributes">
+    <ul>
+        <li><input type="radio" name="red" id="RadioGroup1_0" value="radio" /> Red</li>
+        <li><input type="radio" name="blackcotton" id="RadioGroup1_1" value="radio" /> Black cotton</li>
+        <li><input type="radio" name="murram" id="RadioGroup1_2" value="radio" /> Murram</li>
+
+    </ul>
+</div>
+<h4 class="particilars"> Nature</h4>
+<div className="attributes">
+    <ul>
+        <li><input type="radio" name="residential" id="RadioGroup2_0" value="radio" /> Residential</li>
+        <li><input type="radio" name="commercial" id="RadioGroup2_1" value="radio" /> Commercial</li>
+        <li><input type="radio" name="industrial" id="RadioGroup3_2" value="radio" /> Industrial</li>
+
+    </ul>
+</div>
+<h4 class="particilars"> Road</h4>
+<div className="attributes">
+    <ul>
+        <li><input type="radio" name="tarmac" id="RadioGroup3_0" value="radio" /> Tarmac</li>
+        <li><input type="radio" name="murram" id="RadioGroup3_1" value="radio" /> Murram</li>
+        <li><input type="radio" name="allweather" id="RadioGroup3_2" value="radio" /> All weather</li>
+        <li><input type="radio" name="noroad" id="RadioGroup4_2" value="radio" /> No road</li>
+
+    </ul>
+</div>
+<div className="numeric-number lookingd">
+    <ul>
+        <li>
+            <div className="numeric-label"> <span>km to shopping center</span> <input name="kmtoshoppingcenter" type="number" /></div>
+        </li>
+        <li>
+            <div className="numeric-label"> <span>km to neighbour</span> <input  name="kmtoneighbour" type="number" /></div>
+        </li>
+        <li>
+            <div className="numeric-label"> <span>km to tarmac</span> <input  name="kmtotarmac" type="number" /></div>
+        </li>
+        <li>
+            <div className="numeric-label"> <span>km to water</span> <input name="kmtowater" type="number" /></div>
+        </li>
+        <li>
+            <div className="numeric-label"> <span>km to electricity</span> <input name="kmtoelectricity" type="number" /></div>
+        </li>
+    </ul>
+</div>
+<div className="form-group text-right"><button className="step-next">Next</button></div>
+
+</div>

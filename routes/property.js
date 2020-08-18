@@ -13,5 +13,30 @@ router.get(
 router.post('/post-property', propertyController.addProperty);
 //router.post('/admin/addpropertyimage', propertyImage.upload);
 router.get('/admin/get-all-property', propertyController.getAllproperty);
+router.get('/admin/get-by-id/:id', propertyController.getPostPropertybyId);
+
+router.patch(
+  '/admin/set-property-status/:id',
+  propertyDataController.ActiveInactive
+);
+
+// router.post(
+//   '/admin/post-property-reply-email',
+//   propertyController.postPropertyEmail
+// );
+// router.get(
+//   '/admin/search-property-by-name',
+//   propertyDataController.propertySearchByName
+// );
+
+router.delete(
+  '/admin/delete-one-property/:id',
+  propertyDataController.deleteOneProperty
+);
+
+router.delete(
+  '/admin/delete-multiple-property',
+  propertyDataController.deleteProperty
+);
 
 module.exports = router;

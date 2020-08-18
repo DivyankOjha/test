@@ -5,7 +5,7 @@ const Land = require('./../models/landModel');
 const Hotel = require('./../models/hotelModel');
 const WareHouse = require('./../models/warehouseModel');
 const Inquiry = require('./../models/inquiryModel');
-const Attributes = require('./../models/attributesSchema');
+//const Attributes = require('./../models/attributesSchema');
 const PostProperty = require('../models/postPropertyModel');
 
 exports.getAllproperty = catchAsync(async (req, res) => {
@@ -59,6 +59,7 @@ exports.getpropertylist = catchAsync(async (req, res) => {
     warehouse,
   });
 });
+
 exports.attributes = catchAsync(async (req, res) => {
   const attributes = await Attributes.find();
   res.status(200).json({

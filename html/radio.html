@@ -1,0 +1,233 @@
+<h4 className="particilars">Zoning</h4>
+<div className="attributes">
+  <ul>
+    <li>
+      <input type="radio" name="zoning" value="Commercial"
+      checked={this.state.attributes.zoning==="Commercial" }
+      onChange={this.handleAttribute} /> Commercial
+    </li>
+    <li>
+      <input type="radio" name="zoning" value="Industrial"
+      checked={this.state.attributes.zoning==="Industrial" }
+      onChange={this.handleAttribute} /> Industrial
+    </li>
+    <li>
+      <input type="radio" name="zoning" value="Residential"
+      checked={this.state.attributes.zoning==="Residential" }
+      onChange={this.handleAttribute} /> Residential
+    </li>
+    <li>
+      <input type="radio" name="zoning" value="Epz"
+      checked={this.state.attributes.zoning==="Epz" }
+      onChange={this.handleAttribute} /> epz
+    </li>
+  </ul>
+</div>
+<h4 class="particilars">Town Location</h4>
+<div className="attributes">
+  <ul>
+    <li>
+      <input type="radio" name="townLocation" value="Downtown"
+      checked={this.state.attributes.townLocation==="Downtown" }
+      onChange={this.handleAttribute} /> Downtown
+    </li>
+    <li>
+      <input type="radio" name="townLocation" value="Uptown"
+      checked={this.state.attributes.townLocation==="Uptown" }
+      onChange={this.handleAttribute} /> Uptown
+    </li>
+    <li>
+      <input type="radio" name="townLocation" value="Neartown"
+      checked={this.state.attributes.townLocation==="Neartown" }
+      onChange={this.handleAttribute} /> Neartown
+    </li>
+    {/*
+    <!-- added near town li , check id -->
+    */}
+  </ul>
+</div>
+
+<h4 class="particilars">Access Road</h4>
+<div className="attributes">
+  <ul>
+    <li>
+      <input type="radio" name="accessRoad" value="Tarmac"
+      checked={this.state.attributes.accessRoad==="Tarmac" }
+      onChange={this.handleAttribute}/> Tarmac
+    </li>
+    <li>
+      <input type="radio" name="accessRoad" value="Cabro"
+      checked={this.state.attributes.accessRoad==="Cabro" }
+      onChange={this.handleAttribute} /> Cabro
+    </li>
+    <li>
+      <input type="radio" name="accessRoad" value="AllWeather"
+      checked={this.state.attributes.accessRoad==="AllWeather" }
+      onChange={this.handleAttribute}/> All weather
+    </li>
+    <li>
+      <input type="radio" name="accessRoad" value="Main"
+      checked={this.state.attributes.accessRoad==="Main" }
+      onChange={this.handleAttribute} /> Main
+    </li>
+  </ul>
+</div>
+<h4 class="particilars">Tenants</h4>
+
+<div className="attributes">
+  <ul>
+    <li>
+      <input type="radio" name="tenants" value="Mixed"
+      checked={this.state.attributes.tenants==="Mixed" }
+      onChange={this.handleAttribute} /> Mixed
+    </li>
+    <li>
+      <input type="radio" name="specialized" value="Specialized"
+      checked={this.state.attributes.tenants==="Specialized" }
+      onChange={this.handleAttribute} /> Specialized
+    </li>
+    <li>
+      <input type="radio" name="processing" value="Processing"
+      checked={this.state.attributes.tenants==="Processing" }
+      onChange={this.handleAttribute} /> Processing
+    </li>
+  </ul>
+</div>
+<h4 class="particilars">Elevator</h4>
+<div className="attributes">
+  <ul>
+    <li>
+      <input type="radio" name="elevator" value="None"
+      checked={this.state.attributes.elevator==="None" }
+      onChange={this.handleAttribute}/> None
+    </li>
+    <li>
+      <input type=radio" name="elevator" value="Goods"
+      checked={this.state.attributes.elevator==="Goods" }
+      onChange={this.handleAttribute}/> Goods
+    </li>
+    <li>
+      <input type="radio" name="elevator" value="Passenger"
+      checked={this.state.attributes.elevator==="Passenger" }
+      onChange={this.handleAttribute}/> Passenger
+    </li>
+    <li>
+      <input type="radio" name="elevator" value="Passenger and goods"
+      checked={this.state.attributes.elevator==="Passenger and goods" }
+      onChange={this.handleAttribute}/> Passenger and goods
+    </li>
+  </ul>
+</div>
+
+<h4 class="particilars">Security</h4>
+
+<div className="attributes">
+  <ul>
+    <li>
+      <input type="radio" name="security" value="Tight"
+      checked={this.state.attributes.security==="Tight" }
+      onChange={this.handleAttribute}/> Tight
+    </li>
+    <li>
+      <input type="radio" name="security" value="MainGate"
+      checked={this.state.attributes.security==="MainGate" }
+      onChange={this.handleAttribute}/> Main gate {/*
+      <!--  added maingate -->
+      */}
+    </li>
+
+    <li>
+      <input type="radio" name="security" value="MainGateAndFloors"
+      checked={this.state.attributes.security==="MainGateAndFloors" }
+      onChange={this.handleAttribute}/> Main gate and floors
+    </li>
+    <li>
+      <input type="radio" name="security" value="None"
+      checked={this.state.attributes.security==="None" }
+      onChange={this.handleAttribute}/> None
+    </li>
+  </ul>
+</div>
+<h4 class="particilars">Vehicle Traffic</h4>
+<div className="attributes">
+  <ul>
+    <li>
+      <input type="radio" name="vehicleTraffic" value="VeryHigh"
+      checked={this.state.attributes.vehicleTraffic==="VeryHigh" }
+      onChange={this.handleAttribute}/> Very high
+    </li>
+    <li>
+      <input type="radio" name="vehicleTraffic" value="High"
+      checked={this.state.attributes.vehicleTraffic==="High" }
+      onChange={this.handleAttribute}/> High
+    </li>
+    <li>
+      <input type="radio" name="vehicleTraffic" value="Low"
+      checked={this.state.attributes.vehicleTraffic==="Low" }
+      onChange={this.handleAttribute}/> Low
+    </li>
+  </ul>
+</div>
+
+<h4 class="particilars">Human Traffic</h4>
+<div className="attributes">
+  <ul>
+    <li>
+      <input type="radio" name="humanTraffic" value="VeryHigh"
+      checked={this.state.attributes.humanTraffic==="VeryHigh" }
+      onChange={this.handleAttribute}/> Very high
+    </li>
+    <li>
+      <input type="radio" name="high" value="radio"
+      checked={this.state.attributes.humanTraffic==="High" }
+      onChange={this.handleAttribute}/> High
+    </li>
+    <li>
+      <input type="radio" name="low" value="Low"
+      checked={this.state.attributes.humanTraffic==="Low" }
+      onChange={this.handleAttribute}/> Low
+    </li>
+  </ul>
+</div>
+
+<h4 class="particilars">Meeting Room</h4>
+<div className="attributes">
+  <ul>
+    <li>
+      <input type="radio" name="meetingRoom" value="None"
+      checked={this.state.attributes.meetingRoom==="None" }
+      onChange={this.handleAttribute} /> None
+    </li>
+    <li>
+      <input type="radio" name="meetingRoom" value="Free"
+      checked={this.state.attributes.meetingRoom==="Free" }
+      onChange={this.handleAttribute}/> Free
+    </li>
+    <li>
+      <input type="radio" name="meetingRoom" value="Paid"
+      checked={this.state.attributes.meetingRoom==="Paid" }
+      onChange={this.handleAttribute}/> Paid
+    </li>
+  </ul>
+</div>
+<h4 class="particilars">Parking</h4>
+
+<div className="attributes">
+  <ul>
+    <li>
+      <input type="radio" name="parking" value="None"
+      checked={this.state.attributes.parking==="None" }
+      onChange={this.handleAttribute} /> None
+    </li>
+    <li>
+      <input type="radio" name="parking" value="Free"
+      checked={this.state.attributes.parking==="Free" }
+      onChange={this.handleAttribute} /> Free
+    </li>
+    <li>
+      <input type="radio" name="parking" value="Paid"
+      checked={this.state.attributes.parking==="Paid" }
+      onChange={this.handleAttribute}/> Paid
+    </li>
+  </ul>
+</div>

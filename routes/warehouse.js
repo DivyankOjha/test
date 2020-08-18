@@ -5,5 +5,8 @@ const warehouseController = require('../controllers/propertyController/warehouse
 
 router.post('/post-warehouse', warehouseController.addWarehouse);
 router.get('/get-all-warehouse', warehouseController.getAllWarehouse);
-
+router.get(
+  '/search-property-by-name',
+  warehouseController.propertySearchByName
+);
 module.exports = router;

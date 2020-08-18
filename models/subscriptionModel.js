@@ -1,32 +1,26 @@
 const mongoose = require('mongoose');
 
 const subSchema = new mongoose.Schema({
-  //  Subscription order ID
+  isStatus: { type: Boolean, default: true },
+  // Subscription order ID
   // Customer email
-  // User ID
-  // Subscription type
-  // Subscription amount
-  // Used Points
-  // Subscription date,
-  subscriptionId: String,
+  userID: { type: mongoose.Schema.ObjectId },
+  subscriptionType: { type: String, default: 'rent' }, //rent
+  subscriptionAmount: { type: Number, default: 1200 }, //1200,
+  usedPoints: { type: Number, default: 50 }, // 50,
   subscriptionDate: { type: Date, default: Date.now },
-  //  amount:
+  email: String,
+  // subscriptionId: String,
   //  email:
-  //  userid:
-  user: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'User',
-    required: [true, ' must belong to a user'],
-  },
 });
 
-subSchema.pre(/^find/, function (next) {
-  this.populate('user').populate({
-    path: 'user',
-    select: 'email _id',
-  });
-  next();
-});
+// subSchema.pre(/^find/, function (next) {
+//   this.populate('user').populate({
+//     path: 'user',
+//     select: 'email',
+//   });
+//   next();
+// });
 
 const Subs = mongoose.model('Subscription', subSchema);
 

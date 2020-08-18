@@ -1,8 +1,7 @@
 const express = require('express');
-const router = express.Router();
+
 const catchAsync = require('./../../utils/catchAsync');
 const Email = require('../../models/emailModel');
-const { find, findById, findOne } = require('../../models/emailModel');
 
 exports.email = catchAsync(async (req, res, next) => {
   // let _id = req.body._id;

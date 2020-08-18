@@ -5,4 +5,5 @@ const hotelController = require('../controllers/propertyController/hotelControll
 
 router.post('/post-hotel', hotelController.addhotel);
 router.get('/get-all-hotel', hotelController.getAllHotel);
+router.get('/search-property-by-name', hotelController.propertySearchByName);
 module.exports = router;

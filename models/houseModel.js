@@ -1,78 +1,56 @@
 const mongoose = require('mongoose');
-require('mongoose-currency').loadType(mongoose);
-const Currency = mongoose.Types.Currency;
 
 const houseSchema = new mongoose.Schema({
   //page1 in admin add property details
 
+  isFlipbook: { type: Boolean, default: false },
+  isStatus: { type: Boolean, default: true },
+
   propertyDetails: {
     propertyName: String,
-    propertyFor: {
-      rent: { type: String, default: false },
-      buy: { type: String, default: false },
-    },
+    propertyFor: { type: String },
     propertyDescription: String,
-    propertyType: {
-      house: { type: String, default: 'House' },
-      hotel: { type: String, default: 'Hotel' },
-      commercial: { type: String, default: 'Commercial' },
-      residentialProperty: { type: String, default: 'Residential Property' },
-      land: { type: String, default: 'Land' },
-      plot: { type: String, default: 'Plot' },
-    },
+    propertyType: String,
     otherDetails: String,
     mapLink: String,
     selectSimilarProperties: String, //this field not clear image icon is displayed in design
-
-    // user: {
-    //   type: mongoose.Schema.ObjectId,
-    //   ref: 'User',
-    //   required: true,
-    // },
-
-    // buy: {
-    //   buy: { type: Boolean, default: false },
-    //   subcategory: {
-    //     gated: { type: Boolean, default: false },
-    //     standAlone: { type: Boolean, default: false },
-    //     apartment: { type: Boolean, default: false },
-    //   },
-    // }, buy: {
-    buy: { type: Boolean, default: false },
-    let: { type: Boolean, default: false },
-    fullyfurnished: { type: Boolean, default: false },
-    //doubt in above
-    subcategory: {
-      gated: { type: Boolean, default: false },
-      standAlone: { type: Boolean, default: false },
-      apartment: { type: Boolean, default: false },
-    },
-
-    propertyStatus: {
-      Complete: { type: Boolean, default: false },
-      offplan: { type: Boolean, default: false },
-      refurbished: { type: Boolean, default: false },
-    },
-    area: { type: Number },
-    minPrice: { type: Currency },
-    maxPrice: { type: Currency },
+    //area: { type: Number },
+    // price: Number,
   },
 
   //attributes page 2
   attributes: {
-    opticalfiber: { type: Boolean, default: false },
-    swimmingpool: { type: Boolean, default: false },
-    fireplace: { type: Boolean, default: false },
-    petsallowed: { type: Boolean, default: false },
-    solarhotwater: { type: Boolean, default: false },
-    cctv: { type: Boolean, default: false },
-    borehole: { type: Boolean, default: false },
-    disabilityfeature: { type: Boolean, default: false },
-    maturegarden: { type: Boolean, default: false },
-    balcony: { type: Boolean, default: false },
-    partyarea: { type: Boolean, default: false },
+    cost: Number,
+    area: Number,
+
+    buy: { type: Boolean },
+    let: { type: Boolean },
+    fullyfurnished: { type: Boolean },
+
+    gated: { type: Boolean },
+    standAlone: { type: Boolean },
+    apartment: { type: Boolean },
+
+    complete: { type: Boolean },
+    offplan: { type: Boolean },
+    refurbished: { type: Boolean },
+
+    opticalfiber: { type: Boolean },
+    swimmingpool: { type: Boolean },
+    fireplace: { type: Boolean },
+    petsallowed: { type: Boolean },
+    solarhotwater: { type: Boolean },
+    waterfront: { type: Boolean },
+    cctv: { type: Boolean },
+    borehole: { type: Boolean },
+    disabilityfeature: { type: Boolean },
+    maturegarden: { type: Boolean },
+    balcony: { type: Boolean },
+    partyarea: { type: Boolean },
+    gym: Number,
 
     bedroom: { type: Number },
+    bathrooms: Number,
     steambath: { type: Number },
     lift: { type: Number },
     bathtab: { type: Number },
@@ -101,17 +79,15 @@ const houseSchema = new mongoose.Schema({
     sellerContactNumber: Number,
     sellerofficeaddress: String,
     selleremail: String,
-    sellertype: {
-      owner: { type: String, default: false },
-      agent: { type: String, default: false },
-    },
+    sellertype: String,
+
     selleraltnumber: Number,
     selleraltemail: String,
     sellerwebsite: String,
     sellerlogo: String, //image path
     //remaining from doc
-    maximumprice: Number,
-    minimumprice: Number,
+    // maximumprice: Number,
+    // minimumprice: Number,
     location: String, //address
     description: String, // this point - !cleared
     maplink: String,
@@ -126,35 +102,46 @@ const houseSchema = new mongoose.Schema({
     description: String,
     flipbookBanner: String, //Banner
     //Property Details/Attributes
-    gated: { type: Boolean, default: false },
-    opticalfiber: { type: Boolean, default: false },
-    cctv: { type: Boolean, default: false },
-    standalone: { type: Boolean, default: false },
-    swimmingpool: { type: Boolean, default: false },
-    borehole: { type: Boolean, default: false },
-    apartment: { type: Boolean, default: false },
-    fireplace: { type: Boolean, default: false },
-    disability: { type: Boolean, default: false },
-    completed: { type: Boolean, default: false },
-    petsallowed: { type: Boolean, default: false },
-    maturegarden: { type: Boolean, default: false },
-    offplane: { type: Boolean, default: false },
-    solarhotwater: { type: Boolean, default: false },
-    balcony: { type: Boolean, default: false },
-    refurbished: { type: Boolean, default: false },
-    waterfront: { type: Boolean, default: false },
-    partyarea: { type: Boolean, default: false },
-    bathrooms: Number,
-    steambath: Number,
-    lifts: Number,
-    bathtabs: Number,
-    parkingslots: Number,
-    gym: Number,
+    //showattributes
+    showAttributes: {
+      cost: Boolean,
 
-    //select particilars
-    livingareasize: { type: Number, min: 0, max: 5000 },
-    kitchenareasize: { type: Number, min: 0, max: 5000 },
-    gardenareasize: { type: Number, min: 0, max: 5000 },
+      buy: { type: Boolean },
+      let: { type: Boolean },
+      fullyfurnished: { type: Boolean },
+
+      gated: { type: Boolean },
+      standAlone: { type: Boolean },
+      apartment: { type: Boolean },
+
+      complete: { type: Boolean },
+      offplan: { type: Boolean },
+      refurbished: { type: Boolean },
+
+      opticalfiber: { type: Boolean },
+      swimmingpool: { type: Boolean },
+      fireplace: { type: Boolean },
+      petsallowed: { type: Boolean },
+      solarhotwater: { type: Boolean },
+      waterfront: { type: Boolean },
+      cctv: { type: Boolean },
+      borehole: { type: Boolean },
+      disabilityfeature: { type: Boolean },
+      maturegarden: { type: Boolean },
+      balcony: { type: Boolean },
+      partyarea: { type: Boolean },
+      gym: Boolean,
+
+      bedroom: { type: Boolean },
+      bathrooms: Boolean,
+      steambath: { type: Boolean },
+      lift: { type: Boolean },
+      bathtab: { type: Boolean },
+      parking: { type: Boolean },
+      livingarea: Boolean,
+      kitchensize: Boolean,
+      gardensize: Boolean,
+    },
 
     //Pages
     //Second page

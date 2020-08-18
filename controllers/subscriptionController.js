@@ -12,7 +12,7 @@ exports.Subscription = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllSubscription = catchAsync(async (req, res) => {
-  const subs = await Subs.find();
+  const subs = await Subs.find({});
   res.status(200).json({
     status: 'success',
     results: subs.length,

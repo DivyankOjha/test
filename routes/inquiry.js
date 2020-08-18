@@ -6,4 +6,7 @@ const inquiryController = require('./../controllers/inquiryController');
 router.post('/add-new', inquiryController.Inquiry);
 router.get('/admin/get-all-inquiries', inquiryController.getAllInquiry);
 
+router.get('/admin/get-inquiry-by-id/:id', inquiryController.getInquirybyId);
+router.post('/admin/email', inquiryController.InquiryEmail);
+
 module.exports = router;

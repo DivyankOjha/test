@@ -10,10 +10,13 @@ const WareHouse = require('./../models/warehouseModel');
 
 exports.addFlipbook = catchAsync(async (req, res, next) => {
   // console.log(updatefields);
+  //let floorPlantest;
+  //floorPlantest = req.body.floortest[0].image;
+  //console.log('floorPlanTest : ' + floorPlantest);
 
   image2Dlinks = [];
   floorplan = [];
-
+  floor = [];
   let {
     description,
     tour360Property,
@@ -27,8 +30,11 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
   let id = req.body._id;
   let image2D = req.body.image2D;
   let image3D = req.body.image3D;
-  let floor = req.body.floorPlan;
+  floor = req.body.floorPlan;
+  //console.log(floor);
   let _id = req.body._id;
+  let showAttributes = req.body.showAttributes;
+  //console.log(req.body.showAttributes);
 
   /***********HOUSE***********/
   if (req.body.propertyType === 'House') {
@@ -43,6 +49,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
           'flippbook.contactSeller': contactSeller,
           'flipbook.propertyAvailability': propertyAvailability,
           'flipbook.sendmessageToSeller': sendmessageToSeller,
+          'flipbook.showAttributes': showAttributes,
         },
       }
     );
@@ -232,7 +239,10 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
     for (let i in floor) {
       //console.log(image3D);
       // console.log(image3D);
-      let matches = await floor[i].match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+      console.log(floor[i].name);
+      let matches = await floor[i].image.match(
+          /^data:([A-Za-z-+\/]+);base64,(.+)$/
+        ),
         response = {};
       if (matches.length !== 3) {
         return new Error('Invalid input string');
@@ -251,7 +261,9 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // console.log(extension);
       const rand = Math.ceil(Math.random() * 1000);
       //Random photo name with timeStamp so it will not overide previous images.
-      const fileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
+      const fileName = `${[i]}-${'floor-plan'}_${
+        floor[i].name
+      }_${title}.${extension}`;
       //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
       // let fileName = name1 ++ '.' + extension;
@@ -315,6 +327,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
           'flippbook.contactSeller': contactSeller,
           'flipbook.propertyAvailability': propertyAvailability,
           'flipbook.sendmessageToSeller': sendmessageToSeller,
+          'flipbook.showAttributes': showAttributes,
         },
       }
     );
@@ -588,6 +601,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
           'flippbook.contactSeller': contactSeller,
           'flipbook.propertyAvailability': propertyAvailability,
           'flipbook.sendmessageToSeller': sendmessageToSeller,
+          'flipbook.showAttributes': showAttributes,
         },
       }
     );
@@ -860,6 +874,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
           'flippbook.contactSeller': contactSeller,
           'flipbook.propertyAvailability': propertyAvailability,
           'flipbook.sendmessageToSeller': sendmessageToSeller,
+          'flipbook.showAttributes': showAttributes,
         },
       }
     );

@@ -2,91 +2,93 @@ const mongoose = require('mongoose');
 
 const warehouseSchema = new mongoose.Schema({
   //page1 in admin add property details
+  isFlipbook: { type: Boolean, default: false },
+  isStatus: { type: Boolean, default: true },
+
   propertyDetails: {
     propertyName: String,
-    propertyFor: {
-      rent: { type: String, default: false },
-      buy: { type: String, default: false },
-    },
+    propertyFor: { type: String },
     propertyDescription: String,
     propertyType: String,
     otherDetails: String,
     mapLink: String,
     selectSimilarProperties: String, //this field not clear image icon is displayed in design
+    price: Number,
   },
-  attributes: {
-    type: {
-      godown: { type: Boolean, defult: false },
-      commercialspace: { type: Boolean, defult: false },
-    },
-    area: { type: String },
-    mincost: String,
-    maxcost: String,
-    sizeinfeetfrom: Number,
-    sizeinfeetto: Number,
-    kmfromtarmax: String,
-    conferencefacilites: { type: Boolean, defult: false },
-    freshoutdoors: { type: Boolean, defult: false },
-    aircon: { type: Boolean, defult: false },
-    fullyfurnished: { type: Boolean, defult: false },
-    landscapegarden: { type: Boolean, defult: false },
-    wifi: { type: Boolean, defult: false },
-    sharedsecretary: { type: Boolean, defult: false },
 
-    zoning: {
-      commercial: { type: Boolean, defult: false },
-      industrial: { type: Boolean, defult: false },
-      residential: { type: Boolean, defult: false },
-      epz: { type: Boolean, defult: false },
-    },
-    townlocation: {
-      downtown: { type: Boolean, defult: false },
-      uptown: { type: Boolean, defult: false },
-      neartown: { type: Boolean, defult: false },
-    },
-    accessroad: {
-      tarmac: { type: Boolean, defult: false },
-      cabro: { type: Boolean, defult: false },
-      allweather: { type: Boolean, defult: false },
-      main: { type: Boolean, defult: false },
-    },
-    tenants: {
-      mixed: { type: Boolean, defult: false },
-      specialized: { type: Boolean, defult: false },
-      processing: { type: Boolean, defult: false },
-    },
-    elevator: {
-      none: { type: Boolean, defult: false }, // default true ??
-      goods: { type: Boolean, defult: false },
-      passenger: { type: Boolean, defult: false },
-      passengerandgoods: { type: Boolean, defult: false },
-    },
-    security: {
-      tight: { type: Boolean, defult: false },
-      maingate: { type: Boolean, defult: false },
-      maingateandfloors: { type: Boolean, defult: false },
-      none: { type: Boolean, defult: false },
-    },
-    vehicletraffic: {
-      veryhigh: { type: Boolean, defult: false },
-      high: { type: Boolean, defult: false },
-      low: { type: Boolean, defult: false },
-    },
-    humantraffic: {
-      veryhigh: { type: Boolean, defult: false },
-      high: { type: Boolean, defult: false },
-      low: { type: Boolean, defult: false },
-    },
-    meetingroom: {
-      none: { type: Boolean, defult: false },
-      free: { type: Boolean, defult: false },
-      paid: { type: Boolean, defult: false },
-    },
-    parking: {
-      none: { type: Boolean, defult: false },
-      free: { type: Boolean, defult: false },
-      paid: { type: Boolean, defult: false },
-    },
+  attributes: {
+    Type: String, //type giving error
+    // godown: { type: Boolean },
+    // commercialspace: { type: Boolean },
+
+    area: { type: Number },
+    cost: Number,
+
+    sizeinfeet: Number,
+    kmfromtarmax: Number,
+
+    conferencefacilites: { type: Boolean },
+    freshoutdoors: { type: Boolean },
+    aircon: { type: Boolean },
+    fullyfurnished: { type: Boolean },
+    landscapegarden: { type: Boolean },
+    wifi: { type: Boolean },
+    sharedsecretary: { type: Boolean },
+
+    zoning: String,
+    townLocation: String,
+    accessRoad: String,
+    tenants: String,
+    elevator: String,
+    security: String,
+    vehicleTraffic: String,
+    humanTraffic: String,
+    meetingRoom: String,
+    parking: String,
+
+    // commercial: { type: Boolean },
+    // industrial: { type: Boolean },
+    // residential: { type: Boolean },
+    // epz: { type: Boolean },
+
+    // downtown: { type: Boolean },
+    // uptown: { type: Boolean },
+    // neartown: { type: Boolean },
+
+    // tarmac: { type: Boolean },
+    // cabro: { type: Boolean },
+    // allweather: { type: Boolean },
+    // main: { type: Boolean },
+
+    // mixed: { type: Boolean },
+    // specialized: { type: Boolean },
+    // processing: { type: Boolean },
+
+    // none: { type: Boolean }, // default true ??
+    // goods: { type: Boolean },
+    // passenger: { type: Boolean },
+    // passengerandgoods: { type: Boolean },
+
+    // tight: { type: Boolean },
+    // maingate: { type: Boolean },
+    // maingateandfloors: { type: Boolean },
+    // none: { type: Boolean },
+
+    // veryhigh: { type: Boolean },
+    // high: { type: Boolean },
+    // low: { type: Boolean },
+
+    // veryhigh: { type: Boolean },
+    // high: { type: Boolean },
+    // low: { type: Boolean },
+
+    // none: { type: Boolean },
+    // free: { type: Boolean },
+    // paid: { type: Boolean },
+
+    // none: { type: Boolean },
+    // free: { type: Boolean },
+    // paid: { type: Boolean },
   },
   //page 3
   sellerDetails: {
@@ -94,17 +96,14 @@ const warehouseSchema = new mongoose.Schema({
     sellerContactNumber: Number,
     sellerofficeaddress: String,
     selleremail: String,
-    sellertype: {
-      owner: { type: String, default: false },
-      agent: { type: String, default: false },
-    },
+    sellertype: String,
     selleraltnumber: Number,
     selleraltemail: String,
     sellerwebsite: String,
     sellerlogo: String, //image path
     //remaining from doc
-    maximumprice: Number,
-    minimumprice: Number,
+    //  maximumprice: Number,
+    // minimumprice: Number,
     location: String, //address
     description: String, // this point - !cleared
     nearestplace: {
@@ -118,37 +117,37 @@ const warehouseSchema = new mongoose.Schema({
     description: String,
     flipbookBanner: String, //Banner
     //Property Details/Attributes
-    gated: { type: Boolean, default: false },
-    opticalfiber: { type: Boolean, default: false },
-    cctv: { type: Boolean, default: false },
-    standalone: { type: Boolean, default: false },
-    swimmingpool: { type: Boolean, default: false },
-    borehole: { type: Boolean, default: false },
-    apartment: { type: Boolean, default: false },
-    fireplace: { type: Boolean, default: false },
-    disability: { type: Boolean, default: false },
-    completed: { type: Boolean, default: false },
-    petsallowed: { type: Boolean, default: false },
-    maturegarden: { type: Boolean, default: false },
-    offplane: { type: Boolean, default: false },
-    solarhotwater: { type: Boolean, default: false },
-    balcony: { type: Boolean, default: false },
-    refurbished: { type: Boolean, default: false },
-    waterfront: { type: Boolean, default: false },
-    partyarea: { type: Boolean, default: false },
-    bathrooms: Number,
-    steambath: Number,
-    lifts: Number,
-    bathtabs: Number,
-    parkingslots: Number,
-    gym: Number,
+    showAttributes: {
+      Type: Boolean, //type giving error
+      // godown: { type: Boolean },
+      // commercialspace: { type: Boolean },
 
-    //select particilars
-    livingareasize: { type: Number, min: 0, max: 5000 },
-    kitchenareasize: { type: Number, min: 0, max: 5000 },
-    gardenareasize: { type: Number, min: 0, max: 5000 },
+      area: { type: Boolean },
+      cost: Boolean,
 
-    //Pages
+      sizeinfeet: Boolean,
+      kmfromtarmax: Boolean,
+
+      conferencefacilites: Boolean,
+      freshoutdoors: Boolean,
+      aircon: Boolean,
+      fullyfurnished: Boolean,
+      landscapegarden: Boolean,
+      wifi: Boolean,
+      sharedsecretary: Boolean,
+
+      zoning: Boolean,
+      townLocation: Boolean,
+      accessRoad: Boolean,
+      tenants: Boolean,
+      elevator: Boolean,
+      security: Boolean,
+      vehicleTraffic: Boolean,
+      humanTraffic: Boolean,
+      meetingRoom: Boolean,
+      parking: Boolean,
+    },
+
     //Second page
     image2D: { type: Array },
     image3D: String,

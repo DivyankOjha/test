@@ -3,7 +3,7 @@ const User = require('./../models/userModel');
 const mongoose = require('mongoose');
 
 exports.getAllUsers = catchAsync(async (req, res) => {
-  const users = await User.find();
+  const users = await User.aggregate([{ $match: { role: 'user' } }]);
   res.status(200).json({
     status: 'success',
     results: users.length,
@@ -39,13 +39,25 @@ exports.getnewUsers = catchAsync(async (req, res) => {
   let date = new Date();
   //date = Time;
   console.log(date);
-  const users = await User.find({
-    createdAt: { $lte: date },
-
+  const users = await User.aggregate([
+    {
+      $match: {
+        role: 'user',
+      },
+    },
+    // createdAt: { $lte: date },
     // createdAt: { $lt: endDate },
-  })
+  ])
+
     .sort({ createdAt: -1 })
     .limit(10);
+  // const users = await User.find({
+  //   // createdAt: { $lte: date },
+  //   // createdAt: { $lt: endDate },
+  // })
+  //   .project({ role: 'user' })
+  //   .sort({ createdAt: -1 })
+  //   .limit(10);
   // console.log('users: ' + users);
 
   res.status(200).json({
@@ -83,7 +95,7 @@ exports.searchUser = catchAsync(async (req, res, next) => {
   //console.log('length' + _id.length);
   try {
     if (mongoose.Types.ObjectId.isValid(searchquery)) {
-      console.log('this is id');
+      //console.log('this is id');
       const user = await User.findById(searchquery);
       console.log(user);
       res.status(200).json({
@@ -93,7 +105,7 @@ exports.searchUser = catchAsync(async (req, res, next) => {
       });
     }
     if (str.includes(substr)) {
-      console.log('this is email');
+      //console.log('this is email');
       const user = await User.findOne({ email: searchquery });
       console.log(user);
       res.status(200).json({
@@ -103,7 +115,7 @@ exports.searchUser = catchAsync(async (req, res, next) => {
       });
     }
     if (searchquery) {
-      console.log('this is username');
+      //console.log('this is username');
       const user = await User.find({
         $expr: {
           $regexMatch: {
@@ -119,10 +131,11 @@ exports.searchUser = catchAsync(async (req, res, next) => {
         data: user,
       });
     }
-  } catch (Error) {
+  } catch (error) {
+    //console.log(error);
     res.status(404).json({
-      status: 'NOT FOUND',
-      message: Error,
+      status: 'USER NOT FOUND',
+      // message: error,
     });
   }
 });

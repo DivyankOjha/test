@@ -1,0 +1,302 @@
+<div className="attributes-main">
+  <div className="attributes">
+    <ul>
+      <li>
+        <input type="radio" name="buy" id="RadioGroup2_0" value="radio" /> BUY
+      </li>
+      <li>
+        <input type="radio" name="let" id="RadioGroup2_1" value="radio" /> LET
+      </li>
+      <li>
+        <input
+          type="radio"
+          name="fullyfurnished"
+          id="RadioGroup3_2"
+          value="radio"
+        />
+        FULLY FURNISHED
+      </li>
+    </ul>
+    <ul>
+      <li>
+        <input type="checkbox" name="gated" onChange="{this.handleAttribute}" />
+        GATED
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="opticalfiber"
+          onChange="{this.handleAttribute}"
+        />
+        OPTICAL FIBRE
+      </li>
+      <li>
+        <input type="checkbox" name="cctv" onChange="{this.handleAttribute}" />
+        CCTV
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="standAlone"
+          onChange="{this.handleAttribute}"
+        />
+        STAND ALONE
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="swimmingpool"
+          onChange="{this.handleAttribute}"
+        />
+        SWIMMING POOL
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="borehole"
+          onChange="{this.handleAttribute}"
+        />
+        BORE HOLE
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="apartment"
+          onChange="{this.handleAttribute}"
+        />
+        APARTMENT
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="fireplace"
+          onChange="{this.handleAttribute}"
+        />
+        FIRE PLACE
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="disabilityfeature"
+          onChange="{this.handleAttribute}"
+        />
+        DISABILITY FEATURE
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="complete"
+          onChange="{this.handleAttribute}"
+        />
+        COMPLETED
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="petsallowed"
+          onChange="{this.handleAttribute}"
+        />
+        PETS ALLOWED
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="maturegarden"
+          onChange="{this.handleAttribute}"
+        />
+        MATURE GARDEN
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="offplan"
+          onChange="{this.handleAttribute}"
+        />
+        OFF PLAN
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="solarhotwater"
+          onChange="{this.handleAttribute}"
+        />
+        SOLAR HOT WATER
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="balcony"
+          onChange="{this.handleAttribute}"
+        />
+        BALCONY
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="refurbished"
+          onChange="{this.handleAttribute}"
+        />
+        REFURBISHED
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="waterFront"
+          onChange="{this.handleAttribute}"
+        />
+        WATER FRONT
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          name="partyarea"
+          onChange="{this.handleAttribute}"
+        />
+        PARTY AREA
+      </li>
+    </ul>
+  </div>
+
+  <div className="numeric-number">
+    <ul>
+      <li>
+        <div className="numeric-label">
+          <label
+            >How many <br />
+            Bathrooms</label
+          >
+          <input
+            type="number"
+            name="bathrooms"
+            placeholder="0"
+            onChange="{this.handleAttribute}"
+          />
+        </div>
+        <div className="numeric-label">
+          <label
+            >How many <br />
+            Bedrooms</label
+          >
+          <input
+            type="number"
+            name="bedroom"
+            placeholder="0"
+            onChange="{this.handleAttribute}"
+          />
+        </div>
+      </li>
+
+      <li>
+        <div className="numeric-label">
+          <label
+            >How many<br />
+            Steam Bath</label
+          >
+          <input
+            type="number"
+            name="steambath"
+            placeholder="0"
+            onChange="{this.handleAttribute}"
+          />
+        </div>
+      </li>
+
+      <li>
+        <div className="numeric-label">
+          <label>How many lifts</label>
+          <input
+            type="number"
+            name="lift"
+            placeholder="0"
+            onChange="{this.handleAttribute}"
+          />
+        </div>
+      </li>
+
+      <li>
+        <div className="numeric-label">
+          <label
+            >How many <br />
+            baths tabs</label
+          >
+          <input
+            type="number"
+            name="bathtab"
+            placeholder="0"
+            oonChange="{this.handleAttribute}"
+          />
+        </div>
+      </li>
+
+      <li>
+        <div className="numeric-label">
+          <label
+            >How many <br />
+            parking slots</label
+          >
+          <input
+            type="number"
+            name="parking"
+            placeholder="0"
+            onChange="{this.handleAttribute}"
+          />
+        </div>
+      </li>
+      <li>
+        <div className="numeric-label">
+          <label>GYM</label>
+          <input
+            type="number"
+            name="gym"
+            placeholder="0"
+            onChange="{this.handleAttribute}"
+          />
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div className="form-group">
+    <label>Living Area Size</label>
+    <input
+      type="number"
+      className="form-control"
+      name="livingarea"
+      placeholder="0"
+      onChange="{this.handleAttribute}"
+    />
+  </div>
+
+  <div className="form-group">
+    <label>Kitchen Area Size</label>
+    <input
+      type="number"
+      className="form-control"
+      name="kitchensize"
+      placeholder="0"
+      onChange="{this.handleAttribute}"
+    />
+  </div>
+
+  <div className="form-group">
+    <label>Garden Area Size </label>
+    <input
+      type="number"
+      className="form-control"
+      name="gardensize"
+      placeholder="0"
+      onChange="{this.handleAttribute}"
+    />
+  </div>
+
+  <div className="form-group text-right">
+    <button
+      className="step-next"
+      href="#tab_default_3"
+      data-toggle="tab"
+      onClick="{this.step3c}"
+    >
+      Next
+    </button>
+  </div>
+</div>

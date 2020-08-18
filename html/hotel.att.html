@@ -1,0 +1,107 @@
+<h4 class="particilars">Soil Type</h4>
+<div className="attributes">
+  <ul>
+    <li>
+      <input type="radio" name="soilType" value="Red"
+      checked={this.state.attributes.soilType==="Red" }
+      onChange={this.handleAttribute} /> Red
+    </li>
+    <li>
+      <input type="radio" name="soilType" value="Blackcotton"
+      checked={this.state.attributes.soilType==="Blackcotton" }
+      onChange={this.handleAttribute} /> Black cotton
+    </li>
+    <li>
+      <input type="radio" name="soilType" value="Murram"
+      checked={this.state.attributes.soilType==="Murram" }
+      onChange={this.handleAttribute} /> Murram
+    </li>
+  </ul>
+</div>
+
+<div className="add-property-form">
+  <div className="attributes">
+    <ul>
+      <li>
+        <input
+          type="radio"
+          name="worldclass"
+          id="RadioGroup4_0"
+          value="radio"
+        />
+        world class
+      </li>
+      <li>
+        <input type="radio" name="midrange" id="RadioGroup4_1" value="radio" />
+        Mid-range
+      </li>
+      <li>
+        <input type="radio" name="budget" id="RadioGroup4_2" value="radio" />
+        Budget
+      </li>
+    </ul>
+  </div>
+  <h4 class="particilars">Locality</h4>
+  <div className="attributes">
+    <ul>
+      <li>
+        <input type="radio" name="city" id="RadioGroup5_0" value="radio" />
+        City
+      </li>
+      <li>
+        <input type="radio" name="airport" id="RadioGroup5_1" value="radio" />
+        Airport
+      </li>
+      <li>
+        <input type="radio" name="outskirts" id="RadioGroup5_2" value="radio" />
+        Outskirts
+      </li>
+      <li>
+        <input type="radio" name="gamehotel" id="RadioGroup5_3" value="radio" />
+        Game hotel
+      </li>
+    </ul>
+  </div>
+
+  <div className="attributes">
+    <ul>
+      <li><input type="checkbox" name="carpark" /> carpark</li>
+      <li><input type="checkbox" name="spa" /> spa</li>
+      <li><input type="checkbox" name="aircon" /> aircon</li>
+      <li><input type="checkbox" name="freshoutdoors" /> fresh out doors</li>
+      <li><input type="checkbox" name="indoorpool" /> indoor pool</li>
+      <li>
+        <input type="checkbox" name="disabilityaccess" /> disability access
+      </li>
+      <li><input type="checkbox" name="barlounge" /> Bar Lounge</li>
+      <li><input type="checkbox" name="hairsalon" /> Hair Salon</li>
+      <li><input type="checkbox" name="petsallowed" /> Pets Allowed</li>
+    </ul>
+  </div>
+  <div className="numeric-number lookingd">
+    <ul>
+      <li>
+        <div className="numeric-label">
+          <span>Bed Breakfast Cost</span>
+          <input type="number" name="bedbreakfastcost" />
+        </div>
+      </li>
+      <li>
+        <div className="numeric-label">
+          <span>km from tarmac</span>
+          <input type="number" name="kmfromtarmac" />
+        </div>
+      </li>
+      <li>
+        <div className="numeric-label">
+          <span>Conference room</span>
+          <input type="number" name="conferenceroom" />
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div className="form-group text-right">
+    <button className="step-next">Next</button>
+  </div>
+</div>

@@ -6,4 +6,6 @@ const houseController = require('./../controllers/propertyController/houseContro
 router.post('/post-house', houseController.house);
 router.get('/get-all-house', houseController.getAllHouse);
 
+router.get('/search-property-by-name', houseController.propertySearchByName);
+//router.delete('/delete-one-property/:id', houseController.deleteOneProperty);
 module.exports = router;

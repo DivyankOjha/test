@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const flipbookSchema = new mongoose.Schema({
-  propertyName: String, //Title is property name ???
+  title: String, //Title is property name ???
   description: String,
   flipbookImage: String, //Banner
   //Property Details/Attributes

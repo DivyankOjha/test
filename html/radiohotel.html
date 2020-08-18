@@ -1,0 +1,45 @@
+<h4 class="particilars">Class</h4>
+<div className="attributes">
+  <ul>
+    <li>
+      <input type="radio" name="class" value="WorldClass"
+      checked={this.state.attributes.class==="WorldClass" }
+      onChange={this.handleAttribute}/> world class
+    </li>
+    <li>
+      <input type="radio" name="class" value="MidRange"
+      checked={this.state.attributes.class==="MidRange" }
+      onChange={this.handleAttribute}/> Mid-range
+    </li>
+    <li>
+      <input type="radio" name="class" value="Budget"
+      checked={this.state.attributes.class==="Budget" }
+      onChange={this.handleAttribute}/> Budget
+    </li>
+  </ul>
+</div>
+<h4 class="particilars">Locality</h4>
+<div className="attributes">
+  <ul>
+    <li>
+      <input type="radio" name="locality" value="City"
+      checked={this.state.attributes.locality==="Budget" }
+      onChange={this.handleAttribute} /> City
+    </li>
+    <li>
+      <input type="radio" name="locality" value="Airport"
+      checked={this.state.attributes.locality==="Budget" }
+      onChange={this.handleAttribute}/> Airport
+    </li>
+    <li>
+      <input type="radio" name="locality" value="Outskirts"
+      checked={this.state.attributes.locality==="Budget" }
+      onChange={this.handleAttribute}/> Outskirts
+    </li>
+    <li>
+      <input type="radio" name="locality" value="GameHotel"
+      checked={this.state.attributes.locality==="GameHotel" }
+      onChange={this.handleAttribute}/> Game hotel
+    </li>
+  </ul>
+</div>
