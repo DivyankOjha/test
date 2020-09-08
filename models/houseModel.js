@@ -5,15 +5,16 @@ const houseSchema = new mongoose.Schema({
 
   isFlipbook: { type: Boolean, default: false },
   isStatus: { type: Boolean, default: true },
+  categoryType: { type: String, default: 'House' },
 
   propertyDetails: {
     propertyName: String,
     propertyFor: { type: String },
     propertyDescription: String,
-    propertyType: String,
+    propertyType: { type: String, default: 'House' },
     otherDetails: String,
     mapLink: String,
-    selectSimilarProperties: String, //this field not clear image icon is displayed in design
+    selectSimilarProperties: Array, //this field not clear image icon is displayed in design
     //area: { type: Number },
     // price: Number,
   },
@@ -22,18 +23,23 @@ const houseSchema = new mongoose.Schema({
   attributes: {
     cost: Number,
     area: Number,
+    //transform radio buttons like hotel
+    //mainCategory : buy,let,fully
 
-    buy: { type: Boolean },
-    let: { type: Boolean },
-    fullyfurnished: { type: Boolean },
+    mainCategory: String,
+    // buy: { type: Boolean },
+    // let: { type: Boolean },
+    // fullyfurnished: { type: Boolean },
 
-    gated: { type: Boolean },
-    standAlone: { type: Boolean },
-    apartment: { type: Boolean },
+    subCategory: String,
+    // gated: { type: Boolean },
+    // standAlone: { type: Boolean },
+    // apartment: { type: Boolean },
 
-    complete: { type: Boolean },
-    offplan: { type: Boolean },
-    refurbished: { type: Boolean },
+    propertyStatus: String,
+    // complete: { type: Boolean },
+    // offplan: { type: Boolean },
+    // refurbished: { type: Boolean },
 
     opticalfiber: { type: Boolean },
     swimmingpool: { type: Boolean },
@@ -47,28 +53,22 @@ const houseSchema = new mongoose.Schema({
     maturegarden: { type: Boolean },
     balcony: { type: Boolean },
     partyarea: { type: Boolean },
-    gym: Number,
 
+    gym: Number,
     bedroom: { type: Number },
     bathrooms: Number,
     steambath: { type: Number },
     lift: { type: Number },
     bathtab: { type: Number },
     parking: { type: Number },
-    livingarea: {
+    livingsize: {
       type: Number,
-      min: 0,
-      max: 500,
     },
     kitchensize: {
       type: Number,
-      min: 0,
-      max: 500,
     },
     gardensize: {
       type: Number,
-      min: 0,
-      max: 500,
     },
   },
 

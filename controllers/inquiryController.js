@@ -2,6 +2,8 @@ const catchAsync = require('./../utils/catchAsync');
 const Email = require('./../models/emailModel');
 const Inquiry = require('../models/inquiryModel');
 const nodemailer = require('nodemailer');
+
+//post inquiry
 exports.Inquiry = catchAsync(async (req, res, next) => {
   const newInquiry = await Inquiry.create(req.body);
   res.status(201).json({
@@ -13,7 +15,9 @@ exports.Inquiry = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllInquiry = catchAsync(async (req, res) => {
-  const inquiry = await Inquiry.find();
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+  const inquiry = await Inquiry.find().skip(skip).limit(limit);
   res.status(200).json({
     status: 'success',
     results: inquiry.length,
@@ -57,6 +61,40 @@ exports.deleteInquiry = catchAsync(async (req, res) => {
   });
 });
 
+exports.searchInquiry = catchAsync(async (req, res, next) => {
+  //by subscriptionid/email
+  let searchquery = req.body.searchquery;
+  let str = searchquery;
+  let substr = '@';
+  // console.log(str.includes(substr));
+  console.log(searchquery);
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
+  //const _id = searchquery;
+  //console.log('length' + _id.length);
+  try {
+    if (str.includes(substr)) {
+      console.log('this is email');
+      const data = await Inquiry.find({ email: searchquery })
+        .skip(skip)
+        .limit(limit);
+      console.log(data);
+      res.status(200).json({
+        status: 'success',
+        results: data.length,
+        data: data,
+      });
+    }
+  } catch (error) {
+    //console.log(error);
+    res.status(404).json({
+      status: 'Not Found',
+      message: 'Property Inquiry Details Not Found! Try again.',
+    });
+  }
+});
+
 exports.InquiryEmail = catchAsync(async (req, res) => {
   console.log(req.body.reciever);
   const emailsettings = await Email.findById({
@@ -79,7 +117,7 @@ exports.InquiryEmail = catchAsync(async (req, res) => {
   //const url = `http://localhost:3002/api/users/confirmation/${token}`;
   for (var i in req.body.reciever) {
     var mailOptions = {
-      from: 'Rahul Dhingra <rahul.dhingra@digimonk.in>',
+      from: `CUBOID <${emailsettings.username}>`,
       to: req.body.reciever[i],
       subject: req.body.subject[i],
       html: `<p>Hello ${req.body.message[i]}</p>`,

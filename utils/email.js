@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const Email = require('../models/emailModel');
 // module.exports = class Email {
 //   constructor(user, url) {
 //     this.to = user.email;
@@ -36,7 +37,7 @@ const sendEmail = async (options) => {
 
   //2 define email options
   const mailOptions = {
-    from: 'Divyank <divyank@ojha.io>',
+    from: `CUBOID <${emailsettings.username}>`,
     to: options.email,
     subject: options.subject,
     html: options.message,

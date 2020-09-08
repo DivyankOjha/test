@@ -9,6 +9,20 @@ const app = require('./app');
 // });
 
 dotenv.config({ path: './config.env' });
+const DB = process.env.DatabaseCUBOID.replace(
+  '<password>',
+  process.env.CUBOIDPASSWORD
+);
+mongoose
+  .connect(DB, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  })
+  .then(() => {
+    console.log('DB connection successfull');
+  });
 // const DB = process.env.DATABASE.replace(
 //   '<PASSWORD>',
 //   process.env.DATABASE_PASSWORD
@@ -23,33 +37,33 @@ dotenv.config({ path: './config.env' });
 //   .then(() => {
 //     console.log('DB connection successfull');
 //   });
-mongoose
-  .connect(process.env.DATABASE_LOCAL, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  })
-  .then(() => {
-    console.log('DB connection successfull');
-  });
+// mongoose
+//   .connect(process.env.DATABASE_LOCAL, {
+//     useUnifiedTopology: true,
+//     useNewUrlParser: true,
+//     useCreateIndex: true,
+//     useFindAndModify: false,
+//   })
+//   .then(() => {
+//     console.log('DB connection successfull');
+//   });
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
 
-// process.on('unhandledRejection', (err) => {
-//   console.log('UNHANDLED REJECTION! 💥 Shutting down...');
-//   console.log(err.name, err.message);
-//   server.close(() => {
-//     process.exit(1);
-//   });
-// });
+process.on('unhandledRejection', (err) => {
+  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
 
-// process.on('SIGTERM', () => {
-//   console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
-//   server.close(() => {
-//     console.log('💥 Process terminated!');
-//   });
-// });
+process.on('SIGTERM', () => {
+  console.log('👋 SIGTERM RECEIVED. Shutting down gracefully');
+  server.close(() => {
+    console.log('💥 Process terminated!');
+  });
+});

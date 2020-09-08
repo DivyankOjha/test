@@ -7,27 +7,27 @@ const hotelSchema = new mongoose.Schema({
 
   isFlipbook: { type: Boolean, default: false },
   isStatus: { type: Boolean, default: true },
-
+  categoryType: { type: String, default: 'Hotel' },
   propertyDetails: {
     propertyName: String,
     propertyFor: { type: String },
     propertyDescription: String,
-    propertyType: String,
+    propertyType: { type: String },
     otherDetails: String,
     mapLink: String,
-    selectSimilarProperties: String, //this field not clear image icon is displayed in design
+    selectSimilarProperties: Array,
   },
 
   attributes: {
-    cost: Number,
-    class: String,
-    locality: String,
+    cost: { type: Number },
+    class: { type: String },
+    locality: { type: String },
 
     area: { type: Number },
 
-    bedbreakfastcost: Number,
+    bedbreakfastcost: { type: Number },
     kmfromtarmac: { type: Number },
-    conferenceroom: Number,
+    conferenceroom: { type: Number },
 
     carpark: { type: Boolean },
     aircon: { type: Boolean },
@@ -49,6 +49,7 @@ const hotelSchema = new mongoose.Schema({
 
     //hotelname: { type: String }, == propertyName
   },
+
   //page 3
   sellerDetails: {
     sellername: String,

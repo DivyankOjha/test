@@ -9,6 +9,45 @@ const fs = require('fs');
 exports.addWarehouse = catchAsync(async (req, res, next) => {
   const warehouse = await WareHouse.create(req.body);
 
+  let type = warehouse.attributes.Type;
+  let typelower = type.toLowerCase();
+  let zoning = warehouse.attributes.zoning;
+  let zoninglower = zoning.toLowerCase();
+  let townLocation = warehouse.attributes.townLocation;
+  let townlower = townLocation.toLowerCase();
+  let accessRoad = warehouse.attributes.accessRoad;
+  let roadlower = accessRoad.toLowerCase();
+  let tenants = warehouse.attributes.tenants;
+  let tenantslower = tenants.toLowerCase();
+  let elevator = warehouse.attributes.elevator;
+  let elevatorlower = elevator.toLowerCase();
+  let vehicleTraffic = warehouse.attributes.vehicleTraffic;
+  let vehiclelower = vehicleTraffic.toLowerCase();
+  let humanTraffic = warehouse.attributes.humanTraffic;
+  let humanlower = humanTraffic.toLowerCase();
+  let meetingRoom = warehouse.attributes.meetingRoom;
+  let meetinglower = meetingRoom.toLowerCase();
+  let parking = warehouse.attributes.parking;
+  let parkinglower = parking.toLowerCase();
+
+  const updating = await WareHouse.findByIdAndUpdate(
+    { _id: warehouse._id },
+    {
+      $set: {
+        'attributes.Type': typelower,
+        'attributes.zoning': zoninglower,
+        'attributes.townLocation': townlower,
+        'attributes.accessRoad': roadlower,
+        'attributes.tenants': tenantslower,
+        'attributes.elevator': elevatorlower,
+        'attributes.vehicleTraffic': vehiclelower,
+        'attributes.humanTraffic': humanlower,
+        'attributes.meetingRoom': meetinglower,
+        'attributes.parking': parkinglower,
+      },
+    }
+  );
+
   var matches = await req.body.sellerDetails.sellerlogo.match(
       /^data:([A-Za-z-+\/]+);base64,(.+)$/
     ),
@@ -67,8 +106,11 @@ exports.addWarehouse = catchAsync(async (req, res, next) => {
   });
 });
 
+//pagination done
 exports.getAllWarehouse = catchAsync(async (req, res) => {
-  const warehouse = await WareHouse.find();
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+  const warehouse = await WareHouse.find().skip(skip).limit(limit);
   res.status(200).json({
     status: 'success',
     results: warehouse.length,
@@ -79,6 +121,8 @@ exports.getAllWarehouse = catchAsync(async (req, res) => {
 });
 
 exports.propertySearchByName = catchAsync(async (req, res, next) => {
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
   let searchquery = req.body.searchquery;
   // let str = searchquery;
   // let substr = '@';
@@ -119,7 +163,9 @@ exports.propertySearchByName = catchAsync(async (req, res, next) => {
             options: 'i',
           },
         },
-      });
+      })
+        .skip(skip)
+        .limit(limit);
       if (house.length < 1) {
         //console.log('hello');
         res.status(404).json({

@@ -4,28 +4,31 @@ const warehouseSchema = new mongoose.Schema({
   //page1 in admin add property details
   isFlipbook: { type: Boolean, default: false },
   isStatus: { type: Boolean, default: true },
-
+  categoryType: { type: String, default: 'Warehouse' },
   propertyDetails: {
+    Type: { type: String },
     propertyName: String,
     propertyFor: { type: String },
     propertyDescription: String,
-    propertyType: String,
+    propertyType: { type: String, value: 'Warehouse' },
     otherDetails: String,
     mapLink: String,
-    selectSimilarProperties: String, //this field not clear image icon is displayed in design
-    price: Number,
+    selectSimilarProperties: Array, //this field not clear image icon is displayed in design
+    // price: Number,
   },
 
   attributes: {
     Type: String, //type giving error
     // godown: { type: Boolean },
-    // commercialspace: { type: Boolean },
+    // commercialspace: { type: Boolean },.
+    buy: { type: Boolean },
+    let: { type: Boolean },
 
     area: { type: Number },
     cost: Number,
 
     sizeinfeet: Number,
-    kmfromtarmax: Number,
+    kmfromtarmac: Number, //tarmac
 
     conferencefacilites: { type: Boolean },
     freshoutdoors: { type: Boolean },

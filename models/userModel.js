@@ -10,16 +10,17 @@ const userSchema = new mongoose.Schema({
   subscription: {
     usedPoints: { type: Number, default: 0 },
     totalPoints: { type: Number, default: 1500 },
-    type: {
+    Type: {
       buy: { type: String, default: false },
       rent: { type: String, default: false },
     },
   },
   isSubscribed: { type: Boolean, default: false },
   imagepath: { type: String }, //we can set a default profile image for the user ???
-  flipbook: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Flipbook',
+  savedflipbook: {
+    // array
+    type: Array,
+    // ref: 'Flipbook',
   },
   email: {
     type: String,

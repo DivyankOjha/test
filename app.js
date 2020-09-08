@@ -21,6 +21,8 @@ const subscriptionRoutes = require('./routes/subscription');
 const propertyRoutes = require('./routes/property');
 const dashboardRoutes = require('./routes/dashboard');
 const flipbookRoutes = require('./routes/flipbook');
+const allAttributes = require('./routes/allAttributes');
+const review = require('./routes/review');
 
 const globalErrorHandler = require('./controllers/errorController');
 const app = express();
@@ -111,6 +113,9 @@ app.use('/api/subscription', subscriptionRoutes);
 app.use('/api/property', propertyRoutes);
 app.use('/api/admin/dashboard', dashboardRoutes);
 app.use('/api/admin/flipbook', flipbookRoutes);
+app.use('/api/admin/attributes', allAttributes);
+
+app.use('/api/review', review);
 
 app.use(globalErrorHandler);
 

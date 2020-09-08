@@ -2,6 +2,7 @@ const catchAsync = require('./../utils/catchAsync');
 const User = require('../models/userModel');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
+const AppError = require('./../utils/appError');
 
 exports.getuser = catchAsync(async (req, res) => {
   let token;

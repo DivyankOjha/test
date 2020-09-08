@@ -20,7 +20,7 @@ exports.getdata = catchAsync(async (req, res, next) => {
     let data = [];
     val1 = housedata[i].propertyDetails.propertyName;
     data.push(val1);
-    val2 = housedata[i].propertyDetails.propertyType;
+    val2 = housedata[i].categoryType;
     data.push(val2);
     val3 = housedata[i]._id;
     data.push(val3);
@@ -36,7 +36,7 @@ exports.getdata = catchAsync(async (req, res, next) => {
     let data1 = [];
     val1 = land[i].propertyDetails.propertyName;
     data1.push(val1);
-    val2 = land[i].propertyDetails.propertyType;
+    val2 = land[i].categoryType;
     data1.push(val2);
     val3 = land[i]._id;
     data1.push(val3);
@@ -48,7 +48,7 @@ exports.getdata = catchAsync(async (req, res, next) => {
     let data2 = [];
     val1 = hotel[i].propertyDetails.propertyName;
     data2.push(val1);
-    val2 = hotel[i].propertyDetails.propertyType;
+    val2 = hotel[i].categoryType;
     data2.push(val2);
     val3 = hotel[i]._id;
     data2.push(val3);
@@ -61,7 +61,7 @@ exports.getdata = catchAsync(async (req, res, next) => {
     let data3 = [];
     val1 = warehouse[i].propertyDetails.propertyName;
     data3.push(val1);
-    val2 = warehouse[i].propertyDetails.propertyType;
+    val2 = warehouse[i].categoryType;
     data3.push(val2);
     val3 = warehouse[i]._id;
     data3.push(val3);
@@ -81,7 +81,7 @@ exports.getdata = catchAsync(async (req, res, next) => {
 
 exports.ActiveInactive = catchAsync(async (req, res, next) => {
   const _id = req.params.id;
-  const property = await House.findById({ _id });
+  const property = await House.findById({ _id }); //house
   const land = await Land.findById({ _id });
   const hotel = await Hotel.findById({ _id });
   const warehouse = await Warehouse.findById({ _id });

@@ -9,6 +9,25 @@ const fs = require('fs');
 exports.land = catchAsync(async (req, res, next) => {
   const newLand = await Land.create(req.body);
 
+  let nature = newLand.attributes.nature;
+  let naturelower = nature.toLowerCase();
+  let soilType = newLand.attributes.soilType;
+  let soillower = soilType.toLowerCase();
+  let road = newLand.attributes.road;
+  let roadlower = road.toLowerCase();
+  console.log(mainlower);
+
+  const updating = await Land.findByIdAndUpdate(
+    { _id: newLand._id },
+    {
+      $set: {
+        'attributes.nature': naturelower,
+        'attributes.soilType': soillower,
+        'attributes.road': roadlower,
+      },
+    }
+  );
+
   var matches = await req.body.sellerDetails.sellerlogo.match(
       /^data:([A-Za-z-+\/]+);base64,(.+)$/
     ),
@@ -67,8 +86,11 @@ exports.land = catchAsync(async (req, res, next) => {
   });
 });
 
+//Pagination done
 exports.getAllland = catchAsync(async (req, res) => {
-  const land = await Land.find();
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+  const land = await Land.find().skip(skip).limit(limit);
   res.status(200).json({
     status: 'success',
     results: land.length,
@@ -79,6 +101,8 @@ exports.getAllland = catchAsync(async (req, res) => {
 });
 
 exports.propertySearchByName = catchAsync(async (req, res, next) => {
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
   let searchquery = req.body.searchquery;
   // let str = searchquery;
   // let substr = '@';
@@ -119,7 +143,9 @@ exports.propertySearchByName = catchAsync(async (req, res, next) => {
             options: 'i',
           },
         },
-      });
+      })
+        .skip(skip)
+        .limit(limit);
       if (house.length < 1) {
         //console.log('hello');
         res.status(404).json({

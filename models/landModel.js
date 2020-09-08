@@ -7,19 +7,23 @@ const landSchema = new mongoose.Schema({
 
   isFlipbook: { type: Boolean, default: false },
   isStatus: { type: Boolean, default: true },
+  categoryType: { type: String, default: 'Land' },
   propertyDetails: {
     propertyName: String,
     propertyFor: { type: String },
     propertyDescription: String,
-    propertyType: String,
+    propertyType: { type: String },
     otherDetails: String,
     mapLink: String,
-    selectSimilarProperties: String, //this field not clear image icon is displayed in design
+    selectSimilarProperties: Array, //this field not clear image icon is displayed in design
     // price: Number,
   },
 
   //Attributes
   attributes: {
+    buy: { type: Boolean },
+    let: { type: Boolean },
+
     cost: Number,
     sizeinacres: { type: Number }, // need to set min max ??
 

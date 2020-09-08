@@ -8,7 +8,28 @@ const fs = require('fs');
 exports.house = catchAsync(async (req, res, next) => {
   // const currentlogo = req.body.sellerDetails.sellerlogo;
   //  console.log('currentlogo: ' + currentlogo);
+
   const newHouse = await House.create(req.body);
+  let maincategory = newHouse.attributes.mainCategory;
+  let mainlower = maincategory.toLowerCase();
+  let subCategory = newHouse.attributes.subCategory;
+  let sublower = subCategory.toLowerCase();
+  let propertyStatus = newHouse.attributes.propertyStatus;
+  let propertyStatusLower = propertyStatus.toLowerCase();
+  console.log(mainlower);
+
+  const updating = await House.findByIdAndUpdate(
+    { _id: newHouse._id },
+    {
+      $set: {
+        'attributes.mainCategory': mainlower,
+        'attributes.subCategory': sublower,
+        'attributes.propertyStatus': propertyStatusLower,
+      },
+    }
+  );
+  // console.log(updateing);
+  // console.log(newHouse._id);
 
   //console.log(req.protocol);
   // console.log(req.get('host'));
@@ -43,24 +64,24 @@ exports.house = catchAsync(async (req, res, next) => {
     return new Error('Invalid input string');
   }
   response.type = matches[1];
-  console.log(response.type);
+  //  console.log(response.type);
   response.data = new Buffer.from(matches[2], 'base64');
   let decodedImg = response;
   let imageBuffer = decodedImg.data;
   let type = decodedImg.type;
   const name = type.split('/');
-  console.log(name);
+  //  console.log(name);
   const name1 = name[0];
-  console.log(name1);
+  // console.log(name1);
   let extension = mime.extension(type);
-  console.log(extension);
+  // console.log(extension);
   const rand = Math.ceil(Math.random() * 1000);
   //Random photo name with timeStamp so it will not overide previous images.
   const fileName = `${newHouse.sellerDetails.sellername}.${extension}`;
   //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
   // let fileName = name1 ++ '.' + extension;
-  console.log(fileName);
+  // console.log(fileName);
   let abc = 'abc';
   path3 = path.resolve(`./public/media/admin/house`);
 
@@ -77,11 +98,16 @@ exports.house = catchAsync(async (req, res, next) => {
   //console.log(ip);
   const url = `${req.protocol}://${ip}/media/admin/house/${newHouse._id}/${fileName}`;
 
-  console.log(url);
+  // console.log(url);
 
   const logoUpdate = await House.findByIdAndUpdate(
     { _id: newHouse._id },
-    { $set: { 'sellerDetails.sellerlogo': url } }
+    {
+      $set: {
+        'sellerDetails.sellerlogo': url,
+        //  'attributes.mainCategory': mainlower,
+      },
+    }
   );
   //console.log('logoupdate' + logoUpdate);
   res.status(201).json({
@@ -92,8 +118,11 @@ exports.house = catchAsync(async (req, res, next) => {
   });
 });
 
+//PAGINATION DONE
 exports.getAllHouse = catchAsync(async (req, res) => {
-  const house = await House.find({}); //.sort({  'propertyDetails.propertyName': -1,});
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+  const house = await House.find({}).skip(skip).limit(limit); //.sort({  'propertyDetails.propertyName': -1,});
   var props = Object.keys(House.schema.paths);
   console.log(props);
 
@@ -106,6 +135,8 @@ exports.getAllHouse = catchAsync(async (req, res) => {
   });
 });
 exports.propertySearchByName = catchAsync(async (req, res, next) => {
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
   let searchquery = req.body.searchquery;
   // let str = searchquery;
   // let substr = '@';
@@ -146,7 +177,9 @@ exports.propertySearchByName = catchAsync(async (req, res, next) => {
             options: 'i',
           },
         },
-      });
+      })
+        .skip(skip)
+        .limit(limit);
       if (house.length < 1) {
         //console.log('hello');
         res.status(404).json({

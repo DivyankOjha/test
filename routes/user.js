@@ -12,7 +12,8 @@ router.post('/login', authController.login);
 
 router.post('/google-facebook-signup', authController.extSignup);
 router.post('/google-facebook-login', authController.extLogin);
-router.post('/loginsignup', authController.SignupLogin);
+
+router.post('/google-facebook-auth', authController.SignupLogin);
 
 router.get('/logout', authController.logout);
 
@@ -37,7 +38,7 @@ router.get('/userprofile', profile.getuser);
 
 router.patch('/admin/set-user-status/:id', adminController.ActiveInactive);
 router.get('/admin/newusers', adminController.getnewUsers);
-router.get('/admin/user-filter-by-date', adminController.filterbydate);
+router.post('/admin/user-filter-by-date', adminController.filterbydate);
 router.get('/admin/search-user', adminController.searchUser);
 
 router.delete('/deleteuser/:id', adminController.deleteUser);

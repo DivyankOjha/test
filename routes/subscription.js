@@ -9,9 +9,19 @@ router.post(
   subController.Subscription
 ); //authController.protect,
 router.get(
-  '/get-sub', // authController.protect,
+  '/get-all-subscriptions', // authController.protect,
   // authController.protect,
   subController.getAllSubscription
 );
+router.get(
+  '/get-user-subscription-details/:id',
+  subController.getUserSubscription
+);
+
+router.get(
+  '/subscription-filter-by-date',
+  subController.Subscriptionfilterbydate
+);
+router.get('/search-email-id', subController.searchSubscription);
 
 module.exports = router;

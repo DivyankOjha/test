@@ -260,7 +260,9 @@ exports.addProperty = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllproperty = catchAsync(async (req, res) => {
-  const property = await postProperty.find();
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+  const property = await postProperty.find().skip(skip).limit(limit);
   res.status(200).json({
     status: 'success',
     results: property.length,
@@ -280,6 +282,43 @@ exports.getPostPropertybyId = catchAsync(async (req, res) => {
     },
   });
 });
+
+//searching by email
+exports.searchPostPropertyInquiry = catchAsync(async (req, res, next) => {
+  //by subscriptionid/email
+  let searchquery = req.body.searchquery;
+  let str = searchquery;
+  let substr = '@';
+  // console.log(str.includes(substr));
+  console.log(searchquery);
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
+  //const _id = searchquery;
+  //console.log('length' + _id.length);
+  try {
+    if (str.includes(substr)) {
+      console.log('this is email');
+      const data = await postProperty
+        .find({ email: searchquery })
+        .skip(skip)
+        .limit(limit);
+      console.log(data);
+      res.status(200).json({
+        status: 'success',
+        results: data.length,
+        data: data,
+      });
+    }
+  } catch (error) {
+    //console.log(error);
+    res.status(404).json({
+      status: 'Not Found',
+      message: 'Property Inquiry Details Not Found! Try again.',
+    });
+  }
+});
+
 // exports.postPropertyEmail = catchAsync(async (req, res) => {
 //   console.log(req.body.reciever);
 //   const emailsettings = await Email.findById({

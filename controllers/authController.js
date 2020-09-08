@@ -70,11 +70,11 @@ exports.signup = catchAsync(async (req, res, next) => {
       pass: pass,
     },
   });
-  const url = `http://54.164.209.42/login/${token}`;
+  const url = `https://cuboidtechnologies.com/login/${token}`;
   //const url = `${req.protocol}://${req.get('host')}/api/login/${token}`;
   //const url = `http://localhost:3002/api/users/confirmation/${token}`;
   var mailOptions = {
-    from: 'Rahul Dhingra <rahul.dhingra@digimonk.in>',
+    from: `CUBOID <noreply@CUBOID.com>`, //CUBOID <${emailsettings.username}>`,
     to: newUser.email,
     subject: 'Account Verification',
     html: `Please click this link to confirm you email: <a href="${url}">${url}</a>  <br>
@@ -332,6 +332,33 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+exports.checkSubscripionStatus = catchAsync(async (req, res, next) => {
+  console.log(req.user.id);
+  const checkSubscripion = await User.findById(req.user.id);
+  if (!checkSubscripion.isSubscribed) {
+    return next(
+      new AppError(
+        'You are not Subscribed, Please Subscribe to view Properties.',
+        401
+      )
+    );
+  }
+  next();
+});
+
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    // roles ['admin'] role='user'
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new AppError('You do not have permission to perform this action', 403)
+      );
+    }
+
+    next();
+  };
+};
+
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   //1. get user based on posted email
   const user = await User.findOne({ email: req.body.email });
@@ -343,7 +370,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false }); // this will disable all the validations in schema
   //3. send it to user's email
 
-  const resetUrl = `http://54.164.209.42/reset-password/${resetToken}`;
+  const resetUrl = `https://cuboidtechnologies.com/reset-password/${resetToken}`;
   // const resetUrl = `${req.protocol}://${req.get(
   //   'host'
   // )}/api/users/resetPassword/${resetToken}`;
@@ -424,9 +451,9 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   console.log(user);
 
   // 2) Check if POSTed current password is correct
-  // if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
-  //   return next(new AppError('Your current password is wrong.', 401));
-  // }
+  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+    return next(new AppError('Your current password is wrong.', 401));
+  }
 
   // 3) If so, update password
   user.password = req.body.password;

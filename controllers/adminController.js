@@ -2,8 +2,17 @@ const catchAsync = require('./../utils/catchAsync');
 const User = require('./../models/userModel');
 const mongoose = require('mongoose');
 
+//pagination done
 exports.getAllUsers = catchAsync(async (req, res) => {
-  const users = await User.aggregate([{ $match: { role: 'user' } }]);
+  // const limit = parseInt(req.query.limit);
+  //const skip = parseInt(req.query.skip);
+
+  const users = await User.aggregate([
+    { $match: { role: 'user' } },
+    // { $skip: skip },
+    // { $limit: limit },
+  ]);
+
   res.status(200).json({
     status: 'success',
     results: users.length,
@@ -69,11 +78,16 @@ exports.getnewUsers = catchAsync(async (req, res) => {
 
 exports.filterbydate = catchAsync(async (req, res) => {
   let { startDate, endDate } = req.body;
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
   //console.log(endDate + 'T' + '00:00:00');
   const users = await User.find({
     createdAt: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
     // createdAt: { $lt: endDate },
-  });
+  })
+    .skip(skip)
+    .limit(limit);
   // console.log('users: ' + users);
 
   res.status(200).json({

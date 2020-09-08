@@ -8,6 +8,21 @@ const fs = require('fs');
 exports.addhotel = catchAsync(async (req, res, next) => {
   const hotel = await Hotel.create(req.body);
 
+  let cls = hotel.attributes.class;
+  let classlower = cls.toLowerCase();
+  let locality = hotel.attributes.locality;
+  let localitylower = locality.toLowerCase();
+
+  const updating = await Hotel.findByIdAndUpdate(
+    { _id: hotel._id },
+    {
+      $set: {
+        'attributes.class': classlower,
+        'attributes.locality': localitylower,
+      },
+    }
+  );
+
   var matches = await req.body.sellerDetails.sellerlogo.match(
       /^data:([A-Za-z-+\/]+);base64,(.+)$/
     ),
@@ -65,8 +80,12 @@ exports.addhotel = catchAsync(async (req, res, next) => {
   });
 });
 
+//Pagination Done
 exports.getAllHotel = catchAsync(async (req, res) => {
-  const hotel = await Hotel.find();
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
+  const hotel = await Hotel.find().skip(skip).limit(limit);
   res.status(200).json({
     status: 'success',
     results: hotel.length,
@@ -77,6 +96,8 @@ exports.getAllHotel = catchAsync(async (req, res) => {
 });
 
 exports.propertySearchByName = catchAsync(async (req, res, next) => {
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
   let searchquery = req.body.searchquery;
   // let str = searchquery;
   // let substr = '@';
@@ -117,7 +138,9 @@ exports.propertySearchByName = catchAsync(async (req, res, next) => {
             options: 'i',
           },
         },
-      });
+      })
+        .skip(skip)
+        .limit(limit);
       if (house.length < 1) {
         //console.log('hello');
         res.status(404).json({

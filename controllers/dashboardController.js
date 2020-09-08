@@ -7,6 +7,7 @@ const WareHouse = require('./../models/warehouseModel');
 const Inquiry = require('./../models/inquiryModel');
 //const Attributes = require('./../models/attributesSchema');
 const PostProperty = require('../models/postPropertyModel');
+const Subscription = require('./../models/subscriptionModel');
 
 exports.getAllproperty = catchAsync(async (req, res) => {
   const users = await User.find();
@@ -29,6 +30,9 @@ exports.getAllproperty = catchAsync(async (req, res) => {
 
   const postproperty = await PostProperty.find();
   const totalPropertyInquiries = postproperty.length;
+
+  const subscription = await Subscription.find();
+  const totalSubsription = subscription.length;
   //console.log(inquiry.length);
   // const date = Date();
   // console.log(date);
@@ -37,6 +41,7 @@ exports.getAllproperty = catchAsync(async (req, res) => {
     results: users.length,
     data: {
       totalMembers,
+      totalSubsription,
       totalproperty,
       totalcontactusinquiry,
       totalPropertyInquiries,

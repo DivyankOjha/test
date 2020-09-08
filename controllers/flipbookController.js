@@ -7,6 +7,7 @@ const House = require('./../models/houseModel');
 const Land = require('./../models/landModel');
 const Hotel = require('./../models/hotelModel');
 const WareHouse = require('./../models/warehouseModel');
+const User = require('../models/userModel');
 
 exports.addFlipbook = catchAsync(async (req, res, next) => {
   // console.log(updatefields);
@@ -27,7 +28,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
   } = req.body;
   let banner = req.body.flipbookBanner;
   let title = req.body.title;
-  let id = req.body._id;
+  //let id = req.body._id;
   let image2D = req.body.image2D;
   let image3D = req.body.image3D;
   floor = req.body.floorPlan;
@@ -261,9 +262,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // console.log(extension);
       const rand = Math.ceil(Math.random() * 1000);
       //Random photo name with timeStamp so it will not overide previous images.
-      const fileName = `${[i]}-${'floor-plan'}_${
-        floor[i].name
-      }_${title}.${extension}`;
+      const fileName = `${floor[i].name}`; // `${[i]}-${'floor-plan'}_${floor[i].name} _${ title }.${ extension }`;
       //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
       // let fileName = name1 ++ '.' + extension;
@@ -284,7 +283,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       //console.log(ip);
       const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${fileName}`;
 
-      floorplan.push(url);
+      floorplan.push({ fileName, url });
     }
 
     const updatefloorPlan = await House.findByIdAndUpdate(
@@ -516,9 +515,12 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
 
     /*******++++++++++++====Floor Plan=============********* */
     for (let i in floor) {
+      console.log(floor[i]);
       //console.log(image3D);
       // console.log(image3D);
-      let matches = await floor[i].match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+      let matches = await floor[i].image.match(
+          /^data:([A-Za-z-+\/]+);base64,(.+)$/
+        ),
         response = {};
       if (matches.length !== 3) {
         return new Error('Invalid input string');
@@ -537,7 +539,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // console.log(extension);
       const rand = Math.ceil(Math.random() * 1000);
       //Random photo name with timeStamp so it will not overide previous images.
-      const fileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
+      const fileName = `${floor[i].name}`; //`${[i]}-${'floor-plan'}_${title}.${extension}`;
       //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
       // let fileName = name1 ++ '.' + extension;
@@ -558,7 +560,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       //console.log(ip);
       const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${fileName}`;
 
-      floorplan.push(url);
+      floorplan.push({ fileName, url });
     }
 
     const updatefloorPlan = await Hotel.findByIdAndUpdate(
@@ -791,7 +793,9 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
     for (let i in floor) {
       //console.log(image3D);
       // console.log(image3D);
-      let matches = await floor[i].match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+      let matches = await floor[i].image.match(
+          /^data:([A-Za-z-+\/]+);base64,(.+)$/
+        ),
         response = {};
       if (matches.length !== 3) {
         return new Error('Invalid input string');
@@ -810,7 +814,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // console.log(extension);
       const rand = Math.ceil(Math.random() * 1000);
       //Random photo name with timeStamp so it will not overide previous images.
-      const fileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
+      const fileName = `${floor[i].name}`; //`${[i]}-${'floor-plan'}_${title}.${extension}`;
       //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
       // let fileName = name1 ++ '.' + extension;
@@ -831,7 +835,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       //console.log(ip);
       const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${fileName}`;
 
-      floorplan.push(url);
+      floorplan.push({ fileName, url });
     }
 
     const updatefloorPlan = await Land.findByIdAndUpdate(
@@ -1064,7 +1068,9 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
     for (let i in floor) {
       //console.log(image3D);
       // console.log(image3D);
-      let matches = await floor[i].match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+      let matches = await floor[i].image.match(
+          /^data:([A-Za-z-+\/]+);base64,(.+)$/
+        ),
         response = {};
       if (matches.length !== 3) {
         return new Error('Invalid input string');
@@ -1083,7 +1089,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // console.log(extension);
       const rand = Math.ceil(Math.random() * 1000);
       //Random photo name with timeStamp so it will not overide previous images.
-      const fileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
+      const fileName = `${floor[i].name}`; //`${[i]}-${'floor-plan'}_${title}.${extension}`;
       //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
       // let fileName = name1 ++ '.' + extension;
@@ -1104,7 +1110,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       //console.log(ip);
       const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${fileName}`;
 
-      floorplan.push(url);
+      floorplan.push({ fileName, url });
     }
 
     const updatefloorPlan = await WareHouse.findByIdAndUpdate(
@@ -1144,13 +1150,151 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
   // });
 });
 
-exports.getFlipbook = catchAsync(async (req, res) => {
-  const flipbook = await Flipbook.find();
+// exports.getFlipbook = catchAsync(async (req, res) => {
+//   const flipbook = await Flipbook.find();
+//   res.status(200).json({
+//     status: 'success',
+//     results: flipbook.length,
+//     data: {
+//       flipbook,
+//     },
+//   });
+// });
+
+exports.saveFlipbook = catchAsync(async (req, res) => {
+  const _id = req.body.userID;
+  let flipbookArray = [];
+
+  const userData = await User.findById({ _id });
+
+  // console.log(userData.savedflipbook);
+
+  for (var i in userData.savedflipbook) {
+    flipbookArray.push(userData.savedflipbook[i]);
+  }
+  flipbookArray.push(req.body.propertyId);
+
+  console.log(flipbookArray);
+
+  const user = await User.findByIdAndUpdate(
+    { _id },
+    {
+      $set: { savedflipbook: flipbookArray },
+    }
+  );
+  //console.log(user);
+
+  //const flipbook = await Flipbook.find();
   res.status(200).json({
     status: 'success',
-    results: flipbook.length,
+    results: user.length,
     data: {
-      flipbook,
+      user,
     },
   });
+});
+
+exports.getFlipbookSavedByUser = catchAsync(async (req, res) => {
+  let saveflipbook = [];
+
+  const _id = req.params.id;
+  const user = await User.findById({ _id }, { savedflipbook: 1 });
+
+  for (var i in user.savedflipbook) {
+    let flipbookdata = [];
+    const house = await House.findById({ _id: user.savedflipbook[i] });
+    const land = await Land.findById({ _id: user.savedflipbook[i] });
+    const hotel = await Hotel.findByIdAndDelete({ _id: user.savedflipbook[i] });
+    const warehouse = await WareHouse.findByIdAndDelete({
+      _id: user.savedflipbook[i],
+    });
+    if (house) {
+      flipbookdata.push(user.savedflipbook[i], house.flipbook.image2D[0]);
+      saveflipbook.push(flipbookdata);
+    }
+    if (land) {
+      flipbookdata.push(user.savedflipbook[i], land.flipbook.image2D[0]);
+      saveflipbook.push(flipbookdata);
+    }
+    if (hotel) {
+      flipbookdata.push(user.savedflipbook[i], hotel.flipbook.image2D[0]);
+      saveflipbook.push(flipbookdata);
+    }
+    if (warehouse) {
+      flipbookdata.push(user.savedflipbook[i], warehouse.flipbook.image2D[0]);
+      saveflipbook.push(flipbookdata);
+    }
+
+    // saveflipbook.push(property.flipbook.image2D[0]);
+  }
+  // saveflipbook.push(flipbookdata);
+
+  // console.log('2d image path ' + property.flipbook.image2D);
+  //console.log(user.savedflipbook);
+  res.status(200).json({
+    status: 'success',
+    results: user.length,
+    //savedflipbook: user.savedflipbook + property.flipbook.image2D[0],
+    saveflipbook,
+  });
+});
+
+exports.deleteFlipbook = catchAsync(async (req, res) => {
+  //const _id = req.params.id;
+  console.log('user id ' + req.params.id);
+  const idtodelete = req.body.idToDelete;
+
+  const user = await User.findByIdAndUpdate(
+    { _id: req.params.id },
+    { $pull: { savedflipbook: idtodelete } }
+  );
+  console.log(user);
+  res.status(200).json({
+    status: 'success',
+    //results: user.length,
+    user,
+  });
+});
+
+exports.getFlipbookbyID = catchAsync(async (req, res) => {
+  const _id = req.params.id;
+  console.log(req.params.id);
+
+  const flipbookHouse = await House.findById({ _id });
+  const flipbookHotel = await Hotel.findById({ _id });
+  const flipbookLand = await Land.findById({ _id });
+  const flipbookWarehouse = await WareHouse.findById({ _id });
+
+  if (flipbookHouse) {
+    //console.log(flipbook);
+    res.status(200).json({
+      status: 'success',
+      //results: user.length,
+      flipbook: flipbookHouse,
+    });
+  }
+  if (flipbookHotel) {
+    //console.log(flipbook);
+    res.status(200).json({
+      status: 'success',
+      //results: user.length,
+      flipbook: flipbookHotel,
+    });
+  }
+  if (flipbookLand) {
+    //console.log(flipbook);
+    res.status(200).json({
+      status: 'success',
+      //results: user.length,
+      flipbook: flipbookLand,
+    });
+  }
+  if (flipbookWarehouse) {
+    //console.log(flipbook);
+    res.status(200).json({
+      status: 'success',
+      //results: user.length,
+      flipbook: flipbookWarehouse,
+    });
+  }
 });
