@@ -63,12 +63,24 @@ exports.reviewIsactiveInactive = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.deleteReview = catchAsync(async (req, res, next) => {
-  const postReview = await Review.deleteOne({ _id: req.params.id });
-  res.status(200).json({
-    status: 'Success',
-    //postReview,
+exports.deleteReview = catchAsync(async (req, res) => {
+  var ids = req.body.deletereview;
+  // console.log('id' + ids);
+
+  const deletemany = await Review.deleteMany({
+    _id: { $in: ids },
   });
+  if (deletemany.deletedCount === 0) {
+    res.status(404).json({
+      message: 'Review not found or Already Deleted! Please refresh!',
+    });
+  } else {
+    res.status(200).json({
+      status: 'success',
+      message: 'Deleted Successfully',
+      deleted: deletemany.deletedCount,
+    });
+  }
 });
 
 exports.getSpecificReviews = catchAsync(async (req, res, next) => {

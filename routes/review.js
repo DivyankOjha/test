@@ -10,7 +10,7 @@ router.post(
 ); //authController.protect,
 
 router.get('/admin/get-all-review', reviewController.getReview);
-router.delete('/admin/delete-review-by-id/:id', reviewController.deleteReview);
+router.delete('/admin/delete-review-by-id', reviewController.deleteReview);
 
 router.patch(
   '/admin/update-review-status/:id',

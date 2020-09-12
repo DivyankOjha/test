@@ -41,6 +41,36 @@ exports.getUserSubscription = catchAsync(async (req, res) => {
   });
 });
 
+exports.SubscriptionfilterbyRentBuy = catchAsync(async (req, res) => {
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
+  if (req.body.subscriptionType === 'buy') {
+    const subs = await Subs.find({
+      subscriptionType: 'buy',
+    });
+    res.status(200).json({
+      status: 'success',
+      results: subs.length,
+      data: subs,
+    });
+  }
+  if (req.body.subscriptionType === 'rent') {
+    const subs = await Subs.find({
+      subscriptionType: 'rent',
+    });
+    res.status(200).json({
+      status: 'success',
+      results: subs.length,
+      data: subs,
+    });
+  }
+
+  // .skip(skip)
+  // .limit(limit);
+  //console.log('Subs: ' + subs);
+});
+
 exports.Subscriptionfilterbydate = catchAsync(async (req, res) => {
   let { startDate, endDate } = req.body;
   const limit = parseInt(req.query.limit);

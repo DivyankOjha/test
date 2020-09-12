@@ -77,26 +77,41 @@ exports.searchInquiry = catchAsync(async (req, res, next) => {
 
   //const _id = searchquery;
   //console.log('length' + _id.length);
-  try {
-    if (str.includes(substr)) {
-      console.log('this is email');
-      const data = await Inquiry.find({ email: searchquery });
-      //  .skip(skip)
-      //  .limit(limit);
-      console.log(data);
-      res.status(200).json({
-        status: 'success',
-        results: data.length,
-        data: data,
-      });
-    }
-  } catch (error) {
-    //console.log(error);
+  //try {
+  //  if (str.includes(substr)) {
+  console.log('this is email');
+  const data = await Inquiry.find({
+    $expr: {
+      $regexMatch: {
+        input: '$email',
+        regex: searchquery, //Your text search here
+        options: 'im',
+      },
+    },
+  });
+  //  .skip(skip)
+  //  .limit(limit);
+  //console.log(data);
+  if (data.length < 1) {
     res.status(404).json({
       status: 'Not Found',
-      message: 'Property Inquiry Details Not Found! Try again.',
+      message: 'Details Not Found! Try again.',
+    });
+  } else {
+    res.status(200).json({
+      status: 'success',
+      results: data.length,
+      data: data,
     });
   }
+
+  // } catch (error) {
+  //console.log(error);
+  // res.status(404).json({
+  //   status: 'Not Found',
+  //   message: 'Inquiry Details Not Found! Try again.',
+  // });
+  // }
 });
 
 exports.InquiryEmail = catchAsync(async (req, res) => {
@@ -215,6 +230,54 @@ exports.getAllCustomerInquiry = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.searchInquiryCustomer = catchAsync(async (req, res, next) => {
+  //by subscriptionid/email
+  let searchquery = req.body.searchquery;
+  let str = searchquery;
+  let substr = '@';
+  // console.log(str.includes(substr));
+  console.log(searchquery);
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
+  //const _id = searchquery;
+  //console.log('length' + _id.length);
+  //try {
+  //  if (str.includes(substr)) {
+  console.log('this is email');
+  const data = await Customer.find({
+    $expr: {
+      $regexMatch: {
+        input: '$userEmail',
+        regex: searchquery, //Your text search here
+        options: 'im',
+      },
+    },
+  });
+  //  .skip(skip)
+  //  .limit(limit);
+  //console.log(data);
+  if (data.length < 1) {
+    res.status(404).json({
+      status: 'Not Found',
+      message: 'Details Not Found! Try again.',
+    });
+  } else {
+    res.status(200).json({
+      status: 'success',
+      results: data.length,
+      data: data,
+    });
+  }
+
+  // } catch (error) {
+  //console.log(error);
+  // res.status(404).json({
+  //   status: 'Not Found',
+  //   message: 'Inquiry Details Not Found! Try again.',
+  // });
+  // }
+});
 exports.Customerfilterbydate = catchAsync(async (req, res) => {
   let { startDate, endDate } = req.body;
   const limit = parseInt(req.query.limit);

@@ -17,6 +17,10 @@ router.get(
   '/get-user-subscription-details/:id',
   subController.getUserSubscription
 );
+router.post(
+  '/subscription-filter-by-type',
+  subController.SubscriptionfilterbyRentBuy
+);
 
 router.post(
   '/subscription-filter-by-date',

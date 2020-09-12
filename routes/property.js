@@ -22,7 +22,7 @@ router.patch(
   '/admin/set-property-status/:id',
   propertyDataController.ActiveInactive
 );
-router.get(
+router.post(
   '/admin/search-property-inquiry',
   propertyController.searchPostPropertyInquiry
 );

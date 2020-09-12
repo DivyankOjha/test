@@ -124,9 +124,9 @@ exports.searchHouse1 = catchAsync(async (req, res) => {
   //console.log(attributes);
   //let location = req.body.attributes.location;
 
-  let area = req.body.attributes.area;
-  let areaint = parseInt(area);
-  console.log(areaint);
+  //let area = req.body.attributes.area;
+  // let areaint = parseInt(area);
+  // console.log(areaint);
   let mainCategory = attributes.mainCategory.toLowerCase();
   console.log(mainCategory);
   let subCategory = attributes.subCategory.toLowerCase();
@@ -225,7 +225,7 @@ exports.searchHouse1 = catchAsync(async (req, res) => {
     {
       $match: {
         'attributes.cost': { $lte: maxcost, $gte: mincost },
-        'attributes.area': { $lte: areaint },
+        // 'attributes.area': { $lte: areaint },
 
         'attributes.mainCategory': `${mainCategory}`,
         'attributes.subCategory': `${subCategory}`,
@@ -316,9 +316,9 @@ exports.searchHouse = catchAsync(async (req, res) => {
   //console.log(attributes);
   //let location = req.body.attributes.location;
 
-  let area = req.body.attributes.area;
-  let areaint = parseInt(area);
-  console.log(areaint);
+  // let area = req.body.attributes.area;
+  //  let areaint = parseInt(area);
+  // console.log(areaint);
   let mainCategory = attributes.mainCategory.toLowerCase();
   console.log(mainCategory);
   let subCategory = attributes.subCategory.toLowerCase();
@@ -443,7 +443,7 @@ exports.searchHouse = catchAsync(async (req, res) => {
     {
       $match: {
         'attributes.cost': { $lte: maxcost, $gte: mincost },
-        'attributes.area': { $lte: area },
+        // 'attributes.area': { $lte: area },
 
         'attributes.mainCategory': `${mainCategory}`,
         'attributes.subCategory': `${subCategory}`,

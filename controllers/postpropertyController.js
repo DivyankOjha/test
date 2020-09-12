@@ -298,24 +298,29 @@ exports.searchPostPropertyInquiry = catchAsync(async (req, res, next) => {
 
   //const _id = searchquery;
   //console.log('length' + _id.length);
-  try {
-    if (str.includes(substr)) {
-      console.log('this is email');
-      const data = await postProperty.find({ email: searchquery });
-      //  .skip(skip)
-      //  .limit(limit);
-      console.log(data);
-      res.status(200).json({
-        status: 'success',
-        results: data.length,
-        data: data,
-      });
-    }
-  } catch (error) {
-    //console.log(error);
+  //try {
+  // if (str.includes(substr)) {
+
+  const data = await postProperty.find({
+    $expr: {
+      $regexMatch: {
+        input: '$email',
+        regex: searchquery, //Your text search here
+        options: 'im',
+      },
+    },
+  });
+
+  if (data.length < 1) {
     res.status(404).json({
       status: 'Not Found',
-      message: 'Property Inquiry Details Not Found! Try again.',
+      message: 'Details Not Found! Try again.',
+    });
+  } else {
+    res.status(200).json({
+      status: 'success',
+      results: data.length,
+      data: data,
     });
   }
 });

@@ -12,6 +12,6 @@ router.put(
 );
 router.get('/get-all-hotel', hotelController.getAllHotel);
 router.get('/search-property-by-name', hotelController.propertySearchByName);
-router.post('/search-hotel-location', hotelController.ajaxSearch);
-
+router.post('/search-hotel-location', hotelController.ajaxSearch); //ajax location/ nearest place
+router.post('/search-hotel-name', hotelController.ajaxSearchHotelName); //ajax hotel name
 module.exports = router;

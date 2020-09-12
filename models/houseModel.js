@@ -22,7 +22,7 @@ const houseSchema = new mongoose.Schema({
   //attributes page 2
   attributes: {
     cost: Number,
-    area: Number,
+    area: String,
     //transform radio buttons like hotel
     //mainCategory : buy,let,fully
 
