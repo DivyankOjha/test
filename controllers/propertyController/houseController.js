@@ -117,14 +117,43 @@ exports.house = catchAsync(async (req, res, next) => {
     },
   });
 });
-exports.update = catchAsync(async (req, res, next) => {
-  //const gethouse =
+exports.updateHouse = catchAsync(async (req, res, next) => {
+  // console.log(req.params.id);
+  const gethouse = await House.findByIdAndUpdate(
+    { _id: req.params.id },
+    { $set: req.body }
+  );
+
+  let maincategory = req.body.attributes.mainCategory;
+  let mainlower = maincategory.toLowerCase();
+  let subCategory = req.body.attributes.subCategory;
+  let sublower = subCategory.toLowerCase();
+  let propertyStatus = req.body.attributes.propertyStatus;
+  let propertyStatusLower = propertyStatus.toLowerCase();
+
+  const updating = await House.findByIdAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        'attributes.mainCategory': mainlower,
+        'attributes.subCategory': sublower,
+        'attributes.propertyStatus': propertyStatusLower,
+      },
+    }
+  );
+  //  console.log(gethouse);
+  res.status(200).json({
+    status: 'success',
+    //    results: gethouse.length,
+    data: gethouse,
+  });
 });
+
 //PAGINATION DONE
 exports.getAllHouse = catchAsync(async (req, res) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
-  const house = await House.find({}).skip(skip).limit(limit); //.sort({  'propertyDetails.propertyName': -1,});
+  const house = await House.find({}); //skip(skip).limit(limit); //.sort({  'propertyDetails.propertyName': -1,});
   var props = Object.keys(House.schema.paths);
   console.log(props);
 
@@ -179,9 +208,9 @@ exports.propertySearchByName = catchAsync(async (req, res, next) => {
             options: 'i',
           },
         },
-      })
-        .skip(skip)
-        .limit(limit);
+      });
+      // .skip(skip)
+      //.limit(limit);
       if (house.length < 1) {
         //console.log('hello');
         res.status(404).json({

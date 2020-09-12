@@ -10,6 +10,12 @@ router.post(
   //authController.restrictTo('admin'),
   houseController.house
 );
+router.put(
+  '/edit-house/:id',
+  //authController.protect,
+  //authController.restrictTo('admin'),
+  houseController.updateHouse
+);
 router.get(
   '/get-all-house',
   //authController.protect,

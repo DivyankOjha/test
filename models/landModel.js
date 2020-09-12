@@ -21,8 +21,9 @@ const landSchema = new mongoose.Schema({
 
   //Attributes
   attributes: {
-    buy: { type: Boolean },
-    let: { type: Boolean },
+    mainCategory: String,
+    // buy: { type: Boolean },
+    // let: { type: Boolean },
 
     cost: Number,
     sizeinacres: { type: Number }, // need to set min max ??
@@ -121,9 +122,9 @@ const landSchema = new mongoose.Schema({
     tour360Property: String, //link
     floorPlan: { type: Array }, //image field in design ?????
     map: String,
-    contactSeller: String,
+    // contactSeller: String,
     propertyAvailability: Boolean,
-    sendmessageToSeller: String, //email ???
+    // sendmessageToSeller: String, //email ???
 
     //page3 in design
     content: String,

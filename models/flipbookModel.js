@@ -42,9 +42,9 @@ const flipbookSchema = new mongoose.Schema({
   tour360Property: String,
   floorPlan: String, //image field in design ?????
   map: String,
-  contactSeller: String,
+  //contactSeller: String,
   propertyAvailability: Boolean,
-  sendmessageToSeller: String, //email ???
+  // sendmessageToSeller: String, //email ???
 
   //page3 in design
   content: String,

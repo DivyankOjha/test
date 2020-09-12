@@ -80,12 +80,41 @@ exports.addhotel = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.updateHotel = catchAsync(async (req, res, next) => {
+  // console.log(req.params.id);
+  const gethotel = await Hotel.findByIdAndUpdate(
+    { _id: req.params.id },
+    { $set: req.body }
+  );
+
+  let cls = req.body.attributes.class;
+  let classlower = cls.toLowerCase();
+  let locality = req.body.attributes.locality;
+  let localitylower = locality.toLowerCase();
+
+  const updating = await Hotel.findByIdAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        'attributes.class': classlower,
+        'attributes.locality': localitylower,
+      },
+    }
+  );
+  //  console.log(gethouse);
+  res.status(200).json({
+    status: 'success',
+    //    results: gethouse.length,
+    data: gethotel,
+  });
+});
+
 //Pagination Done
 exports.getAllHotel = catchAsync(async (req, res) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
 
-  const hotel = await Hotel.find().skip(skip).limit(limit);
+  const hotel = await Hotel.find(); //.skip(skip).limit(limit);
   res.status(200).json({
     status: 'success',
     results: hotel.length,
@@ -138,9 +167,9 @@ exports.propertySearchByName = catchAsync(async (req, res, next) => {
             options: 'i',
           },
         },
-      })
-        .skip(skip)
-        .limit(limit);
+      });
+      // .skip(skip)
+      // .limit(limit);
       if (house.length < 1) {
         //console.log('hello');
         res.status(404).json({

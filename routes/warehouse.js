@@ -4,6 +4,12 @@ const router = express.Router();
 const warehouseController = require('../controllers/propertyController/warehouseController');
 
 router.post('/post-warehouse', warehouseController.addWarehouse);
+router.put(
+  '/edit-warehouse/:id',
+  //authController.protect,
+  //authController.restrictTo('admin'),
+  warehouseController.updateWarehouse
+);
 router.get('/get-all-warehouse', warehouseController.getAllWarehouse);
 router.get(
   '/search-property-by-name',

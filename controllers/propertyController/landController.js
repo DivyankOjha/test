@@ -8,7 +8,7 @@ const fs = require('fs');
 
 exports.land = catchAsync(async (req, res, next) => {
   const newLand = await Land.create(req.body);
-
+  console.log(newLand.attributes);
   let mainCategory = newLand.attributes.mainCategory;
   let mainlower = mainCategory.toLowerCase();
   let nature = newLand.attributes.nature;
@@ -89,11 +89,45 @@ exports.land = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.updateLand = catchAsync(async (req, res, next) => {
+  // console.log(req.params.id);
+  const getLand = await Land.findByIdAndUpdate(
+    { _id: req.params.id },
+    { $set: req.body }
+  );
+
+  let mainCategory = req.body.attributes.mainCategory;
+  let mainlower = mainCategory.toLowerCase();
+  let nature = req.body.attributes.nature;
+  let naturelower = nature.toLowerCase();
+  let soilType = req.body.attributes.soilType;
+  let soillower = soilType.toLowerCase();
+  let road = req.body.attributes.road;
+  let roadlower = road.toLowerCase();
+
+  const updating = await Land.findByIdAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        'attributes.nature': naturelower,
+        'attributes.soilType': soillower,
+        'attributes.road': roadlower,
+        'attributes.mainCategory': mainlower,
+      },
+    }
+  );
+  //  console.log(gethouse);
+  res.status(200).json({
+    status: 'success',
+    //    results: gethouse.length,
+    data: getLand,
+  });
+});
 //Pagination done
 exports.getAllland = catchAsync(async (req, res) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
-  const land = await Land.find().skip(skip).limit(limit);
+  const land = await Land.find(); //.skip(skip).limit(limit);
   res.status(200).json({
     status: 'success',
     results: land.length,
@@ -146,9 +180,9 @@ exports.propertySearchByName = catchAsync(async (req, res, next) => {
             options: 'i',
           },
         },
-      })
-        .skip(skip)
-        .limit(limit);
+      });
+      //  .skip(skip)
+      // .limit(limit);
       if (house.length < 1) {
         //console.log('hello');
         res.status(404).json({

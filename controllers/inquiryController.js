@@ -80,9 +80,9 @@ exports.searchInquiry = catchAsync(async (req, res, next) => {
   try {
     if (str.includes(substr)) {
       console.log('this is email');
-      const data = await Inquiry.find({ email: searchquery })
-        .skip(skip)
-        .limit(limit);
+      const data = await Inquiry.find({ email: searchquery });
+      //  .skip(skip)
+      //  .limit(limit);
       console.log(data);
       res.status(200).json({
         status: 'success',

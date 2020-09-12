@@ -520,7 +520,7 @@ exports.searchHouse = catchAsync(async (req, res) => {
     // },
 
     //  $group: { _id: null, count: { $sum: 1 } },
-  ]).project({ attributes: 1, _id: 0 });
+  ]); //.project({ attributes: 1, _id: 0 });
 
   res.status(200).json({
     status: 'success',
