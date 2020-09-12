@@ -23,5 +23,8 @@ router.get(
   //authController.restrictTo('admin'),
   houseController.propertySearchByName
 );
+
+router.post('/search-house-location', houseController.ajaxSearch);
+
 //router.delete('/delete-one-property/:id', houseController.deleteOneProperty);
 module.exports = router;

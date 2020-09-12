@@ -6,7 +6,8 @@ const flipbookController = require('./../controllers/flipbookController');
 router.post('/', flipbookController.addFlipbook);
 //router.get('/', flipbookController.getFlipbook);
 
-router.patch('/save-flipbook', flipbookController.saveFlipbook);
+router.patch('/delete-flipbook/:id', flipbookController.deleteFlipbook);
+
 router.get(
   '/get-saved-flipbook/:id',
   flipbookController.getFlipbookSavedByUser

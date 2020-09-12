@@ -8,6 +8,7 @@ const postPropertySchema = new mongoose.Schema({
   propertyDetails: String,
   nationalidimage: String, // image field
   propertyimage: [], // 5 image fields
+  createdAt: { type: Date, default: Date.now },
 });
 
 const PostProperty = mongoose.model('PostProperty', postPropertySchema);

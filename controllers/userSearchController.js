@@ -1252,17 +1252,18 @@ exports.searchWarehousePage2 = catchAsync(async (req, res) => {
   });
 });
 exports.searchWarehousePage3 = catchAsync(async (req, res) => {
+  let attributes = req.body.attributes;
   let type = attributes.Type;
   let Type = type.toLowerCase();
   // let area = req.body.area;
 
   let cost = req.body.cost;
-  let mincost = req.body.cost.min;
-  let maxcost = req.body.cost.max;
+  let mincost = cost.min;
+  let maxcost = cost.max;
 
   let sizeinfeet = req.body.sizeinfeet;
-  let minsizeinfeet = req.body.sizeinfeet.min;
-  let maxsizeinfeet = req.body.sizeinfeet.max;
+  let minsizeinfeet = sizeinfeet.min;
+  let maxsizeinfeet = sizeinfeet.max;
   let kmfromtarmac = req.body.kmfromtarmac; //tarmac change in frontend also.
 
   let conferencefacilites = attributes.conferencefacilites;

@@ -2,6 +2,7 @@ const catchAsync = require('./../utils/catchAsync');
 const Subs = require('../models/subscriptionModel');
 const User = require('../models/userModel');
 const mongoose = require('mongoose');
+const sendEmail = require('./../utils/email');
 
 exports.Subscription = catchAsync(async (req, res, next) => {
   const newSub = await Subs.create(req.body);
@@ -16,7 +17,7 @@ exports.Subscription = catchAsync(async (req, res, next) => {
 exports.getAllSubscription = catchAsync(async (req, res) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
-  const subscription = await Subs.find({}).skip(skip).limit(limit);
+  const subscription = await Subs.find({}); //.skip(skip).limit(limit);
   res.status(200).json({
     status: 'success',
     results: subscription.length,
@@ -50,9 +51,9 @@ exports.Subscriptionfilterbydate = catchAsync(async (req, res) => {
     subscriptionDate: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
     //email: 1,
     // createdAt: { $lt: endDate },
-  })
-    .skip(skip)
-    .limit(limit);
+  });
+  // .skip(skip)
+  // .limit(limit);
   //console.log('Subs: ' + subs);
 
   res.status(200).json({
@@ -101,4 +102,43 @@ exports.searchSubscription = catchAsync(async (req, res, next) => {
       message: 'Subscription Details Not Found! Try again.',
     });
   }
+});
+
+exports.updateUsedPoints = catchAsync(async (req, res) => {
+  //  console.log(req.user.id);
+  let id = '5f538841557252230c231db7';
+  const subscription = await User.findByIdAndUpdate({ _id: id });
+  //console.log(subscription.subscription.usedPoints);
+  const update = await User.findByIdAndUpdate(
+    { _id: id },
+    {
+      $set: {
+        'subscription.usedPoints': subscription.subscription.usedPoints + 1,
+      },
+    }
+  );
+
+  const checkUsedPoints = await User.findById({ _id: id });
+  // console.log(checkUsedPoints);
+  let math70 = (checkUsedPoints.subscription.totalPoints / 100) * 70;
+  //console.log(math70);
+  if (checkUsedPoints.subscription.usedPoints >= math70) {
+    //math70
+    console.log('greater than 70');
+    const message = `<p> Subscription Message : You have consumed 70 percent of the total points </p> `;
+
+    await sendEmail({
+      email: checkUsedPoints.email,
+      subject: `Hi, ${checkUsedPoints.firstname}, Subscription expiring soon!`,
+      //  subject: 'Your password reset token (valid for 10 min)',
+      message,
+    });
+  }
+  res.status(200).json({
+    status: 'success',
+    // results: subscription.length,
+    data: {
+      checkUsedPoints,
+    },
+  });
 });

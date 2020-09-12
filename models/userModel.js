@@ -7,14 +7,13 @@ const crypto = require('crypto');
 const userSchema = new mongoose.Schema({
   firstname: { type: String, required: [true, 'Please Tell us your name'] },
   lastname: { type: String, required: [true, 'Please Tell us your last name'] },
+
   subscription: {
     usedPoints: { type: Number, default: 0 },
     totalPoints: { type: Number, default: 1500 },
-    Type: {
-      buy: { type: String, default: false },
-      rent: { type: String, default: false },
-    },
+    Type: String,
   },
+
   isSubscribed: { type: Boolean, default: false },
   imagepath: { type: String }, //we can set a default profile image for the user ???
   savedflipbook: {

@@ -5,9 +5,9 @@ const subSchema = new mongoose.Schema({
   // Subscription order ID
   // Customer email
   userID: { type: mongoose.Schema.ObjectId },
-  subscriptionType: { type: String, default: 'rent' }, //rent
-  subscriptionAmount: { type: Number, default: 1200 }, //1200,
-  usedPoints: { type: Number, default: 50 }, // 50,
+  subscriptionType: { type: String }, //rent
+  subscriptionAmount: { type: Number }, //1200,
+  usedPoints: { type: Number }, // 50,
   subscriptionDate: { type: Date, default: Date.now },
   email: String,
   // subscriptionId: String,

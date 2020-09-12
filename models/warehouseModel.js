@@ -18,11 +18,12 @@ const warehouseSchema = new mongoose.Schema({
   },
 
   attributes: {
+    mainCategory: String,
     Type: String, //type giving error
     // godown: { type: Boolean },
     // commercialspace: { type: Boolean },.
-    buy: { type: Boolean },
-    let: { type: Boolean },
+    // buy: { type: Boolean },
+    // let: { type: Boolean },
 
     area: { type: Number },
     cost: Number,

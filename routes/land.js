@@ -6,4 +6,6 @@ const landController = require('../controllers/propertyController/landController
 router.post('/post-land', landController.land);
 router.get('/get-all-land', landController.getAllland);
 router.get('/search-property-by-name', landController.propertySearchByName);
+
+router.post('/search-land-location', landController.ajaxSearch);
 module.exports = router;

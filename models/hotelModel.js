@@ -19,6 +19,7 @@ const hotelSchema = new mongoose.Schema({
   },
 
   attributes: {
+    mainCategory: String,
     cost: { type: Number },
     class: { type: String },
     locality: { type: String },

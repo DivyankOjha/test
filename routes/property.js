@@ -27,10 +27,14 @@ router.get(
   propertyController.searchPostPropertyInquiry
 );
 
-// router.post(
-//   '/admin/post-property-reply-email',
-//   propertyController.postPropertyEmail
-// );
+router.post(
+  '/admin/post-property-reply-email',
+  propertyController.postPropertyEmail
+);
+router.post(
+  '/admin/post-property-filter-by-date',
+  propertyController.filterbydate
+);
 // router.get(
 //   '/admin/search-property-by-name',
 //   propertyDataController.propertySearchByName

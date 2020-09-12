@@ -117,7 +117,9 @@ exports.house = catchAsync(async (req, res, next) => {
     },
   });
 });
-
+exports.update = catchAsync(async (req, res, next) => {
+  //const gethouse =
+});
 //PAGINATION DONE
 exports.getAllHouse = catchAsync(async (req, res) => {
   const limit = parseInt(req.query.limit);
@@ -200,6 +202,45 @@ exports.propertySearchByName = catchAsync(async (req, res, next) => {
     //   message: error,
     // });
   }
+});
+
+exports.ajaxSearch = catchAsync(async (req, res, next) => {
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+  let searchquery = req.body.searchquery;
+  let lowersearchquery = searchquery.toLowerCase();
+
+  console.log(lowersearchquery);
+  let query = {
+    $or: [
+      {
+        'sellerDetails.location': { $regex: lowersearchquery, $options: 'ism' },
+      },
+      {
+        'sellerDetails.nearestplace.placename': {
+          $regex: lowersearchquery,
+          $options: 'ism',
+        },
+      },
+    ],
+  };
+
+  const searchResult = await House.find(
+    query
+    // $expr: {
+    //   $regexMatch: {
+    //     input: '$sellerDetails.location',
+    //     regex: lowersearchquery, //Your text search here
+    //     options: 'm',
+    //   },
+    // },
+  );
+
+  res.status(200).json({
+    status: 'success',
+    results: searchResult.length,
+    data: searchResult,
+  });
 });
 // exports.deleteOneProperty = catchAsync(async (req, res) => {
 //   console.log(req.params.id);

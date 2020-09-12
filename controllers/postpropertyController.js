@@ -3,6 +3,8 @@ const nodemailer = require('nodemailer');
 const Email = require('./../models/emailModel');
 const postProperty = require('../models/postPropertyModel');
 
+const User = require('../models/userModel');
+
 const path = require('path');
 const mime = require('mime');
 const fs = require('fs');
@@ -262,7 +264,7 @@ exports.addProperty = catchAsync(async (req, res, next) => {
 exports.getAllproperty = catchAsync(async (req, res) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
-  const property = await postProperty.find().skip(skip).limit(limit);
+  const property = await postProperty.find(); //.skip(skip).limit(limit);
   res.status(200).json({
     status: 'success',
     results: property.length,
@@ -299,10 +301,9 @@ exports.searchPostPropertyInquiry = catchAsync(async (req, res, next) => {
   try {
     if (str.includes(substr)) {
       console.log('this is email');
-      const data = await postProperty
-        .find({ email: searchquery })
-        .skip(skip)
-        .limit(limit);
+      const data = await postProperty.find({ email: searchquery });
+      //  .skip(skip)
+      //  .limit(limit);
       console.log(data);
       res.status(200).json({
         status: 'success',
@@ -319,48 +320,83 @@ exports.searchPostPropertyInquiry = catchAsync(async (req, res, next) => {
   }
 });
 
-// exports.postPropertyEmail = catchAsync(async (req, res) => {
-//   console.log(req.body.reciever);
-//   const emailsettings = await Email.findById({
-//     _id: '5f2e3d86d15a133adc74df50',
-//   });
-//   console.log(emailsettings);
-//   let host = emailsettings.host;
-//   let user = emailsettings.username;
-//   let pass = emailsettings.password;
+exports.filterbydate = catchAsync(async (req, res) => {
+  let { startDate, endDate } = req.body;
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
 
-//   var transporter = await nodemailer.createTransport({
-//     service: host,
-//     auth: {
-//       user: user,
-//       pass: pass,
-//     },
-//   });
-//   // const url = `http://54.164.209.42/login/${token}`;
-//   //const url = `${req.protocol}://${req.get('host')}/api/login/${token}`;
-//   //const url = `http://localhost:3002/api/users/confirmation/${token}`;
-//   for (var i in req.body.reciever) {
-//     var mailOptions = {
-//       from: 'Rahul Dhingra <rahul.dhingra@digimonk.in>',
-//       to: req.body.reciever[i],
-//       subject: req.body.subject[i],
-//       html: `<p>Hello ${req.body.message[i]}</p>`,
-//     };
+  //console.log(endDate + 'T' + '00:00:00');
+  const users = await postProperty.find({
+    createdAt: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
+    // createdAt: { $lt: endDate },
+  });
+  //.skip(skip)
+  //  .limit(limit);
+  // console.log('users: ' + users);
 
-//     transporter.sendMail(mailOptions, function (err) {
-//       if (err) {
-//         console.log('ERRor sending mail: ' + err);
-//       } else {
-//         console.log('Mail sent to: ' + req.body.reciever[i]);
-//       }
-//     });
-//   }
-//   //const inquiry = await Inquiry.find();
-//   res.status(200).json({
-//     status: 'success',
-//     // results: inquiry.length,
-//     // data: {
-//     //   inquiry,
-//     // },
-//   });
-// });
+  res.status(200).json({
+    status: 'success',
+    results: users.length,
+    data: users,
+  });
+});
+
+exports.postPropertyEmail = catchAsync(async (req, res) => {
+  //console.log(req.body.reciever);
+  const emailsettings = await Email.findById({
+    _id: '5f2e3d86d15a133adc74df50',
+  });
+  // console.log(emailsettings);
+  let host = emailsettings.host;
+  let user = emailsettings.username;
+  let pass = emailsettings.password;
+
+  var transporter = await nodemailer.createTransport({
+    service: host,
+    auth: {
+      user: user,
+      pass: pass,
+    },
+  });
+  // const url = `http://54.164.209.42/login/${token}`;
+  //const url = `${req.protocol}://${req.get('host')}/api/login/${token}`;
+  //const url = `http://localhost:3002/api/users/confirmation/${token}`;
+  for (var i in req.body.reciever) {
+    const inquiryemail = await postProperty.findById({
+      _id: req.body.reciever[i],
+    });
+    console.log(inquiryemail.email);
+    if (req.body.subject[i] > req.body.subject[0]) {
+      var mailOptions = {
+        from: `CUBOID <${emailsettings.username}>`,
+        to: inquiryemail.email,
+        subject: req.body.subject[i],
+        html: `<p>Hello ${req.body.message[i]}</p>`,
+      };
+    }
+    if (req.body.subject[i] === req.body.subject[0]) {
+      var mailOptions = {
+        from: `CUBOID <${emailsettings.username}>`,
+        to: inquiryemail.email,
+        subject: req.body.subject[0],
+        html: `<p>Hello ${req.body.message[0]}</p>`,
+      };
+    }
+
+    transporter.sendMail(mailOptions, function (err) {
+      if (err) {
+        console.log('ERRor sending mail: ' + err);
+      } else {
+        console.log('Mail sent to: ' + req.body.reciever[i]);
+      }
+    });
+  }
+  //const inquiry = await Inquiry.find();
+  res.status(200).json({
+    status: 'success',
+    // results: inquiry.length,
+    // data: {
+    //   inquiry,
+    // },
+  });
+});

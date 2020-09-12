@@ -51,6 +51,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
           'flipbook.propertyAvailability': propertyAvailability,
           'flipbook.sendmessageToSeller': sendmessageToSeller,
           'flipbook.showAttributes': showAttributes,
+          isFlipbook: true,
         },
       }
     );
@@ -262,11 +263,13 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // console.log(extension);
       const rand = Math.ceil(Math.random() * 1000);
       //Random photo name with timeStamp so it will not overide previous images.
-      const fileName = `${floor[i].name}`; // `${[i]}-${'floor-plan'}_${floor[i].name} _${ title }.${ extension }`;
+      const fileName = `${[i]}-${'floor-plan'}_${
+        floor[i].name
+      } _${title}.${extension}`;
       //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
       // let fileName = name1 ++ '.' + extension;
-      // console.log(filename);
+      console.log('filename' + fileName);
 
       path3 = path.resolve(`./public/media/flipbook/House`);
 
@@ -282,8 +285,8 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       ip = '54.164.209.42';
       //console.log(ip);
       const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${fileName}`;
-
-      floorplan.push({ fileName, url });
+      let Name = `${floor[i].name}`;
+      floorplan.push({ Name, url });
     }
 
     const updatefloorPlan = await House.findByIdAndUpdate(
@@ -327,6 +330,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
           'flipbook.propertyAvailability': propertyAvailability,
           'flipbook.sendmessageToSeller': sendmessageToSeller,
           'flipbook.showAttributes': showAttributes,
+          isFlipbook: true,
         },
       }
     );
@@ -539,7 +543,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // console.log(extension);
       const rand = Math.ceil(Math.random() * 1000);
       //Random photo name with timeStamp so it will not overide previous images.
-      const fileName = `${floor[i].name}`; //`${[i]}-${'floor-plan'}_${title}.${extension}`;
+      const fileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
       //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
       // let fileName = name1 ++ '.' + extension;
@@ -558,9 +562,10 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
       ip = '54.164.209.42';
       //console.log(ip);
-      const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${fileName}`;
+      const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${fileName}.${extension}`;
 
-      floorplan.push({ fileName, url });
+      let Name = `${floor[i].name}`;
+      floorplan.push({ Name, url });
     }
 
     const updatefloorPlan = await Hotel.findByIdAndUpdate(
@@ -604,6 +609,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
           'flipbook.propertyAvailability': propertyAvailability,
           'flipbook.sendmessageToSeller': sendmessageToSeller,
           'flipbook.showAttributes': showAttributes,
+          isFlipbook: true,
         },
       }
     );
@@ -814,7 +820,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // console.log(extension);
       const rand = Math.ceil(Math.random() * 1000);
       //Random photo name with timeStamp so it will not overide previous images.
-      const fileName = `${floor[i].name}`; //`${[i]}-${'floor-plan'}_${title}.${extension}`;
+      const fileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
       //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
       // let fileName = name1 ++ '.' + extension;
@@ -833,9 +839,10 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
       ip = '54.164.209.42';
       //console.log(ip);
-      const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${fileName}`;
+      const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${fileName}.${extension}`;
 
-      floorplan.push({ fileName, url });
+      let Name = `${floor[i].name}`;
+      floorplan.push({ Name, url });
     }
 
     const updatefloorPlan = await Land.findByIdAndUpdate(
@@ -879,6 +886,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
           'flipbook.propertyAvailability': propertyAvailability,
           'flipbook.sendmessageToSeller': sendmessageToSeller,
           'flipbook.showAttributes': showAttributes,
+          isFlipbook: true,
         },
       }
     );
@@ -1089,7 +1097,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // console.log(extension);
       const rand = Math.ceil(Math.random() * 1000);
       //Random photo name with timeStamp so it will not overide previous images.
-      const fileName = `${floor[i].name}`; //`${[i]}-${'floor-plan'}_${title}.${extension}`;
+      const fileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
       //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
       // let fileName = name1 ++ '.' + extension;
@@ -1108,9 +1116,10 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
       ip = '54.164.209.42';
       //console.log(ip);
-      const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${fileName}`;
+      const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${fileName}.${extension}`;
 
-      floorplan.push({ fileName, url });
+      let Name = `${floor[i].name}`;
+      floorplan.push({ Name, url });
     }
 
     const updatefloorPlan = await WareHouse.findByIdAndUpdate(
@@ -1210,19 +1219,19 @@ exports.getFlipbookSavedByUser = catchAsync(async (req, res) => {
     });
     if (house) {
       flipbookdata.push(user.savedflipbook[i], house.flipbook.image2D[0]);
-      saveflipbook.push(flipbookdata);
+      saveflipbook.push([flipbookdata]);
     }
     if (land) {
       flipbookdata.push(user.savedflipbook[i], land.flipbook.image2D[0]);
-      saveflipbook.push(flipbookdata);
+      saveflipbook.push([flipbookdata]);
     }
     if (hotel) {
       flipbookdata.push(user.savedflipbook[i], hotel.flipbook.image2D[0]);
-      saveflipbook.push(flipbookdata);
+      saveflipbook.push([flipbookdata]);
     }
     if (warehouse) {
       flipbookdata.push(user.savedflipbook[i], warehouse.flipbook.image2D[0]);
-      saveflipbook.push(flipbookdata);
+      saveflipbook.push([flipbookdata]);
     }
 
     // saveflipbook.push(property.flipbook.image2D[0]);

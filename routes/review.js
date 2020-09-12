@@ -16,5 +16,8 @@ router.patch(
   '/admin/update-review-status/:id',
   reviewController.reviewIsactiveInactive
 );
-
+router.post(
+  '/admin/get-reviews-by-property-id',
+  reviewController.getSpecificReviews
+);
 module.exports = router;

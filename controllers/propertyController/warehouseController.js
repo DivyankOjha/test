@@ -9,8 +9,11 @@ const fs = require('fs');
 exports.addWarehouse = catchAsync(async (req, res, next) => {
   const warehouse = await WareHouse.create(req.body);
 
-  let type = warehouse.attributes.Type;
-  let typelower = type.toLowerCase();
+  let mainCategory = warehouse.attributes.mainCategory;
+  let mainlower = mainCategory.toLowerCase();
+  let typeatt = warehouse.attributes.Type;
+  console.log(typeatt);
+  let typelower = typeatt.toLowerCase();
   let zoning = warehouse.attributes.zoning;
   let zoninglower = zoning.toLowerCase();
   let townLocation = warehouse.attributes.townLocation;
@@ -34,6 +37,7 @@ exports.addWarehouse = catchAsync(async (req, res, next) => {
     { _id: warehouse._id },
     {
       $set: {
+        'attributes.mainCategory': mainlower,
         'attributes.Type': typelower,
         'attributes.zoning': zoninglower,
         'attributes.townLocation': townlower,

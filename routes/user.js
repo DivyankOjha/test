@@ -39,7 +39,7 @@ router.get('/userprofile', profile.getuser);
 router.patch('/admin/set-user-status/:id', adminController.ActiveInactive);
 router.get('/admin/newusers', adminController.getnewUsers);
 router.post('/admin/user-filter-by-date', adminController.filterbydate);
-router.get('/admin/search-user', adminController.searchUser);
+router.post('/admin/search-user', adminController.searchUser);
 
 router.delete('/deleteuser/:id', adminController.deleteUser);
 router.delete('/deletemany', adminController.deleteManyUsers);

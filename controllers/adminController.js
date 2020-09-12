@@ -56,10 +56,10 @@ exports.getnewUsers = catchAsync(async (req, res) => {
     },
     // createdAt: { $lte: date },
     // createdAt: { $lt: endDate },
-  ])
+  ]);
 
-    .sort({ createdAt: -1 })
-    .limit(10);
+  //.sort({ createdAt: -1 })
+  //  .limit(10);
   // const users = await User.find({
   //   // createdAt: { $lte: date },
   //   // createdAt: { $lt: endDate },
@@ -85,9 +85,9 @@ exports.filterbydate = catchAsync(async (req, res) => {
   const users = await User.find({
     createdAt: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
     // createdAt: { $lt: endDate },
-  })
-    .skip(skip)
-    .limit(limit);
+  });
+  //.skip(skip)
+  //  .limit(limit);
   // console.log('users: ' + users);
 
   res.status(200).json({

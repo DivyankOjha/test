@@ -1,9 +1,29 @@
 const AppError = require('./../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const Review = require('../models/reviewModel');
+const User = require('../models/userModel');
+const { update } = require('../models/userModel');
 
 exports.postReview = catchAsync(async (req, res, next) => {
   const postReview = await Review.create(req.body);
+
+  const finduser = await User.findById({ _id: postReview.userId });
+  // console.log(finduser.firstname);
+  // console.log(finduser.lastname);
+  str1 = finduser.firstname;
+  str2 = finduser.lastname;
+  const newString = str1.concat(' ', str2);
+  //console.log(newString);
+
+  const updateReview = await Review.updateOne(
+    { _id: postReview._id },
+    {
+      $set: { name: newString },
+    }
+  );
+  //console.log(finduser);
+
+  //console.log(updateReview);
   res.status(200).json({
     status: 'Success',
     review: postReview,
@@ -13,7 +33,7 @@ exports.postReview = catchAsync(async (req, res, next) => {
 exports.getReview = catchAsync(async (req, res, next) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
-  const postReview = await Review.find().skip(skip).limit(limit);
+  const postReview = await Review.find(); //.skip(skip).limit(limit);
   res.status(200).json({
     status: 'Success',
     results: postReview.length,
@@ -48,5 +68,14 @@ exports.deleteReview = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'Success',
     //postReview,
+  });
+});
+
+exports.getSpecificReviews = catchAsync(async (req, res, next) => {
+  const getReviews = await Review.find({ propertyID: req.body.propertyID });
+  res.status(200).json({
+    status: 'Success',
+    results: getReviews.length,
+    getReviews,
   });
 });

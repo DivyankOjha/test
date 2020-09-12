@@ -18,10 +18,11 @@ router.get(
   subController.getUserSubscription
 );
 
-router.get(
+router.post(
   '/subscription-filter-by-date',
   subController.Subscriptionfilterbydate
 );
+router.patch('/subscription-update-points/:id', subController.updateUsedPoints);
 router.get('/search-email-id', subController.searchSubscription);
 
 module.exports = router;
