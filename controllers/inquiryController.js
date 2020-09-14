@@ -85,7 +85,7 @@ exports.searchInquiry = catchAsync(async (req, res, next) => {
       $regexMatch: {
         input: '$email',
         regex: searchquery, //Your text search here
-        options: 'im',
+        options: 'm',
       },
     },
   });
@@ -93,7 +93,7 @@ exports.searchInquiry = catchAsync(async (req, res, next) => {
   //  .limit(limit);
   //console.log(data);
   if (data.length < 1) {
-    res.status(404).json({
+    res.status(200).json({
       status: 'Not Found',
       message: 'Details Not Found! Try again.',
     });
@@ -250,7 +250,7 @@ exports.searchInquiryCustomer = catchAsync(async (req, res, next) => {
       $regexMatch: {
         input: '$userEmail',
         regex: searchquery, //Your text search here
-        options: 'im',
+        options: 'm',
       },
     },
   });
@@ -258,7 +258,7 @@ exports.searchInquiryCustomer = catchAsync(async (req, res, next) => {
   //  .limit(limit);
   //console.log(data);
   if (data.length < 1) {
-    res.status(404).json({
+    res.status(200).json({
       status: 'Not Found',
       message: 'Details Not Found! Try again.',
     });

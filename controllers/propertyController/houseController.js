@@ -246,6 +246,26 @@ exports.getAllHouse = catchAsync(async (req, res) => {
     },
   });
 });
+exports.filterbydate = catchAsync(async (req, res) => {
+  let { startDate, endDate } = req.body;
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+
+  //console.log(endDate + 'T' + '00:00:00');
+  const users = await House.find({
+    createdAt: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
+    // createdAt: { $lt: endDate },
+  });
+  //.skip(skip)
+  //  .limit(limit);
+  // console.log('users: ' + users);
+
+  res.status(200).json({
+    status: 'success',
+    results: users.length,
+    data: users,
+  });
+});
 exports.propertySearchByName = catchAsync(async (req, res, next) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
@@ -286,7 +306,7 @@ exports.propertySearchByName = catchAsync(async (req, res, next) => {
             //input: { $concat: ['$firstname', ' ', '$lastname'] },
             input: '$propertyDetails.propertyName',
             regex: searchquery, //Your text search here
-            options: 'i',
+            options: 'm',
           },
         },
       });
@@ -294,7 +314,7 @@ exports.propertySearchByName = catchAsync(async (req, res, next) => {
       //.limit(limit);
       if (house.length < 1) {
         //console.log('hello');
-        res.status(404).json({
+        res.status(200).json({
           message: 'Property Not Found! Try another keyword',
         });
       } else {

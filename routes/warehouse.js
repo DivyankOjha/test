@@ -11,7 +11,9 @@ router.put(
   warehouseController.updateWarehouse
 );
 router.get('/get-all-warehouse', warehouseController.getAllWarehouse);
-router.get(
+
+router.post('/warehouse-filter-by-date', warehouseController.filterbydate);
+router.post(
   '/search-property-by-name',
   warehouseController.propertySearchByName
 );

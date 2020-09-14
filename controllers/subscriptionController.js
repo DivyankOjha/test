@@ -106,19 +106,26 @@ exports.searchSubscription = catchAsync(async (req, res, next) => {
   //console.log('length' + _id.length);
   try {
     if (mongoose.Types.ObjectId.isValid(searchquery)) {
-      console.log('this is id');
+      // console.log('this is id');
       const subs = await Subs.findById(searchquery);
-      console.log(subs);
+      // console.log(subs);
       res.status(200).json({
         status: 'success',
         results: subs.length,
         data: subs,
       });
-    }
-    if (str.includes(substr)) {
+    } else {
       //console.log('this is email');
-      const subs = await Subs.findOne({ email: searchquery });
-      console.log(subs);
+      const subs = await Subs.find({
+        $expr: {
+          $regexMatch: {
+            input: '$email',
+            regex: searchquery, //Your text search here
+            options: 'm',
+          },
+        },
+      });
+      //console.log(subs);
       res.status(200).json({
         status: 'success',
         results: subs.length,

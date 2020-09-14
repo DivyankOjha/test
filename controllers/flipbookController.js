@@ -1520,3 +1520,6 @@ exports.getFlipbookbyID = catchAsync(async (req, res) => {
     });
   }
 });
+exports.getFlipbookbyID = catchAsync(async (req, res) => {
+  propertyid = req.body.propertyId;
+});

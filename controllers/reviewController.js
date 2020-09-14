@@ -41,6 +41,17 @@ exports.getReview = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getReviewByRating = catchAsync(async (req, res, next) => {
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+  const postReview = await Review.find({ rating: { $eq: req.body.rating } }); //.skip(skip).limit(limit);
+  res.status(200).json({
+    status: 'Success',
+    results: postReview.length,
+    review: postReview,
+  });
+});
+
 exports.reviewIsactiveInactive = catchAsync(async (req, res, next) => {
   const _id = req.params.id;
   const review = await Review.findById({ _id });
@@ -71,7 +82,7 @@ exports.deleteReview = catchAsync(async (req, res) => {
     _id: { $in: ids },
   });
   if (deletemany.deletedCount === 0) {
-    res.status(404).json({
+    res.status(200).json({
       message: 'Review not found or Already Deleted! Please refresh!',
     });
   } else {

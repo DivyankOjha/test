@@ -10,6 +10,9 @@ router.post(
 ); //authController.protect,
 
 router.get('/admin/get-all-review', reviewController.getReview);
+
+router.post('/admin/get-review-by-rating', reviewController.getReviewByRating);
+
 router.delete('/admin/delete-review-by-id', reviewController.deleteReview);
 
 router.patch(

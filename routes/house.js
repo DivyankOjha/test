@@ -23,7 +23,8 @@ router.get(
   houseController.getAllHouse
 );
 
-router.get(
+router.post('/house-filter-by-date', houseController.filterbydate);
+router.post(
   '/search-property-by-name',
   //authController.protect,
   //authController.restrictTo('admin'),

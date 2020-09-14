@@ -11,7 +11,9 @@ router.put(
   landController.updateLand
 );
 router.get('/get-all-land', landController.getAllland);
-router.get('/search-property-by-name', landController.propertySearchByName);
+
+router.post('/land-filter-by-date', landController.filterbydate);
+router.post('/search-property-by-name', landController.propertySearchByName);
 
 router.post('/search-land-location', landController.ajaxSearch);
 module.exports = router;

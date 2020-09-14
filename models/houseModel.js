@@ -6,6 +6,8 @@ const houseSchema = new mongoose.Schema({
   isFlipbook: { type: Boolean, default: false },
   isStatus: { type: Boolean, default: true },
   categoryType: { type: String, default: 'House' },
+  isSavedStatus: { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now },
 
   propertyDetails: {
     propertyName: String,
