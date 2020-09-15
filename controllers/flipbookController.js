@@ -1479,6 +1479,7 @@ exports.deleteFlipbook = catchAsync(async (req, res) => {
 });
 
 exports.getFlipbookbyID = catchAsync(async (req, res) => {
+  console.log('hi');
   const _id = req.params.id;
   console.log(req.params.id);
 
@@ -1520,6 +1521,6 @@ exports.getFlipbookbyID = catchAsync(async (req, res) => {
     });
   }
 });
-exports.getFlipbookbyID = catchAsync(async (req, res) => {
-  propertyid = req.body.propertyId;
-});
+// exports.getFlipbookbyID = catchAsync(async (req, res) => {
+//   propertyid = req.body.propertyId;
+// });

@@ -17,4 +17,5 @@ router.post(
   '/search-property-by-name',
   warehouseController.propertySearchByName
 );
+router.post('/search-warehouse-location', warehouseController.ajaxSearchArea); //ajax search
 module.exports = router;
