@@ -32,6 +32,7 @@ exports.addWarehouse = catchAsync(async (req, res, next) => {
   let meetinglower = meetingRoom.toLowerCase();
   let parking = warehouse.attributes.parking;
   let parkinglower = parking.toLowerCase();
+  console.log(typelower, zoninglower, townlower);
 
   const updating = await WareHouse.findByIdAndUpdate(
     { _id: warehouse._id },
@@ -116,7 +117,7 @@ exports.updateWarehouse = catchAsync(async (req, res, next) => {
   var d = sellerlogo.startsWith('http', 0);
   if (d) {
     console.log('true');
-    const updatedellerlogo = await Warehouse.findByIdAndUpdate(
+    const updatedellerlogo = await WareHouse.findByIdAndUpdate(
       { _id: req.params.id },
       {
         $set: { 'sellerDetails.sellerlogo': sellerlogo },

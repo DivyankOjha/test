@@ -7,6 +7,7 @@ const subSchema = new mongoose.Schema({
   userID: { type: mongoose.Schema.ObjectId },
   subscriptionType: { type: String }, //rent
   subscriptionAmount: { type: Number }, //1200,
+  totalpoints: Number,
   usedPoints: { type: Number }, // 50,
   subscriptionDate: { type: Date, default: Date.now },
   email: String,

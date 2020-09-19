@@ -25,9 +25,21 @@ router.post('/land-search-3', searchHouse.searchLandPage3);
 router.post('/hotel-search-1', searchHouse.searchHotelPage1);
 router.post('/hotel-search-2', searchHouse.searchHotelPage2);
 
-router.post('/warehouse-search-1', searchHouse.searchWarehousePage1);
-router.post('/warehouse-search-2', searchHouse.searchWarehousePage2);
-router.post('/warehouse-search-3', searchHouse.searchWarehousePage3);
+router.post(
+  '/warehouse-search-1',
+  authController.protect,
+  searchHouse.searchWarehousePage1
+);
+router.post(
+  '/warehouse-search-2',
+  authController.protect,
+  searchHouse.searchWarehousePage2
+);
+router.post(
+  '/warehouse-search-3',
+  authController.protect,
+  searchHouse.searchWarehousePage3
+);
 
 //INDEX - show all campgrounds
 // router.get('/', function (req, res) {

@@ -16,15 +16,18 @@ exports.getdata = catchAsync(async (req, res, next) => {
   let PropertyNames = [];
   let housedata = await House.find();
   // console.log(housedata.length);
+  //console.log(housedata[0].isFlipbook);
   for (var i in housedata) {
-    let data = [];
-    val1 = housedata[i].propertyDetails.propertyName;
-    data.push(val1);
-    val2 = housedata[i].categoryType;
-    data.push(val2);
-    val3 = housedata[i]._id;
-    data.push(val3);
-    PropertyNames.push(data);
+    if (!housedata[i].isFlipbook) {
+      let data = [];
+      val1 = housedata[i].propertyDetails.propertyName;
+      data.push(val1);
+      val2 = housedata[i].categoryType;
+      data.push(val2);
+      val3 = housedata[i]._id;
+      data.push(val3);
+      PropertyNames.push(data);
+    }
   }
 
   //   for (let i = 0; i <= housedata.length; i++) {
@@ -32,40 +35,47 @@ exports.getdata = catchAsync(async (req, res, next) => {
   //   }
 
   const land = await Land.find();
+  console.log(land[0].isFlipbook);
   for (var i in land) {
-    let data1 = [];
-    val1 = land[i].propertyDetails.propertyName;
-    data1.push(val1);
-    val2 = land[i].categoryType;
-    data1.push(val2);
-    val3 = land[i]._id;
-    data1.push(val3);
-    PropertyNames.push(data1);
+    if (!land[i].isFlipbook) {
+      let data1 = [];
+      val1 = land[i].propertyDetails.propertyName;
+      data1.push(val1);
+      val2 = land[i].categoryType;
+      data1.push(val2);
+      val3 = land[i]._id;
+      data1.push(val3);
+      PropertyNames.push(data1);
+    }
   }
 
   const hotel = await Hotel.find();
   for (var i in hotel) {
-    let data2 = [];
-    val1 = hotel[i].propertyDetails.propertyName;
-    data2.push(val1);
-    val2 = hotel[i].categoryType;
-    data2.push(val2);
-    val3 = hotel[i]._id;
-    data2.push(val3);
-    console.log(data2);
-    PropertyNames.push(data2);
+    if (!hotel[i].isFlipbook) {
+      let data2 = [];
+      val1 = hotel[i].propertyDetails.propertyName;
+      data2.push(val1);
+      val2 = hotel[i].categoryType;
+      data2.push(val2);
+      val3 = hotel[i]._id;
+      data2.push(val3);
+      console.log(data2);
+      PropertyNames.push(data2);
+    }
   }
 
   const warehouse = await Warehouse.find();
   for (var i in warehouse) {
-    let data3 = [];
-    val1 = warehouse[i].propertyDetails.propertyName;
-    data3.push(val1);
-    val2 = warehouse[i].categoryType;
-    data3.push(val2);
-    val3 = warehouse[i]._id;
-    data3.push(val3);
-    PropertyNames.push(data3);
+    if (!warehouse[i].isFlipbook) {
+      let data3 = [];
+      val1 = warehouse[i].propertyDetails.propertyName;
+      data3.push(val1);
+      val2 = warehouse[i].categoryType;
+      data3.push(val2);
+      val3 = warehouse[i]._id;
+      data3.push(val3);
+      PropertyNames.push(data3);
+    }
   }
   // console.log(PropertyNames);
   let sortedName = [];

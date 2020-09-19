@@ -285,7 +285,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
     /*******++++++++++++====Floor Plan=============********* */
 
     for (let i in floor) {
-      var f = floor[i].image.startsWith('http', 0);
+      var f = floor[i].url.startsWith('http', 0);
       console.log('f : ' + f);
       if (f) {
         console.log('true');
@@ -300,8 +300,8 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         console.log(floorplan);
       }
       if (!f) {
-        console.log(floor[i].name);
-        let matches = await floor[i].image.match(
+        console.log(floor[i].Name);
+        let matches = await floor[i].url.match(
             /^data:([A-Za-z-+\/]+);base64,(.+)$/
           ),
           response = {};
@@ -322,13 +322,13 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(extension);
         const rand = Math.ceil(Math.random() * 1000);
         //Random photo name with timeStamp so it will not overide previous images.
-        const fileName = `${[i]}-${'floor-plan'}_${
-          floor[i].name
+        const FileName = `${[i]}-${'floor-plan'}_${
+          floor[i].Name
         } _${title}.${extension}`;
-        //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+        //const FileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
-        // let fileName = name1 ++ '.' + extension;
-        console.log('filename' + fileName);
+        // let FileName = name1 ++ '.' + extension;
+        console.log('filename' + FileName);
 
         path3 = path.resolve(`./public/media/flipbook/House`);
 
@@ -340,12 +340,13 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         }
         // console.log(localpath);
 
-        fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+        fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
         ip = '54.164.209.42';
         //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${fileName}`;
-        let Name = `${floor[i].name}`;
-        floorplan.push({ Name, url });
+        const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${FileName}`;
+        //  let image = url;
+        let fileName = `${floor[i].fileName}`;
+        floorplan.push({ fileName, url });
       }
     }
 
@@ -616,7 +617,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
 
     /*******++++++++++++====Floor Plan=============********* */
     for (let i in floor) {
-      var f = floor[i].image.startsWith('http', 0);
+      var f = floor[i].url.startsWith('http', 0);
       console.log('f : ' + f);
       if (f) {
         console.log('true');
@@ -634,7 +635,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       //console.log(image3D);
       // console.log(image3D);
       if (!f) {
-        let matches = await floor[i].image.match(
+        let matches = await floor[i].url.match(
             /^data:([A-Za-z-+\/]+);base64,(.+)$/
           ),
           response = {};
@@ -655,10 +656,10 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(extension);
         const rand = Math.ceil(Math.random() * 1000);
         //Random photo name with timeStamp so it will not overide previous images.
-        const fileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
-        //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+        const FileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
+        //const FileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
-        // let fileName = name1 ++ '.' + extension;
+        // let FileName = name1 ++ '.' + extension;
         // console.log(filename);
 
         path3 = path.resolve(`./public/media/flipbook/Hotel`);
@@ -671,13 +672,13 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         }
         // console.log(localpath);
 
-        fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+        fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
         ip = '54.164.209.42';
         //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${fileName}.${extension}`;
+        const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${FileName}.${extension}`;
 
-        let Name = `${floor[i].name}`;
-        floorplan.push({ Name, url });
+        let fileName = `${floor[i].fileName}`;
+        floorplan.push({ fileName, url });
       }
     }
 
@@ -945,7 +946,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
 
     /*******++++++++++++====Floor Plan=============********* */
     for (let i in floor) {
-      var f = floor[i].image.startsWith('http', 0);
+      var f = floor[i].url.startsWith('http', 0);
       if (f) {
         console.log('true');
         // const update2dimage = await House.findByIdAndUpdate(
@@ -959,7 +960,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         console.log(floorplan);
       }
       if (!f) {
-        let matches = await floor[i].image.match(
+        let matches = await floor[i].url.match(
             /^data:([A-Za-z-+\/]+);base64,(.+)$/
           ),
           response = {};
@@ -980,10 +981,10 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(extension);
         const rand = Math.ceil(Math.random() * 1000);
         //Random photo name with timeStamp so it will not overide previous images.
-        const fileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
-        //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+        const FileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
+        //const FileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
-        // let fileName = name1 ++ '.' + extension;
+        // let FileName = name1 ++ '.' + extension;
         // console.log(filename);
 
         path3 = path.resolve(`./public/media/flipbook/Land`);
@@ -996,13 +997,13 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         }
         // console.log(localpath);
 
-        fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+        fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
         ip = '54.164.209.42';
         //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${fileName}.${extension}`;
+        const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${FileName}.${extension}`;
 
-        let Name = `${floor[i].name}`;
-        floorplan.push({ Name, url });
+        let fileName = `${floor[i].fileName}`;
+        floorplan.push({ fileName, url });
       }
     }
 
@@ -1088,9 +1089,9 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // let fileName = name1 ++ '.' + extension;
       // console.log(filename);
 
-      path3 = path.resolve(`./public/media/flipbook`);
+      path3 = path.resolve(`./public/media/flipbook/WareHouse`);
 
-      let localpath = `${path3}/${'Warehouse'}/${_id}/`;
+      let localpath = `${path3}/${_id}/`;
       console.log(localpath);
 
       if (!fs.existsSync(localpath)) {
@@ -1122,6 +1123,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
 
     /***********  2D Image Array****** */
     for (let i in image2D) {
+      var e = image2D[i].startsWith('http', 0);
       if (e) {
         // console.log('true');
         // const update2dimage = await House.findByIdAndUpdate(
@@ -1272,7 +1274,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
 
     /*******++++++++++++====Floor Plan=============********* */
     for (let i in floor) {
-      var f = floor[i].image.startsWith('http', 0);
+      var f = floor[i].url.startsWith('http', 0);
       //console.log(image3D);
       // console.log(image3D);
       if (f) {
@@ -1288,7 +1290,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         console.log(floorplan);
       }
       if (!f) {
-        let matches = await floor[i].image.match(
+        let matches = await floor[i].url.match(
             /^data:([A-Za-z-+\/]+);base64,(.+)$/
           ),
           response = {};
@@ -1309,10 +1311,10 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(extension);
         const rand = Math.ceil(Math.random() * 1000);
         //Random photo name with timeStamp so it will not overide previous images.
-        const fileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
-        //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+        const FileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
+        //const FileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
-        // let fileName = name1 ++ '.' + extension;
+        // let FileName = name1 ++ '.' + extension;
         // console.log(filename);
 
         path3 = path.resolve(`./public/media/flipbook/WareHouse`);
@@ -1325,13 +1327,13 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         }
         // console.log(localpath);
 
-        fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+        fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
         ip = '54.164.209.42';
         //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${fileName}.${extension}`;
+        const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${FileName}.${extension}`;
 
-        let Name = `${floor[i].name}`;
-        floorplan.push({ Name, url });
+        let fileName = `${floor[i].fileName}`;
+        floorplan.push({ fileName, url });
       }
     }
 

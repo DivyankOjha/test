@@ -6,6 +6,8 @@ const sendEmail = require('./../utils/email');
 
 exports.Subscription = catchAsync(async (req, res, next) => {
   const newSub = await Subs.create(req.body);
+  console.log(newSub);
+  // update issubscribed true in user
   res.status(201).json({
     status: 'success',
     data: {
@@ -159,7 +161,7 @@ exports.updateUsedPoints = catchAsync(async (req, res) => {
   // console.log(checkUsedPoints);
   let math70 = (checkUsedPoints.subscription.totalPoints / 100) * 70;
   //console.log(math70);
-  if (checkUsedPoints.subscription.usedPoints >= math70) {
+  if (checkUsedPoints.subscription.usedPoints === math70) {
     //math70
     console.log('greater than 70');
     const message = `<p> Subscription Message : You have consumed 70 percent of the total points </p> `;

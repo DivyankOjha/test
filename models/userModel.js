@@ -9,12 +9,13 @@ const userSchema = new mongoose.Schema({
   lastname: { type: String, required: [true, 'Please Tell us your last name'] },
 
   subscription: {
-    usedPoints: { type: Number, default: 0 },
-    totalPoints: { type: Number, default: 1500 },
+    usedPoints: { type: Number },
+    totalPoints: { type: Number },
     Type: String,
   },
 
   isSubscribed: { type: Boolean, default: false },
+
   imagepath: { type: String }, //we can set a default profile image for the user ???
   savedflipbook: {
     // array

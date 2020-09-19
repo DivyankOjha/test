@@ -40,6 +40,7 @@ exports.getuser = catchAsync(async (req, res) => {
     email: currentUser.email,
     mobilenumber: currentUser.mobilenumber,
     imagepath: currentUser.imagepath,
+    isSubscribed: currentUser.isSubscribed,
   };
   //console.log(data);
   //user = currentUser;

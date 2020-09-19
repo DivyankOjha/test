@@ -6,7 +6,7 @@ const warehouseSchema = new mongoose.Schema({
   isStatus: { type: Boolean, default: true },
   categoryType: { type: String, default: 'Warehouse' },
   createdAt: { type: Date, default: Date.now },
-
+  isSavedStatus: { type: Boolean, default: false },
   propertyDetails: {
     Type: { type: String },
     propertyName: String,

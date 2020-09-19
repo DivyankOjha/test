@@ -135,30 +135,33 @@ exports.InquiryEmail = catchAsync(async (req, res) => {
   //const url = `${req.protocol}://${req.get('host')}/api/login/${token}`;
   //const url = `http://localhost:3002/api/users/confirmation/${token}`;
   for (var i in req.body.reciever) {
-    const inquiryemail = await Inquiry.findById({ _id: req.body.reciever[i] });
+    let inquiryemail = await Inquiry.findById({ _id: req.body.reciever[i] });
     console.log(inquiryemail.email);
-    if (req.body.subject[i] > req.body.subject[0]) {
-      var mailOptions = {
-        from: `CUBOID <${emailsettings.username}>`,
-        to: inquiryemail.email,
-        subject: req.body.subject[i],
-        html: `<p>Hello ${req.body.message[i]}</p>`,
-      };
-    }
-    if (req.body.subject[i] === req.body.subject[0]) {
-      var mailOptions = {
-        from: `CUBOID <${emailsettings.username}>`,
-        to: inquiryemail.email,
-        subject: req.body.subject[0],
-        html: `<p>Hello ${req.body.message[0]}</p>`,
-      };
-    }
+    // if (req.body.reciever[i] >= req.body.reciever[0]) {
+    var mailOptions = {
+      from: `CUBOID <${emailsettings.username}>`,
+      to: inquiryemail.email,
+      subject: req.body.subject[0],
+      html: `<p>Hello ${req.body.message[0]}</p>`,
+    };
+    console.log('if 1');
+    //  }
+    // if (req.body.subject[i] === req.body.subject[0]) {
+    //   var mailOptions = {
+    //     from: `CUBOID <${emailsettings.username}>`,
+    //     to: inquiryemail.email,
+    //     subject: req.body.subject[0],
+    //     html: `<p>Hello ${req.body.message[0]}</p>`,
+    //   };
+    // }
 
     transporter.sendMail(mailOptions, function (err) {
       if (err) {
         console.log('ERRor sending mail: ' + err);
       } else {
-        console.log('Mail sent to: ' + req.body.reciever[i]);
+        console.log(
+          'Mail sent to: ' + req.body.reciever[i] + inquiryemail.email
+        );
       }
     });
   }
@@ -322,22 +325,22 @@ exports.CustomerReplyEmail = catchAsync(async (req, res) => {
   for (var i in req.body.reciever) {
     const inquiryemail = await Customer.findById({ _id: req.body.reciever[i] });
     console.log(inquiryemail.userEmail);
-    if (req.body.subject[i] > req.body.subject[0]) {
-      var mailOptions = {
-        from: `CUBOID <${emailsettings.username}>`,
-        to: inquiryemail.userEmail,
-        subject: req.body.subject[i],
-        html: `<p>Hello ${req.body.message[i]}</p>`,
-      };
-    }
-    if (req.body.subject[i] === req.body.subject[0]) {
-      var mailOptions = {
-        from: `CUBOID <${emailsettings.username}>`,
-        to: inquiryemail.userEmail,
-        subject: req.body.subject[0],
-        html: `<p>Hello ${req.body.message[0]}</p>`,
-      };
-    }
+    // if (req.body.subject[i] > req.body.subject[0]) {
+    var mailOptions = {
+      from: `CUBOID <${emailsettings.username}>`,
+      to: inquiryemail.userEmail,
+      subject: req.body.subject[0],
+      html: `<p>${req.body.message[0]}</p>`,
+    };
+    //}
+    // if (req.body.subject[i] === req.body.subject[0]) {
+    //   var mailOptions = {
+    //     from: `CUBOID <${emailsettings.username}>`,
+    //     to: inquiryemail.userEmail,
+    //     subject: req.body.subject[0],
+    //     html: `<p>Hello ${req.body.message[0]}</p>`,
+    //   };
+    // }
 
     transporter.sendMail(mailOptions, function (err) {
       if (err) {

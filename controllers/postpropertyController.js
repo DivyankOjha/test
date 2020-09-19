@@ -371,28 +371,30 @@ exports.postPropertyEmail = catchAsync(async (req, res) => {
       _id: req.body.reciever[i],
     });
     console.log(inquiryemail.email);
-    if (req.body.subject[i] > req.body.subject[0]) {
-      var mailOptions = {
-        from: `CUBOID <${emailsettings.username}>`,
-        to: inquiryemail.email,
-        subject: req.body.subject[i],
-        html: `<p>Hello ${req.body.message[i]}</p>`,
-      };
-    }
-    if (req.body.subject[i] === req.body.subject[0]) {
+    if (req.body.reciever[i] >= req.body.reciever[0]) {
       var mailOptions = {
         from: `CUBOID <${emailsettings.username}>`,
         to: inquiryemail.email,
         subject: req.body.subject[0],
         html: `<p>Hello ${req.body.message[0]}</p>`,
       };
+      console.log('if 1');
     }
+    // if (req.body.reciever[i] === req.body.reciever[0]) {
+    //   var mailOptions = {
+    //     from: `CUBOID <${emailsettings.username}>`,
+    //     to: inquiryemail.email,
+    //     subject: req.body.subject[0],
+    //     html: `<p>Hello ${req.body.message[0]}</p>`,
+    //   };
+    //   console.log('if 2');
+    // }
 
     transporter.sendMail(mailOptions, function (err) {
       if (err) {
         console.log('ERRor sending mail: ' + err);
       } else {
-        console.log('Mail sent to: ' + req.body.reciever[i]);
+        console.log('Mail sent to : ' + req.body.reciever[i]); //inquiryemail.email
       }
     });
   }

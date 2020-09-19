@@ -4,6 +4,7 @@ const House = require('./../models/houseModel');
 const Land = require('./../models/landModel');
 const Hotel = require('./../models/hotelModel');
 const WareHouse = require('./../models/warehouseModel');
+const User = require('../models/userModel');
 
 exports.searchHouse1 = catchAsync(async (req, res) => {
   // for (var i in req.body) {
@@ -686,6 +687,7 @@ exports.searchLandPage3 = catchAsync(async (req, res) => {
   let kmtotarmac = req.body.kmtotarmac;
   let kmtowater = req.body.kmtowater;
   let kmtoelectricity = req.body.kmtoelectricity;
+  console.log(kmtoelectricity);
 
   let freehold = attributes.freehold;
   let lease = attributes.lease;
@@ -701,7 +703,7 @@ exports.searchLandPage3 = catchAsync(async (req, res) => {
   let soilType = attributes.soilType.toLowerCase();
   let nature = attributes.nature.toLowerCase();
   let road = attributes.road.toLowerCase();
-
+  console.log(soilType, nature, road);
   var search = await Land.aggregate([
     {
       $match: {
@@ -746,6 +748,7 @@ exports.searchLandPage3 = catchAsync(async (req, res) => {
 
     {
       $match: {
+        //  'attributes.mainCategory' :{mainCategory}
         'attributes.soilType': { $lte: soilType },
         'attributes.nature': { $lte: nature },
         'attributes.road': { $lte: road }, //3 - RADIO BUTTONS
@@ -1141,6 +1144,7 @@ exports.searchHotelPage2 = catchAsync(async (req, res) => {
 });
 
 exports.searchWarehousePage1 = catchAsync(async (req, res) => {
+  //  isSavedStatus: { type: Boolean, default: false },
   let attributes = req.body.attributes;
   let type = attributes.Type;
   let Type = type.toLowerCase();
@@ -1155,19 +1159,39 @@ exports.searchWarehousePage1 = catchAsync(async (req, res) => {
   let maxsizeinfeet = req.body.sizeinfeet.max;
 
   let kmfromtarmac = req.body.kmfromtarmac; //tarmac change in frontend also.
+  console.log(kmfromtarmac);
 
   var search = await WareHouse.aggregate([
     {
       $match: {
         'attributes.Type': { $in: [Type] },
         'attributes.cost': { $lte: maxcost, $gte: mincost },
-        // 'attributes.area': { $lte: area },
         'attributes.sizeinfeet': { $lte: maxsizeinfeet, $gte: minsizeinfeet },
         'attributes.kmfromtarmac': { $lte: kmfromtarmac },
+        // 'attributes.area': { $lte: area },
         //do this spelling tarmac
       },
     },
   ]);
+  const checkinUser = await User.findById({ _id: req.user.id });
+  // console.log('user ' + checkinUser.savedflipbook[2]);
+  let searchResult = search;
+  for (var i in searchResult) {
+    //  console.log('searchid ' + searchResult[0]._id);
+
+    if ((checkinUser.savedflipbook[i] = searchResult[i]._id)) {
+      const updateWarehouse = await WareHouse.findByIdAndUpdate(
+        {
+          _id: searchResult[i]._id,
+        },
+        { $set: { isSavedStatus: true } }
+      );
+      //  console.log('hi');
+      // console.log(i);
+    }
+
+    //  console.log(req.user.id); //add login check
+  }
   res.status(200).json({
     status: 'success',
     results: search.length,
@@ -1244,6 +1268,25 @@ exports.searchWarehousePage2 = catchAsync(async (req, res) => {
       },
     },
   ]);
+  const checkinUser = await User.findById({ _id: req.user.id });
+  // console.log('user ' + checkinUser.savedflipbook[2]);
+  let searchResult = search;
+  for (var i in searchResult) {
+    //  console.log('searchid ' + searchResult[0]._id);
+
+    if ((checkinUser.savedflipbook[i] = searchResult[i]._id)) {
+      const updateWarehouse = await WareHouse.findByIdAndUpdate(
+        {
+          _id: searchResult[i]._id,
+        },
+        { $set: { isSavedStatus: true } }
+      );
+      //  console.log('hi');
+      // console.log(i);
+    }
+  }
+
+  //  console.log(req.user.id); //add login check
 
   res.status(200).json({
     status: 'success',
@@ -1342,7 +1385,25 @@ exports.searchWarehousePage3 = catchAsync(async (req, res) => {
       },
     },
   ]);
+  const checkinUser = await User.findById({ _id: req.user.id });
+  // console.log('user ' + checkinUser.savedflipbook[2]);
+  let searchResult = search;
+  for (var i in searchResult) {
+    //  console.log('searchid ' + searchResult[0]._id);
 
+    if ((checkinUser.savedflipbook[i] = searchResult[i]._id)) {
+      const updateWarehouse = await WareHouse.findByIdAndUpdate(
+        {
+          _id: searchResult[i]._id,
+        },
+        { $set: { isSavedStatus: true } }
+      );
+      //  console.log('hi');
+      // console.log(i);
+    }
+  }
+
+  //  console.log(req.user.id); //add login check
   res.status(200).json({
     status: 'success',
     results: search.length,
