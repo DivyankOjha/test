@@ -95,7 +95,10 @@ exports.deleteReview = catchAsync(async (req, res) => {
 });
 
 exports.getSpecificReviews = catchAsync(async (req, res, next) => {
-  const getReviews = await Review.find({ propertyID: req.body.propertyID });
+  const getReviews = await Review.find({
+    propertyID: req.body.propertyID,
+    isActive: true,
+  });
   res.status(200).json({
     status: 'Success',
     results: getReviews.length,

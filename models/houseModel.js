@@ -153,7 +153,7 @@ const houseSchema = new mongoose.Schema({
     floorPlan: { type: Array }, //image field in design ?????
     map: String,
     // contactSeller: String,
-    propertyAvailability: Boolean,
+    // propertyAvailability: Boolean,
     // sendmessageToSeller: String, //email ???
 
     //page3 in design

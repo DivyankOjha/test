@@ -79,7 +79,7 @@ exports.upload = catchAsync(async (req, res, next) => {
   //console.log(localpath);
 
   fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-  ip = '54.164.209.42';
+  ip = 'cuboidtechnologies.com';
   //console.log(ip);
   const url = `${req.protocol}://${ip}/media/profilepictures/${req.user._id}/${fileName}`;
 

@@ -62,7 +62,7 @@ exports.addhotel = catchAsync(async (req, res, next) => {
   //console.log(localpath);
 
   fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-  ip = '54.164.209.42';
+  ip = 'cuboidtechnologies.com';
   //console.log(ip);
   const url = `${req.protocol}://${ip}/media/admin/hotel/${hotel._id}/${fileName}`;
 
@@ -134,7 +134,7 @@ exports.updateHotel = catchAsync(async (req, res, next) => {
     //console.log(localpath);
 
     fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-    ip = '54.164.209.42';
+    ip = 'cuboidtechnologies.com';
     //console.log(ip);
     const url = `${req.protocol}://${ip}/media/admin/hotel/${req.params.id}/${fileName}`;
 

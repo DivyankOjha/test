@@ -782,7 +782,9 @@ exports.searchHotelPage1 = catchAsync(async (req, res) => {
   let conferenceroom = req.body.conferenceroom; //conferenceroom number
 
   let kmfromtarmac = req.body.kmfromtarmac;
-  // let area = req.body.area;
+  let area = req.body.area;
+  //let area = areaC.toLowerCase();
+  let hotelname = req.body.Hotel;
   let cls = attributes.class.toLowerCase();
   let locality = attributes.locality.toLowerCase();
   //let location = req.body.location;
@@ -914,15 +916,30 @@ exports.searchHotelPage1 = catchAsync(async (req, res) => {
     //     },
     //   },
     // ],
+    {
+      $match: {
+        $or: [
+          //$or
+          { 'propertyDetails.propertyName': `${hotelname}` },
+          { 'sellerDetails.location': `${area}` },
+        ],
+      },
+    },
 
     {
       $match: {
         //  'attributes.cost': { $lte: cost },
-        //'attributes.area': { $lte: area },
+        // 'attributes.area': { $lte: area },
         'attributes.class': `${cls}`,
-
-        // 'sellerDetails.location': `${location}`,
-
+        // 'propertyDetails.propertyName': `${hotelname}`,
+        // 'sellerDetails.location': `${area}`,
+        'attributes.locality': { $lte: locality },
+        'attributes.kmfromtarmac': { $lte: kmfromtarmac },
+        'attributes.conferenceroom': { $lte: conferenceroom },
+        'attributes.bedbreakfastcost': {
+          $lte: maxbedbreakfastcost,
+          $gte: minbedbreakfastcost,
+        },
         //{ $type: "string" }
         //  'attributes.carpark': { $exists: true },
 
@@ -998,7 +1015,9 @@ exports.searchHotelPage1 = catchAsync(async (req, res) => {
 exports.searchHotelPage2 = catchAsync(async (req, res) => {
   let attributes = req.body.attributes;
   let conferenceroom = req.body.conferenceroom; //conferenceroom number
-
+  let area = req.body.area;
+  //let area = areaC.toLowerCase();
+  let hotelname = req.body.Hotel;
   let kmfromtarmac = req.body.kmfromtarmac;
   //let area = req.body.area;
   let cls = attributes.class.toLowerCase();
@@ -1025,7 +1044,8 @@ exports.searchHotelPage2 = catchAsync(async (req, res) => {
       $match: {
         $or: [
           //$or
-
+          { 'propertyDetails.propertyName': `${hotelname}` },
+          { 'sellerDetails.location': `${area}` },
           {
             'attributes.carpark': { $in: [carpark] },
           },
@@ -1061,6 +1081,8 @@ exports.searchHotelPage2 = catchAsync(async (req, res) => {
       $match: {
         //  'attributes.cost': { $lte: cost },
         //  'attributes.area': { $lte: area },
+        // 'propertyDetails.propertyName': `${hotelname}`,
+        // 'sellerDetails.location': `${area}`,
         'attributes.class': { $lte: cls },
         'attributes.locality': { $lte: locality },
         'attributes.kmfromtarmac': { $lte: kmfromtarmac },

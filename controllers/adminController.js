@@ -110,8 +110,8 @@ exports.searchUser = catchAsync(async (req, res, next) => {
   try {
     if (mongoose.Types.ObjectId.isValid(searchquery)) {
       //console.log('this is id');
-      const user = await User.findById(searchquery);
-      console.log(user);
+      const user = await User.findOne({ _id: searchquery, role: 'user' });
+      //  console.log(user);
       res.status(200).json({
         status: 'success',
         results: user.length,
@@ -120,7 +120,7 @@ exports.searchUser = catchAsync(async (req, res, next) => {
     }
     if (str.includes(substr)) {
       //console.log('this is email');
-      const user = await User.findOne({ email: searchquery });
+      const user = await User.findOne({ email: searchquery, role: 'user' });
       console.log(user);
       res.status(200).json({
         status: 'success',
@@ -138,7 +138,9 @@ exports.searchUser = catchAsync(async (req, res, next) => {
             options: 'i',
           },
         },
+        role: 'user',
       });
+      // console.log(user[0].role);
       res.status(200).json({
         status: 'success',
         results: user.length,
@@ -147,7 +149,7 @@ exports.searchUser = catchAsync(async (req, res, next) => {
     }
   } catch (error) {
     //console.log(error);
-    res.status(404).json({
+    res.status(200).json({
       status: 'USER NOT FOUND',
       // message: error,
     });

@@ -70,7 +70,7 @@ exports.land = catchAsync(async (req, res, next) => {
   //console.log(localpath);
 
   fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-  ip = '54.164.209.42';
+  ip = 'cuboidtechnologies.com';
   //console.log(ip);
   const url = `${req.protocol}://${ip}/media/admin/land/${newLand._id}/${fileName}`;
 
@@ -143,7 +143,8 @@ exports.updateLand = catchAsync(async (req, res, next) => {
     //console.log(localpath);
 
     fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-    ip = '54.164.209.42';
+    ip = 'cuboidtechnologies.com';
+
     //console.log(ip);
     const url = `${req.protocol}://${ip}/media/admin/hotel/${req.params.id}/${fileName}`;
 

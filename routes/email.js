@@ -1,12 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const protect = require('../controllers/authController');
+const authController = require('../controllers/authController');
 const emailController = require('../controllers/admin/emailController');
 
-router.post('/email-settings', protect.protect, emailController.email);
+router.post(
+  '/email-settings',
+  authController.protect,
+  authController.restrictTo('admin'),
+  emailController.email
+);
 router.get(
   '/email-settings',
-  protect.protect,
+  authController.protect,
+  authController.restrictTo('admin'),
   emailController.getStoredEmailSettings
 );
 

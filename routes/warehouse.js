@@ -2,19 +2,36 @@ const express = require('express');
 
 const router = express.Router();
 const warehouseController = require('../controllers/propertyController/warehouseController');
-
-router.post('/post-warehouse', warehouseController.addWarehouse);
+const authController = require('../controllers/authController');
+router.post(
+  '/post-warehouse',
+  authController.protect,
+  authController.restrictTo('admin'),
+  warehouseController.addWarehouse
+);
 router.put(
   '/edit-warehouse/:id',
-  //authController.protect,
-  //authController.restrictTo('admin'),
+  authController.protect,
+  authController.restrictTo('admin'),
   warehouseController.updateWarehouse
 );
-router.get('/get-all-warehouse', warehouseController.getAllWarehouse);
+router.get(
+  '/get-all-warehouse',
+  authController.protect,
+  authController.restrictTo('admin'),
+  warehouseController.getAllWarehouse
+);
 
-router.post('/warehouse-filter-by-date', warehouseController.filterbydate);
+router.post(
+  '/warehouse-filter-by-date',
+  authController.protect,
+  authController.restrictTo('admin'),
+  warehouseController.filterbydate
+);
 router.post(
   '/search-property-by-name',
+  authController.protect,
+  authController.restrictTo('admin'),
   warehouseController.propertySearchByName
 );
 router.post('/search-warehouse-location', warehouseController.ajaxSearchArea); //ajax search

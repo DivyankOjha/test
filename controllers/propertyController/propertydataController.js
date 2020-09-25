@@ -179,6 +179,298 @@ exports.ActiveInactive = catchAsync(async (req, res, next) => {
   }
 });
 
+exports.getPropertyInNeighbourhood = catchAsync(async (req, res, next) => {
+  const _id = req.params.id;
+  const house = await House.findById({ _id }); //house
+  const land = await Land.findById({ _id });
+  const hotel = await Hotel.findById({ _id });
+  const warehouse = await Warehouse.findById({ _id });
+  // console.log(user);
+  // console.log(user._id);
+  let property = [];
+  if (house) {
+    // console.log(house.sellerDetails.nearestplace.placename);
+    let placename = house.sellerDetails.nearestplace.placename;
+    // console.log(placename);
+    const findinHouse = await House.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    //  console.log(findinHouse);
+    for (var i in findinHouse) {
+      // console.log(findinHouse[i]._id);
+      property.push(findinHouse[i]._id);
+    }
+    const findinland = await Land.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    // console.log(findinland);
+    for (var i in findinland) {
+      // console.log(findinland[i]._id);
+      property.push(findinland[i]._id);
+    }
+    const findinHotel = await Hotel.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    //  console.log(findinHotel);
+    for (var i in findinHotel) {
+      // console.log(findinHotel[i]._id);
+      property.push(findinHotel[i]._id);
+    }
+    const findinWarehouse = await Warehouse.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    //  console.log(findinWarehouse);
+    for (var i in findinWarehouse) {
+      console.log(findinWarehouse[i]._id);
+      property.push(findinWarehouse[i]._id);
+    }
+    res.status(200).json({
+      status: 'success',
+      results: property.length,
+      property,
+    });
+  }
+
+  if (land) {
+    // console.log(house.sellerDetails.nearestplace.placename);
+    let placename = house.sellerDetails.nearestplace.placename;
+    // console.log(placename);
+    const findinHouse = await House.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    //  console.log(findinHouse);
+    for (var i in findinHouse) {
+      // console.log(findinHouse[i]._id);
+      property.push(findinHouse[i]._id);
+    }
+    const findinland = await Land.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    // console.log(findinland);
+    for (var i in findinland) {
+      // console.log(findinland[i]._id);
+      property.push(findinland[i]._id);
+    }
+    const findinHotel = await Hotel.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    //  console.log(findinHotel);
+    for (var i in findinHotel) {
+      // console.log(findinHotel[i]._id);
+      property.push(findinHotel[i]._id);
+    }
+    const findinWarehouse = await Warehouse.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    //  console.log(findinWarehouse);
+    for (var i in findinWarehouse) {
+      console.log(findinWarehouse[i]._id);
+      property.push(findinWarehouse[i]._id);
+    }
+    res.status(200).json({
+      status: 'success',
+      results: property.length,
+      property,
+    });
+  }
+  if (hotel) {
+    // console.log(house.sellerDetails.nearestplace.placename);
+    let placename = house.sellerDetails.nearestplace.placename;
+    // console.log(placename);
+    const findinHouse = await House.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    //  console.log(findinHouse);
+    for (var i in findinHouse) {
+      // console.log(findinHouse[i]._id);
+      property.push(findinHouse[i]._id);
+    }
+    const findinland = await Land.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    // console.log(findinland);
+    for (var i in findinland) {
+      // console.log(findinland[i]._id);
+      property.push(findinland[i]._id);
+    }
+    const findinHotel = await Hotel.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    //  console.log(findinHotel);
+    for (var i in findinHotel) {
+      // console.log(findinHotel[i]._id);
+      property.push(findinHotel[i]._id);
+    }
+    const findinWarehouse = await Warehouse.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    //  console.log(findinWarehouse);
+    for (var i in findinWarehouse) {
+      console.log(findinWarehouse[i]._id);
+      property.push(findinWarehouse[i]._id);
+    }
+    res.status(200).json({
+      status: 'success',
+      results: property.length,
+      property,
+    });
+  }
+  if (warehouse) {
+    // console.log(house.sellerDetails.nearestplace.placename);
+    let placename = house.sellerDetails.nearestplace.placename;
+    // console.log(placename);
+    const findinHouse = await House.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    //  console.log(findinHouse);
+    for (var i in findinHouse) {
+      // console.log(findinHouse[i]._id);
+      property.push(findinHouse[i]._id);
+    }
+    const findinland = await Land.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    // console.log(findinland);
+    for (var i in findinland) {
+      // console.log(findinland[i]._id);
+      property.push(findinland[i]._id);
+    }
+    const findinHotel = await Hotel.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    //  console.log(findinHotel);
+    for (var i in findinHotel) {
+      // console.log(findinHotel[i]._id);
+      property.push(findinHotel[i]._id);
+    }
+    const findinWarehouse = await Warehouse.find({
+      $expr: {
+        $regexMatch: {
+          input: '$sellerDetails.nearestplace.placename',
+          regex: placename, //Your text search here
+          options: 'm',
+        },
+      },
+    });
+
+    //  console.log(findinWarehouse);
+    for (var i in findinWarehouse) {
+      console.log(findinWarehouse[i]._id);
+      property.push(findinWarehouse[i]._id);
+    }
+    res.status(200).json({
+      status: 'success',
+      results: property.length,
+      property,
+    });
+  }
+});
+
 // exports.propertySearchByName = catchAsync(async (req, res, next) => {
 //   let searchquery = req.body.searchquery;
 //   console.log(searchquery);

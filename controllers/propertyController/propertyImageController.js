@@ -81,7 +81,7 @@ exports.upload = catchAsync(async (req, res, next) => {
     // console.log(localpath);
 
     fs.writeFileSync(`${localpath}/` + fileName, imageBuffer, 'utf8');
-    ip = '54.164.209.42';
+    ip = 'https://cuboidtechnologies.com';
     const url = `${req.protocol}://${ip}/media/propertyimages/${propertyName}/${fileName}`;
 
     propertylinks.push(url);

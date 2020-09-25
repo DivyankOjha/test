@@ -17,7 +17,7 @@ exports.addProperty = catchAsync(async (req, res, next) => {
     address: req.body.address,
     propertyDetails: req.body.propertyDetails,
   };
-  const ip = '54.164.209.42';
+  const ip = 'cuboidtechnologies.com';
   const newproperty = await postProperty.create(body);
 
   const propertyName = newproperty.email + '_' + newproperty._id;

@@ -36,20 +36,56 @@ router.patch(
 
 router.get('/userprofile', profile.getuser);
 
-router.patch('/admin/set-user-status/:id', adminController.ActiveInactive);
-router.get('/admin/newusers', adminController.getnewUsers);
-router.post('/admin/user-filter-by-date', adminController.filterbydate);
-router.post('/admin/search-user', adminController.searchUser);
+router.patch(
+  '/admin/set-user-status/:id',
+  authController.protect,
+  authController.restrictTo('admin'),
+  adminController.ActiveInactive
+);
+router.get(
+  '/admin/newusers',
+  authController.protect,
+  authController.restrictTo('admin'),
+  adminController.getnewUsers
+);
+router.post(
+  '/admin/user-filter-by-date',
+  authController.protect,
+  authController.restrictTo('admin'),
+  adminController.filterbydate
+);
+router.post(
+  '/admin/search-user',
+  authController.protect,
+  authController.restrictTo('admin'),
+  adminController.searchUser
+);
 
-router.delete('/deleteuser/:id', adminController.deleteUser);
-router.delete('/deletemany', adminController.deleteManyUsers);
+router.delete(
+  '/deleteuser/:id',
+  authController.protect,
+  authController.restrictTo('admin'),
+  adminController.deleteUser
+);
+router.delete(
+  '/deletemany',
+  authController.protect,
+  authController.restrictTo('admin'),
+  adminController.deleteManyUsers
+);
 
 //app.post('/resend', userController.resendTokenPost);
 
-router.route('/admin/allusers-list').get(adminController.getAllUsers);
+router
+  .route('/admin/allusers-list')
+  .get(
+    authController.protect,
+    authController.restrictTo('admin'),
+    adminController.getAllUsers
+  );
 // .post(userController.createUser);
 
-router.get('/:id'), userController.getUser;
+//router.get('/:id'), userController.getUser;
 // .patch(userController.updateUser)
 // .delete(adminController.deleteUser);
 
