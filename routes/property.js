@@ -14,6 +14,13 @@ router.get(
   authController.restrictTo('admin'),
   propertyDataController.getdata
 );
+router.get(
+  //get all property names
+  '/admin/get-all-similar-property-name',
+  // authController.protect,
+  // authController.restrictTo('admin'),
+  propertyDataController.getdataEx
+);
 
 router.post(
   '/post-property',

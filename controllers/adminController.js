@@ -9,6 +9,7 @@ exports.getAllUsers = catchAsync(async (req, res) => {
 
   const users = await User.aggregate([
     { $match: { role: 'user' } },
+    { $sort: { _id: -1 } },
     // { $skip: skip },
     // { $limit: limit },
   ]);
@@ -54,6 +55,7 @@ exports.getnewUsers = catchAsync(async (req, res) => {
         role: 'user',
       },
     },
+    { $sort: { _id: -1 } },
     // createdAt: { $lte: date },
     // createdAt: { $lt: endDate },
   ]);
@@ -84,8 +86,9 @@ exports.filterbydate = catchAsync(async (req, res) => {
   //console.log(endDate + 'T' + '00:00:00');
   const users = await User.find({
     createdAt: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
+    role: 'user',
     // createdAt: { $lt: endDate },
-  });
+  }).sort({ _id: -1 });
   //.skip(skip)
   //  .limit(limit);
   // console.log('users: ' + users);

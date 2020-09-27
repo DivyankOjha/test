@@ -40,7 +40,7 @@ exports.Subscription = catchAsync(async (req, res, next) => {
 exports.getAllSubscription = catchAsync(async (req, res) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
-  const subscription = await Subs.find({}); //.skip(skip).limit(limit);
+  const subscription = await Subs.find({}).sort({ _id: -1 }); //.skip(skip).limit(limit);
   res.status(200).json({
     status: 'success',
     results: subscription.length,
@@ -72,7 +72,7 @@ exports.SubscriptionfilterbyRentBuy = catchAsync(async (req, res) => {
   if (req.body.subscriptionType === 'buy') {
     const subs = await Subs.find({
       subscriptionType: 'buy',
-    });
+    }).sort({ _id: -1 });
     res.status(200).json({
       status: 'success',
       results: subs.length,
@@ -82,7 +82,7 @@ exports.SubscriptionfilterbyRentBuy = catchAsync(async (req, res) => {
   if (req.body.subscriptionType === 'rent') {
     const subs = await Subs.find({
       subscriptionType: 'rent',
-    });
+    }).sort({ _id: -1 });
     res.status(200).json({
       status: 'success',
       results: subs.length,
@@ -105,7 +105,7 @@ exports.Subscriptionfilterbydate = catchAsync(async (req, res) => {
     subscriptionDate: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
     //email: 1,
     // createdAt: { $lt: endDate },
-  });
+  }).sort({ _id: -1 });
   // .skip(skip)
   // .limit(limit);
   //console.log('Subs: ' + subs);

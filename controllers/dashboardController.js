@@ -50,10 +50,10 @@ exports.getAllproperty = catchAsync(async (req, res) => {
 });
 
 exports.getpropertylist = catchAsync(async (req, res) => {
-  const house = await House.find();
-  const land = await Land.find();
-  const hotel = await Hotel.find();
-  const warehouse = await WareHouse.find();
+  const house = await House.find().sort({ _id: -1 });
+  const land = await Land.find().sort({ _id: -1 });
+  const hotel = await Hotel.find().sort({ _id: -1 });
+  const warehouse = await WareHouse.find().sort({ _id: -1 });
 
   res.status(200).json({
     status: 'success',

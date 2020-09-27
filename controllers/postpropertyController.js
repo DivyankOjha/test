@@ -264,7 +264,7 @@ exports.addProperty = catchAsync(async (req, res, next) => {
 exports.getAllproperty = catchAsync(async (req, res) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
-  const property = await postProperty.find(); //.skip(skip).limit(limit);
+  const property = await postProperty.find().sort({ _id: -1 }); //.skip(skip).limit(limit);
   res.status(200).json({
     status: 'success',
     results: property.length,
@@ -331,10 +331,12 @@ exports.filterbydate = catchAsync(async (req, res) => {
   const skip = parseInt(req.query.skip);
 
   //console.log(endDate + 'T' + '00:00:00');
-  const users = await postProperty.find({
-    createdAt: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
-    // createdAt: { $lt: endDate },
-  });
+  const users = await postProperty
+    .find({
+      createdAt: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
+      // createdAt: { $lt: endDate },
+    })
+    .sort({ _id: -1 });
   //.skip(skip)
   //  .limit(limit);
   // console.log('users: ' + users);

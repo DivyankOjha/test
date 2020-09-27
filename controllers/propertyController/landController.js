@@ -132,7 +132,7 @@ exports.updateLand = catchAsync(async (req, res, next) => {
     // let fileName = name1 ++ '.' + extension;
     console.log(fileName);
     let abc = 'abc';
-    path3 = path.resolve(`./public/media/admin/hotel`);
+    path3 = path.resolve(`./public/media/admin/land`);
 
     let localpath = `${path3}/${req.params.id}/`;
     //console.log(localpath);
@@ -146,7 +146,7 @@ exports.updateLand = catchAsync(async (req, res, next) => {
     ip = 'cuboidtechnologies.com';
 
     //console.log(ip);
-    const url = `${req.protocol}://${ip}/media/admin/hotel/${req.params.id}/${fileName}`;
+    const url = `${req.protocol}://${ip}/media/admin/land/${req.params.id}/${fileName}`;
 
     console.log(url);
 
@@ -202,7 +202,7 @@ exports.updateLand = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     //    results: gethouse.length,
-    data: getLand,
+    data: updating,
   });
 });
 //Pagination done

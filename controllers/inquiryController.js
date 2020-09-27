@@ -21,7 +21,7 @@ exports.Inquiry = catchAsync(async (req, res, next) => {
 exports.getAllInquiry = catchAsync(async (req, res) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
-  const inquiry = await Inquiry.find(); //.skip(skip).limit(limit);
+  const inquiry = await Inquiry.find().sort({ _id: -1 }); //.skip(skip).limit(limit);
   res.status(200).json({
     status: 'success',
     results: inquiry.length,
@@ -184,7 +184,7 @@ exports.filterbydate = catchAsync(async (req, res) => {
   const users = await Inquiry.find({
     createdAt: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
     // createdAt: { $lt: endDate },
-  });
+  }).sort({ _id: -1 });
   //.skip(skip)
   //  .limit(limit);
   // console.log('users: ' + users);
@@ -226,7 +226,7 @@ exports.customerInquiry = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllCustomerInquiry = catchAsync(async (req, res, next) => {
-  const customerInquiries = await Customer.find({});
+  const customerInquiries = await Customer.find({}).sort({ _id: -1 });
   res.status(201).json({
     status: 'success',
     inquiry: customerInquiries,
@@ -290,7 +290,7 @@ exports.Customerfilterbydate = catchAsync(async (req, res) => {
   const users = await Customer.find({
     createdAt: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
     // createdAt: { $lt: endDate },
-  });
+  }).sort({ _id: -1 });
   //.skip(skip)
   //  .limit(limit);
   // console.log('users: ' + users);

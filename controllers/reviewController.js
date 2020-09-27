@@ -33,7 +33,7 @@ exports.postReview = catchAsync(async (req, res, next) => {
 exports.getReview = catchAsync(async (req, res, next) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
-  const postReview = await Review.find(); //.skip(skip).limit(limit);
+  const postReview = await Review.find().sort({ _id: -1 }); //.skip(skip).limit(limit);
   res.status(200).json({
     status: 'Success',
     results: postReview.length,

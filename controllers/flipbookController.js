@@ -108,7 +108,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // console.log(localpath);
 
       fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-      ip = 'https://cuboidtechnologies.com';
+      ip = 'cuboidtechnologies.com';
       //console.log(ip);
       const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${fileName}`;
 
@@ -183,7 +183,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(localpath);
 
         fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-        ip = 'https://cuboidtechnologies.com';
+        ip = 'cuboidtechnologies.com';
         //console.log(ip);
         const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${fileName}`;
 
@@ -261,7 +261,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(localpath);
 
         fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-        ip = 'https://cuboidtechnologies.com';
+        ip = 'cuboidtechnologies.com';
         //console.log(ip);
         const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${fileName}`;
         image3DUrl = url;
@@ -341,7 +341,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(localpath);
 
         fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
-        ip = 'https://cuboidtechnologies.com';
+        ip = 'cuboidtechnologies.com';
         //console.log(ip);
         const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${FileName}`;
         //  let image = url;
@@ -443,7 +443,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // console.log(localpath);
 
       fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-      ip = 'https://cuboidtechnologies.com';
+      ip = 'cuboidtechnologies.com';
       //console.log(ip);
       const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${fileName}`;
 
@@ -518,7 +518,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(localpath);
 
         fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-        ip = 'https://cuboidtechnologies.com';
+        ip = 'cuboidtechnologies.com';
         //console.log(ip);
         const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${fileName}`;
 
@@ -591,7 +591,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(localpath);
 
         fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-        ip = 'https://cuboidtechnologies.com';
+        ip = 'cuboidtechnologies.com';
         //console.log(ip);
         const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${fileName}`;
         image3DUrl = url;
@@ -673,7 +673,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(localpath);
 
         fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
-        ip = 'https://cuboidtechnologies.com';
+        ip = 'cuboidtechnologies.com';
         //console.log(ip);
         const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${FileName}.${extension}`;
 
@@ -775,7 +775,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // console.log(localpath);
 
       fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-      ip = 'https://cuboidtechnologies.com';
+      ip = 'cuboidtechnologies.com';
       //console.log(ip);
       const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${fileName}`;
 
@@ -849,7 +849,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(localpath);
 
         fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-        ip = 'https://cuboidtechnologies.com';
+        ip = 'cuboidtechnologies.com';
         //console.log(ip);
         const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${fileName}`;
 
@@ -922,7 +922,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(localpath);
 
         fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-        ip = 'https://cuboidtechnologies.com';
+        ip = 'cuboidtechnologies.com';
         //console.log(ip);
         const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${fileName}`;
         image3DUrl = url;
@@ -998,7 +998,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(localpath);
 
         fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
-        ip = 'https://cuboidtechnologies.com';
+        ip = 'cuboidtechnologies.com';
         //console.log(ip);
         const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${FileName}.${extension}`;
 
@@ -1100,7 +1100,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // console.log(localpath);
 
       fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-      ip = 'https://cuboidtechnologies.com';
+      ip = 'cuboidtechnologies.com';
       //console.log(ip);
       const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${fileName}`;
 
@@ -1174,7 +1174,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(localpath);
 
         fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-        ip = 'https://cuboidtechnologies.com';
+        ip = 'cuboidtechnologies.com';
         //console.log(ip);
         const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${fileName}`;
 
@@ -1248,7 +1248,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(localpath);
 
         fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-        ip = 'https://cuboidtechnologies.com';
+        ip = 'cuboidtechnologies.com';
         //console.log(ip);
         const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${fileName}`;
         image3DUrl = url;
@@ -1328,7 +1328,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(localpath);
 
         fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
-        ip = 'https://cuboidtechnologies.com';
+        ip = 'cuboidtechnologies.com';
         //console.log(ip);
         const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${FileName}.${extension}`;
 
