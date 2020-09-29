@@ -160,6 +160,7 @@ exports.updateHotel = catchAsync(async (req, res, next) => {
         'sellerDetails.selleremail': req.body.sellerDetails.selleremail,
         'sellerDetails.sellertype': req.body.sellerDetails.sellertype,
         'sellerDetails.selleraltnumber': req.body.sellerDetails.selleraltnumber,
+        'sellerDetails.selleraltemail': req.body.sellerDetails.selleraltemail,
         'sellerDetails.sellerwebsite': req.body.sellerDetails.sellerwebsite,
         'sellerDetails.location': req.body.sellerDetails.location,
         'sellerDetails.maplink': req.body.sellerDetails.maplink,

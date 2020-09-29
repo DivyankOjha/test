@@ -32,6 +32,8 @@ exports.addWarehouse = catchAsync(async (req, res, next) => {
   let meetinglower = meetingRoom.toLowerCase();
   let parking = warehouse.attributes.parking;
   let parkinglower = parking.toLowerCase();
+  let security = warehouse.attributes.security;
+  let securitylower = security.toLowerCase();
   console.log(typelower, zoninglower, townlower);
 
   const updating = await WareHouse.findByIdAndUpdate(
@@ -49,6 +51,7 @@ exports.addWarehouse = catchAsync(async (req, res, next) => {
         'attributes.humanTraffic': humanlower,
         'attributes.meetingRoom': meetinglower,
         'attributes.parking': parkinglower,
+        'attributes.security': securitylower,
       },
     }
   );
@@ -191,6 +194,7 @@ exports.updateWarehouse = catchAsync(async (req, res, next) => {
         'sellerDetails.selleremail': req.body.sellerDetails.selleremail,
         'sellerDetails.sellertype': req.body.sellerDetails.sellertype,
         'sellerDetails.selleraltnumber': req.body.sellerDetails.selleraltnumber,
+        'sellerDetails.selleraltemail': req.body.sellerDetails.selleraltemail,
         'sellerDetails.sellerwebsite': req.body.sellerDetails.sellerwebsite,
         'sellerDetails.location': req.body.sellerDetails.location,
         'sellerDetails.maplink': req.body.sellerDetails.maplink,

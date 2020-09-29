@@ -3,19 +3,13 @@ const express = require('express');
 const router = express.Router();
 const flipbookController = require('./../controllers/flipbookController');
 const authController = require('../controllers/authController');
-router.post(
-  '/',
-  authController.protect,
-  authController.restrictTo('admin'),
-  flipbookController.addFlipbook
-);
+router.post('/', authController.protect, flipbookController.addFlipbook);
 //router.get('/', flipbookController.getFlipbook);
 
 router.patch(
-  '/delete-flipbook/:id',
+  '/save-flipbook',
   authController.protect,
-  authController.restrictTo('admin'),
-  flipbookController.deleteFlipbook
+  flipbookController.saveFlipbook
 );
 
 router.get(

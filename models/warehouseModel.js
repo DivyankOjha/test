@@ -112,6 +112,7 @@ const warehouseSchema = new mongoose.Schema({
     // minimumprice: Number,
     location: String, //address
     description: String, // this point - !cleared
+    maplink: String,
     nearestplace: {
       placename: String,
       kms: String,

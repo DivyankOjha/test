@@ -128,11 +128,23 @@ exports.searchHouse1 = catchAsync(async (req, res) => {
   //let area = req.body.attributes.area;
   // let areaint = parseInt(area);
   // console.log(areaint);
-  let mainCategory = attributes.mainCategory.toLowerCase();
+  let mainCategory;
+  if (attributes.mainCategory) {
+    mainCategory = attributes.mainCategory.toLowerCase();
+  }
+  let propertyStatus;
+  if (attributes.propertyStatus) {
+    propertyStatus = attributes.propertyStatus.toLowerCase();
+  }
+  let subCategory;
+  if (attributes.subCategory) {
+    subCategory = attributes.subCategory.toLowerCase();
+  }
+  // let mainCategory = attributes.mainCategory.toLowerCase();
   console.log(mainCategory);
-  let subCategory = attributes.subCategory.toLowerCase();
-  //console.log(subCategory);
-  let propertyStatus = attributes.propertyStatus.toLowerCase();
+  // let subCategory = attributes.subCategory.toLowerCase();
+  // //console.log(subCategory);
+  // let propertyStatus = attributes.propertyStatus.toLowerCase();
 
   //const att = attributes.console.log(attributes);
 
@@ -150,7 +162,7 @@ exports.searchHouse1 = catchAsync(async (req, res) => {
   let partyarea = attributes.partyarea;
 
   // let gym = attributes.gym;
-  // let bedroom = attributes.bedroom;
+  let bedroom = attributes.bedroom;
   // let bathrooms = attributes.bathrooms;
   // let steambath = attributes.steambath;
   // let lift = attributes.lift;
@@ -182,7 +194,9 @@ exports.searchHouse1 = catchAsync(async (req, res) => {
       $match: {
         $or: [
           //$or
-
+          {
+            'attributes.bedroom': { $in: [bedroom] },
+          },
           {
             'attributes.opticalfiber': { $in: [opticalfiber] },
           },
@@ -320,11 +334,18 @@ exports.searchHouse = catchAsync(async (req, res) => {
   // let area = req.body.attributes.area;
   //  let areaint = parseInt(area);
   // console.log(areaint);
-  let mainCategory = attributes.mainCategory.toLowerCase();
-  console.log(mainCategory);
-  let subCategory = attributes.subCategory.toLowerCase();
-  //console.log(subCategory);
-  let propertyStatus = attributes.propertyStatus.toLowerCase();
+  let mainCategory;
+  if (attributes.mainCategory) {
+    mainCategory = attributes.mainCategory.toLowerCase();
+  }
+  let propertyStatus;
+  if (attributes.propertyStatus) {
+    propertyStatus = attributes.propertyStatus.toLowerCase();
+  }
+  let subCategory;
+  if (attributes.subCategory) {
+    subCategory = attributes.subCategory.toLowerCase();
+  }
 
   //const att = attributes.console.log(attributes);
 
@@ -435,7 +456,7 @@ exports.searchHouse = catchAsync(async (req, res) => {
             'attributes.parking': { $gte: 0, $lte: parking },
           },
           {
-            'attributes.bedroom': { $eq: bedroom },
+            'attributes.bedroom': { $in: [bedroom] },
           },
         ],
       },
@@ -543,12 +564,19 @@ exports.searchLandPage1 = catchAsync(async (req, res) => {
   let attributes = req.body.attributes;
   let freehold = attributes.freehold;
   let lease = attributes.lease;
-
+  let mainCategory;
+  if (attributes.mainCategory) {
+    mainCategory = attributes.mainCategory.toLowerCase();
+  }
+  console.log(mainCategory);
   var search = await Land.aggregate([
     {
       $match: {
         $or: [
           //$or
+          {
+            'attributes.mainCategory': { $in: [mainCategory] },
+          },
           {
             'attributes.freehold': { $in: [freehold] },
           },
@@ -566,6 +594,8 @@ exports.searchLandPage1 = catchAsync(async (req, res) => {
           $lte: maxsizeinacres,
           $gte: minsizeinacres,
         },
+        'attributes.mainCategory': { $in: [mainCategory] },
+
         //   'sellerDetails.location': `${location}`,
       },
     },
@@ -600,17 +630,41 @@ exports.searchLandPage2 = catchAsync(async (req, res) => {
   let maturegarden = attributes.maturegarden;
   let waterfront = attributes.waterfront;
   let gated = attributes.gated;
-
-  let soilType = attributes.soilType.toLowerCase();
-  let nature = attributes.nature.toLowerCase();
-  let road = attributes.road.toLowerCase();
+  let mainCategory;
+  if (attributes.mainCategory) {
+    mainCategory = attributes.mainCategory.toLowerCase();
+  }
+  let soilType;
+  if (attributes.soilType) {
+    soilType = attributes.soilType.toLowerCase();
+  }
+  let nature;
+  if (attributes.nature) {
+    nature = attributes.nature.toLowerCase();
+  }
+  let road;
+  if (attributes.road) {
+    road = attributes.road.toLowerCase();
+  }
+  // let soilType = attributes.soilType.toLowerCase();
+  // let nature = attributes.nature.toLowerCase();
+  // let road = attributes.road.toLowerCase();
 
   var search = await Land.aggregate([
     {
       $match: {
         $or: [
           //$or
-
+          {
+            'attributes.mainCategory': { $in: [mainCategory] },
+          },
+          {
+            'attributes.soilType': { $lte: soilType },
+          },
+          {
+            'attributes.nature': { $lte: nature },
+          },
+          { 'attributes.road': { $lte: road } },
           {
             'attributes.maturegarden': { $in: [maturegarden] },
           },
@@ -649,9 +703,9 @@ exports.searchLandPage2 = catchAsync(async (req, res) => {
 
     {
       $match: {
-        'attributes.soilType': { $lte: soilType },
-        'attributes.nature': { $lte: nature },
-        'attributes.road': { $lte: road }, //3 - RADIO BUTTONS
+        // 'attributes.soilType': { $lte: soilType },
+        // 'attributes.nature': { $lte: nature },
+        // 'attributes.road': { $lte: road }, //3 - RADIO BUTTONS
 
         'attributes.cost': { $lte: maxcost, $gte: mincost },
         'attributes.sizeinacres': {
@@ -700,16 +754,41 @@ exports.searchLandPage3 = catchAsync(async (req, res) => {
   let waterfront = attributes.waterfront;
   let gated = attributes.gated;
 
-  let soilType = attributes.soilType.toLowerCase();
-  let nature = attributes.nature.toLowerCase();
-  let road = attributes.road.toLowerCase();
+  let soilType;
+  if (attributes.soilType) {
+    soilType = attributes.soilType.toLowerCase();
+  }
+  let nature;
+  if (attributes.nature) {
+    nature = attributes.nature.toLowerCase();
+  }
+  let road;
+  if (attributes.road) {
+    road = attributes.road.toLowerCase();
+  }
+  // let soilType = attributes.soilType.toLowerCase();
+  // let nature = attributes.nature.toLowerCase();
+  // let road = attributes.road.toLowerCase();
+  let mainCategory;
   console.log(soilType, nature, road);
+  if (attributes.mainCategory) {
+    mainCategory = attributes.mainCategory.toLowerCase();
+  }
   var search = await Land.aggregate([
     {
       $match: {
         $or: [
           //$or
-
+          {
+            'attributes.mainCategory': { $in: [mainCategory] },
+          },
+          {
+            'attributes.soilType': { $lte: soilType },
+          },
+          {
+            'attributes.nature': { $lte: nature },
+          },
+          { 'attributes.road': { $lte: road } },
           {
             'attributes.maturegarden': { $in: [maturegarden] },
           },
@@ -748,10 +827,11 @@ exports.searchLandPage3 = catchAsync(async (req, res) => {
 
     {
       $match: {
-        //  'attributes.mainCategory' :{mainCategory}
-        'attributes.soilType': { $lte: soilType },
-        'attributes.nature': { $lte: nature },
-        'attributes.road': { $lte: road }, //3 - RADIO BUTTONS
+        'attributes.mainCategory': { $in: [mainCategory] },
+
+        // 'attributes.soilType': { $lte: soilType },
+        // 'attributes.nature': { $lte: nature },
+        // 'attributes.road': { $lte: road }, //3 - RADIO BUTTONS
 
         'attributes.cost': { $lte: maxcost, $gte: mincost },
         'attributes.sizeinacres': {
@@ -922,6 +1002,7 @@ exports.searchHotelPage1 = catchAsync(async (req, res) => {
           //$or
           { 'propertyDetails.propertyName': `${hotelname}` },
           { 'sellerDetails.location': `${area}` },
+          { 'attributes.class': `${cls}` },
         ],
       },
     },
@@ -1156,7 +1237,7 @@ exports.searchHotelPage2 = catchAsync(async (req, res) => {
     // },
 
     //  $group: { _id: null, count: { $sum: 1 } },
-  ]).project({ attributes: 1, _id: 0 });
+  ]); //.project({ attributes: 1, _id: 0 });
 
   res.status(200).json({
     status: 'success',
@@ -1170,7 +1251,7 @@ exports.searchWarehousePage1 = catchAsync(async (req, res) => {
   let attributes = req.body.attributes;
   let type = attributes.Type;
   let Type = type.toLowerCase();
-  // let area = req.body.area;
+  let area = req.body.area;
 
   let cost = req.body.cost;
   let mincost = req.body.cost.min;
@@ -1192,6 +1273,15 @@ exports.searchWarehousePage1 = catchAsync(async (req, res) => {
         'attributes.kmfromtarmac': { $lte: kmfromtarmac },
         // 'attributes.area': { $lte: area },
         //do this spelling tarmac
+      },
+    },
+    {
+      $match: {
+        $or: [
+          //$or
+          { 'sellerDetails.location': `${area}` },
+          { 'attributes.Type': { $in: [Type] } },
+        ],
       },
     },
   ]);
@@ -1225,7 +1315,7 @@ exports.searchWarehousePage2 = catchAsync(async (req, res) => {
   let attributes = req.body.attributes;
   let type = attributes.Type;
   let Type = type.toLowerCase();
-  // let area = req.body.area;
+  let area = req.body.area;
 
   let cost = req.body.cost;
   let mincost = req.body.cost.min;
@@ -1250,7 +1340,7 @@ exports.searchWarehousePage2 = catchAsync(async (req, res) => {
       $match: {
         $or: [
           //$or
-
+          { 'sellerDetails.location': `${area}` },
           {
             'attributes.conferencefacilites': { $in: [conferencefacilites] },
           },
@@ -1320,7 +1410,7 @@ exports.searchWarehousePage3 = catchAsync(async (req, res) => {
   let attributes = req.body.attributes;
   let type = attributes.Type;
   let Type = type.toLowerCase();
-  // let area = req.body.area;
+  let area = req.body.area;
 
   let cost = req.body.cost;
   let mincost = cost.min;
@@ -1339,16 +1429,57 @@ exports.searchWarehousePage3 = catchAsync(async (req, res) => {
   let wifi = attributes.wifi;
   let sharedsecretary = attributes.sharedsecretary;
 
-  let zoning = attributes.zoning.toLowerCase();
-  let townLocation = attributes.townLocation.toLowerCase();
-  let accessRoad = attributes.accessRoad.toLowerCase();
-  let tenants = attributes.tenants.toLowerCase();
-  let elevator = attributes.elevator.toLowerCase();
-  let security = attributes.security.toLowerCase();
-  let vehicleTraffic = attributes.vehicleTraffic.toLowerCase();
-  let humanTraffic = attributes.humanTraffic.toLowerCase();
-  let meetingRoom = attributes.meetingRoom.toLowerCase();
-  let parking = attributes.parking.toLowerCase();
+  // let check = attributes.zoning;
+  let zoning;
+  if (attributes.zoning) {
+    zoning = attributes.zoning.toLowerCase();
+  }
+  let townLocation;
+  if (attributes.townLocation) {
+    townLocation = attributes.townLocation.toLowerCase();
+  }
+  let accessRoad;
+  if (attributes.accessRoad) {
+    accessRoad = attributes.accessRoad.toLowerCase();
+  }
+  let tenants;
+  if (attributes.tenants) {
+    tenants = attributes.tenants.toLowerCase();
+  }
+  let elevator;
+  if (attributes.elevator) {
+    elevator = attributes.elevator.toLowerCase();
+  }
+  let security;
+  if (attributes.security) {
+    security = attributes.security.toLowerCase();
+  }
+  let vehicleTraffic;
+  if (attributes.vehicleTraffic) {
+    vehicleTraffic = attributes.vehicleTraffic.toLowerCase();
+  }
+  let humanTraffic;
+  if (attributes.humanTraffic) {
+    humanTraffic = attributes.humanTraffic.toLowerCase();
+  }
+  let meetingRoom;
+  if (attributes.meetingRoom) {
+    meetingRoom = attributes.meetingRoom.toLowerCase();
+  }
+  let parking;
+  if (attributes.parking) {
+    parking = attributes.parking.toLowerCase();
+  }
+
+  //let townLocation = attributes.townLocation.toLowerCase();
+  // let accessRoad = attributes.accessRoad.toLowerCase();
+  // let tenants = attributes.tenants.toLowerCase();
+  // let elevator = attributes.elevator.toLowerCase();
+  // let security = attributes.security.toLowerCase();
+  // let vehicleTraffic = attributes.vehicleTraffic.toLowerCase();
+  // let humanTraffic = attributes.humanTraffic.toLowerCase();
+  // let meetingRoom = attributes.meetingRoom.toLowerCase();
+  // let parking = attributes.parking.toLowerCase();
 
   var search = await WareHouse.aggregate([
     {
@@ -1379,6 +1510,19 @@ exports.searchWarehousePage3 = catchAsync(async (req, res) => {
           {
             'attributes.wifi': { $in: [wifi] },
           },
+          { 'sellerDetails.location': `${area}` },
+          {
+            'attributes.zoning': { $in: [zoning] },
+            'attributes.townLocation': { $in: [townLocation] },
+            'attributes.accessRoad': { $in: [accessRoad] },
+            'attributes.tenants': { $in: [tenants] },
+            'attributes.elevator': { $in: [elevator] },
+            'attributes.security': { $in: [security] },
+            'attributes.vehicleTraffic': { $in: [vehicleTraffic] },
+            'attributes.humanTraffic': { $in: [humanTraffic] },
+            'attributes.meetingRoom': { $in: [meetingRoom] },
+            'attributes.parking': { $in: [parking] },
+          },
         ],
       },
     },
@@ -1388,16 +1532,16 @@ exports.searchWarehousePage3 = catchAsync(async (req, res) => {
         //- RADIO BUTTONS
         'attributes.Type': { $in: [Type] },
 
-        'attributes.zoning': { $in: [zoning] },
-        'attributes.townLocation': { $in: [townLocation] },
-        'attributes.accessRoad': { $in: [accessRoad] },
-        'attributes.tenants': { $in: [tenants] },
-        'attributes.elevator': { $in: [elevator] },
-        'attributes.security': { $in: [security] },
-        'attributes.vehicleTraffic': { $in: [vehicleTraffic] },
-        'attributes.humanTraffic': { $in: [humanTraffic] },
-        'attributes.meetingRoom': { $in: [meetingRoom] },
-        'attributes.parking': { $in: [parking] },
+        // 'attributes.zoning': { $in: [zoning] },
+        // 'attributes.townLocation': { $in: [townLocation] },
+        // 'attributes.accessRoad': { $in: [accessRoad] },
+        // 'attributes.tenants': { $in: [tenants] },
+        // 'attributes.elevator': { $in: [elevator] },
+        // 'attributes.security': { $in: [security] },
+        // 'attributes.vehicleTraffic': { $in: [vehicleTraffic] },
+        // 'attributes.humanTraffic': { $in: [humanTraffic] },
+        // 'attributes.meetingRoom': { $in: [meetingRoom] },
+        // 'attributes.parking': { $in: [parking] },
 
         'attributes.cost': { $lte: maxcost, $gte: mincost },
         //  'attributes.area': { $lte: area },
