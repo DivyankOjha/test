@@ -133,7 +133,7 @@ const warehouseSchema = new mongoose.Schema({
       cost: Boolean,
 
       sizeinfeet: Boolean,
-      kmfromtarmax: Boolean,
+      kmfromtarmac: Boolean,
 
       conferencefacilites: Boolean,
       freshoutdoors: Boolean,

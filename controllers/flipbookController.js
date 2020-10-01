@@ -2,7 +2,7 @@ const catchAsync = require('./../utils/catchAsync');
 const path = require('path');
 const mime = require('mime');
 const fs = require('fs');
-
+const AppError = require('./../utils/appError');
 const House = require('./../models/houseModel');
 const Land = require('./../models/landModel');
 const Hotel = require('./../models/hotelModel');
@@ -675,7 +675,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
         ip = 'cuboidtechnologies.com';
         //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${FileName}.${extension}`;
+        const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${FileName}`;
 
         let fileName = `${floor[i].fileName}`;
         floorplan.push({ fileName, url });
@@ -933,15 +933,14 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // });
 
         /************************************** */
+        const update3dimage = await Land.findByIdAndUpdate(
+          { _id },
+          {
+            $set: { 'flipbook.image3D': image3DUrl },
+          }
+        );
       }
       //console.log(image3DUrl);
-
-      const update3dimage = await Land.findByIdAndUpdate(
-        { _id },
-        {
-          $set: { 'flipbook.image3D': image3DUrl },
-        }
-      );
     }
 
     /*******++++++++++++====Floor Plan=============********* */
@@ -1035,7 +1034,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       // },
     });
   }
-  if (req.body.CategoryType === 'Warehouse') {
+  if (req.body.propertyType === 'Warehouse') {
     const updatedata = await WareHouse.updateMany(
       { _id },
       {
@@ -1275,6 +1274,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
     /*******++++++++++++====Floor Plan=============********* */
     for (let i in floor) {
       var f = floor[i].url.startsWith('http', 0);
+      console.log(f);
       //console.log(image3D);
       // console.log(image3D);
       if (f) {
@@ -1330,7 +1330,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
         ip = 'cuboidtechnologies.com';
         //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${FileName}.${extension}`;
+        const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${FileName}`;
 
         let fileName = `${floor[i].fileName}`;
         floorplan.push({ fileName, url });
@@ -1385,12 +1385,25 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
 //   });
 // });
 
-exports.saveFlipbook = catchAsync(async (req, res) => {
+exports.saveFlipbook = catchAsync(async (req, res, next) => {
   const _id = req.body.userID;
   let flipbookArray = [];
 
   const userData = await User.findById({ _id });
 
+  if (_id) {
+    // console.log(userData.savedflipbook);
+    for (var i in userData.savedflipbook) {
+      if (userData.savedflipbook[i] === req.body.propertyId) {
+        return next(new AppError('Already Saved!', 400));
+      }
+    }
+    // console.log(gethouse.isFlipbook);
+    // if (gethouse.isFlipbook) {
+    //   return next(new AppError('Already Saved!', 400));
+    // }
+  }
+  console.log('Saving...');
   // console.log(userData.savedflipbook);
 
   for (var i in userData.savedflipbook) {

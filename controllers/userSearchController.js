@@ -239,6 +239,7 @@ exports.searchHouse1 = catchAsync(async (req, res) => {
 
     {
       $match: {
+        isFlipbook: true,
         'attributes.cost': { $lte: maxcost, $gte: mincost },
         // 'attributes.area': { $lte: areaint },
 
@@ -458,12 +459,16 @@ exports.searchHouse = catchAsync(async (req, res) => {
           {
             'attributes.bedroom': { $in: [bedroom] },
           },
+          {
+            'attributes.mainCategory': `${mainCategory}`,
+          },
         ],
       },
     },
 
     {
       $match: {
+        isFlipbook: true,
         'attributes.cost': { $lte: maxcost, $gte: mincost },
         // 'attributes.area': { $lte: area },
 
@@ -589,6 +594,7 @@ exports.searchLandPage1 = catchAsync(async (req, res) => {
 
     {
       $match: {
+        isFlipbook: true,
         'attributes.cost': { $lte: maxcost, $gte: mincost },
         'attributes.sizeinacres': {
           $lte: maxsizeinacres,
@@ -703,6 +709,7 @@ exports.searchLandPage2 = catchAsync(async (req, res) => {
 
     {
       $match: {
+        isFlipbook: true,
         // 'attributes.soilType': { $lte: soilType },
         // 'attributes.nature': { $lte: nature },
         // 'attributes.road': { $lte: road }, //3 - RADIO BUTTONS
@@ -827,6 +834,7 @@ exports.searchLandPage3 = catchAsync(async (req, res) => {
 
     {
       $match: {
+        isFlipbook: true,
         'attributes.mainCategory': { $in: [mainCategory] },
 
         // 'attributes.soilType': { $lte: soilType },
@@ -1009,6 +1017,7 @@ exports.searchHotelPage1 = catchAsync(async (req, res) => {
 
     {
       $match: {
+        isFlipbook: true,
         //  'attributes.cost': { $lte: cost },
         // 'attributes.area': { $lte: area },
         'attributes.class': `${cls}`,
@@ -1154,12 +1163,14 @@ exports.searchHotelPage2 = catchAsync(async (req, res) => {
           {
             'attributes.hairsalon': { $in: [hairsalon] },
           },
+          { 'attributes.class': `${cls}` },
         ],
       },
     },
 
     {
       $match: {
+        isFlipbook: true,
         //  'attributes.cost': { $lte: cost },
         //  'attributes.area': { $lte: area },
         // 'propertyDetails.propertyName': `${hotelname}`,
@@ -1267,6 +1278,7 @@ exports.searchWarehousePage1 = catchAsync(async (req, res) => {
   var search = await WareHouse.aggregate([
     {
       $match: {
+        isFlipbook: true,
         'attributes.Type': { $in: [Type] },
         'attributes.cost': { $lte: maxcost, $gte: mincost },
         'attributes.sizeinfeet': { $lte: maxsizeinfeet, $gte: minsizeinfeet },
@@ -1285,25 +1297,9 @@ exports.searchWarehousePage1 = catchAsync(async (req, res) => {
       },
     },
   ]);
-  const checkinUser = await User.findById({ _id: req.user.id });
-  // console.log('user ' + checkinUser.savedflipbook[2]);
-  let searchResult = search;
-  for (var i in searchResult) {
-    //  console.log('searchid ' + searchResult[0]._id);
 
-    if ((checkinUser.savedflipbook[i] = searchResult[i]._id)) {
-      const updateWarehouse = await WareHouse.findByIdAndUpdate(
-        {
-          _id: searchResult[i]._id,
-        },
-        { $set: { isSavedStatus: true } }
-      );
-      //  console.log('hi');
-      // console.log(i);
-    }
+  //  console.log(req.user.id); //add login check
 
-    //  console.log(req.user.id); //add login check
-  }
   res.status(200).json({
     status: 'success',
     results: search.length,
@@ -1364,12 +1360,14 @@ exports.searchWarehousePage2 = catchAsync(async (req, res) => {
           {
             'attributes.wifi': { $in: [wifi] },
           },
+          { 'attributes.Type': { $in: [Type] } },
         ],
       },
     },
 
     {
       $match: {
+        isFlipbook: true,
         //- RADIO BUTTONS
         'attributes.Type': { $in: [Type] },
         'attributes.cost': { $lte: maxcost, $gte: mincost },
@@ -1380,23 +1378,6 @@ exports.searchWarehousePage2 = catchAsync(async (req, res) => {
       },
     },
   ]);
-  const checkinUser = await User.findById({ _id: req.user.id });
-  // console.log('user ' + checkinUser.savedflipbook[2]);
-  let searchResult = search;
-  for (var i in searchResult) {
-    //  console.log('searchid ' + searchResult[0]._id);
-
-    if ((checkinUser.savedflipbook[i] = searchResult[i]._id)) {
-      const updateWarehouse = await WareHouse.findByIdAndUpdate(
-        {
-          _id: searchResult[i]._id,
-        },
-        { $set: { isSavedStatus: true } }
-      );
-      //  console.log('hi');
-      // console.log(i);
-    }
-  }
 
   //  console.log(req.user.id); //add login check
 
@@ -1523,12 +1504,16 @@ exports.searchWarehousePage3 = catchAsync(async (req, res) => {
             'attributes.meetingRoom': { $in: [meetingRoom] },
             'attributes.parking': { $in: [parking] },
           },
+          {
+            'attributes.Type': { $in: [Type] },
+          },
         ],
       },
     },
 
     {
       $match: {
+        isFlipbook: true,
         //- RADIO BUTTONS
         'attributes.Type': { $in: [Type] },
 
@@ -1551,23 +1536,6 @@ exports.searchWarehousePage3 = catchAsync(async (req, res) => {
       },
     },
   ]);
-  const checkinUser = await User.findById({ _id: req.user.id });
-  // console.log('user ' + checkinUser.savedflipbook[2]);
-  let searchResult = search;
-  for (var i in searchResult) {
-    //  console.log('searchid ' + searchResult[0]._id);
-
-    if ((checkinUser.savedflipbook[i] = searchResult[i]._id)) {
-      const updateWarehouse = await WareHouse.findByIdAndUpdate(
-        {
-          _id: searchResult[i]._id,
-        },
-        { $set: { isSavedStatus: true } }
-      );
-      //  console.log('hi');
-      // console.log(i);
-    }
-  }
 
   //  console.log(req.user.id); //add login check
   res.status(200).json({

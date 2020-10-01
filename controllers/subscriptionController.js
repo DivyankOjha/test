@@ -3,8 +3,16 @@ const Subs = require('../models/subscriptionModel');
 const User = require('../models/userModel');
 const mongoose = require('mongoose');
 const sendEmail = require('./../utils/email');
+const AppError = require('./../utils/appError');
 
 exports.Subscription = catchAsync(async (req, res, next) => {
+  if (req.body.userID) {
+    const getUser = await User.findById({ _id: req.body.userID });
+    console.log(getUser.isSubscribed);
+    if (getUser.isSubscribed) {
+      return next(new AppError('You are Already Subscribed!', 400));
+    }
+  }
   const newSub = await Subs.create(req.body);
   console.log(newSub);
   // update issubscribed true in user
@@ -167,48 +175,57 @@ exports.searchSubscription = catchAsync(async (req, res, next) => {
 
 exports.updateUsedPoints = catchAsync(async (req, res) => {
   //  console.log(req.user.id);
-  let id = req.user.id; //'5f538841557252230c231db7';
-  const subscription = await User.findByIdAndUpdate({ _id: id });
-  //console.log(subscription.subscription.usedPoints);
-  const update = await User.findByIdAndUpdate(
-    { _id: id },
+  console.log(req.params.id);
+  let id = req.params.id; //'5f538841557252230c231db7';
+  const subscription = await Subs.findOne({ userID: id });
+  console.log(subscription);
+  // console.log(subscription.subscription.usedPoints);
+  let n = 1;
+  // console.log(subscription[0]);
+  //console.log(subscription[0].usedPoints);
+  let up = await subscription.usedPoints;
+  let sum = up + n;
+  console.log('up' + up);
+  const update = await Subs.findOneAndUpdate(
+    { userID: id },
     {
       $set: {
-        'subscription.usedPoints': subscription.subscription.usedPoints + 1,
+        usedPoints: sum,
       },
     }
   );
-
-  const checkUsedPoints = await User.findById({ _id: id });
-  // console.log(checkUsedPoints);
-  let math70 = (checkUsedPoints.subscription.totalPoints / 100) * 70;
-  //console.log(math70);
-  if (checkUsedPoints.subscription.usedPoints === math70) {
+  console.log('update' + update);
+  const checkUsedPoints = await Subs.find({ userID: id });
+  // console.log(checkUsedPoints[0]);
+  let math70 = (checkUsedPoints[0].totalpoints / 100) * 70;
+  console.log(math70);
+  const finduser = await User.findById({ _id: id });
+  if (checkUsedPoints[0].usedPoints === math70) {
     //math70
     console.log('greater than 70');
     const message = `<p> Subscription Message : You have consumed 70 percent of the total points </p> `;
 
     await sendEmail({
-      email: checkUsedPoints.email,
-      subject: `Hi, ${checkUsedPoints.firstname}, Subscription expiring soon!`,
+      email: finduser.email,
+      subject: `Hi, ${finduser.firstname}, Subscription expiring soon!`,
       //  subject: 'Your password reset token (valid for 10 min)',
       message,
     });
   }
-  if (
-    (checkUsedPoints.subscription.usedPoints =
-      checkUsedPoints.subscription.totalPoints)
-  ) {
-    const updateinUser = await User.findByIdAndUpdate(
-      { id },
+  //console.log(checkUsedPoints[0].usedPoints);
+  if (checkUsedPoints[0].usedPoints === checkUsedPoints[0].totalpoints) {
+    //console.log('In here');
+    const updateinUser = await Subs.findOneAndUpdate(
+      { userID: id },
       { $set: { isSubscribed: false } }
     );
+    // console.log(updateinUser);
     //console.log('greater than  total');
     const message = `<p> Your subscription has expired! Please Subscribe / renew to resume services </p> `;
 
     await sendEmail({
-      email: checkUsedPoints.email,
-      subject: `Hi, ${checkUsedPoints.firstname}, Subscription expired!`,
+      email: finduser.email,
+      subject: `Hi, ${finduser.firstname}, Subscription expired!`,
       //  subject: 'Your password reset token (valid for 10 min)',
       message,
     });

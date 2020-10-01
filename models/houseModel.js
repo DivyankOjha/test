@@ -111,10 +111,10 @@ const houseSchema = new mongoose.Schema({
       buy: { type: Boolean },
       let: { type: Boolean },
       fullyfurnished: { type: Boolean },
-
-      gated: { type: Boolean },
-      standAlone: { type: Boolean },
-      apartment: { type: Boolean },
+      subCategory: String,
+      // gated: { type: Boolean },
+      // standAlone: { type: Boolean },
+      // apartment: { type: Boolean },
 
       complete: { type: Boolean },
       offplan: { type: Boolean },
@@ -140,7 +140,7 @@ const houseSchema = new mongoose.Schema({
       lift: { type: Boolean },
       bathtab: { type: Boolean },
       parking: { type: Boolean },
-      livingarea: Boolean,
+      livingsize: Boolean,
       kitchensize: Boolean,
       gardensize: Boolean,
     },

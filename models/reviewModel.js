@@ -8,6 +8,7 @@ const reviewsSchema = new mongoose.Schema({
   isActive: { type: Boolean, default: true },
   userId: { type: mongoose.Schema.ObjectId },
   propertyID: { type: mongoose.Schema.ObjectId },
+  isSelect: { type: Boolean, default: true },
 });
 
 const Reviews = mongoose.model('Reviews', reviewsSchema);
