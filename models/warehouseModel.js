@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const warehouseSchema = new mongoose.Schema({
   //page1 in admin add property details
   isSelect: { type: Boolean, default: false },
+  isSaved: { type: Boolean, default: false },
+  isSelect: { type: Boolean, default: false },
   isFlipbook: { type: Boolean, default: false },
   isStatus: { type: Boolean, default: true },
   categoryType: { type: String, default: 'Warehouse' },

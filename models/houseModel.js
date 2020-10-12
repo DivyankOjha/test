@@ -7,6 +7,7 @@ const houseSchema = new mongoose.Schema({
   isStatus: { type: Boolean, default: true },
   categoryType: { type: String, default: 'House' },
   isSavedStatus: { type: Boolean, default: false },
+  isSaved: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
   isSelect: { type: Boolean, default: false },
   propertyDetails: {

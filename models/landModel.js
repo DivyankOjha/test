@@ -10,6 +10,7 @@ const landSchema = new mongoose.Schema({
   categoryType: { type: String, default: 'Land' },
   createdAt: { type: Date, default: Date.now },
   isSelect: { type: Boolean, default: false },
+  isSaved: { type: Boolean, default: false },
   propertyDetails: {
     propertyName: String,
     propertyFor: { type: String },

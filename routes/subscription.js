@@ -5,6 +5,11 @@ const subController = require('./../controllers/subscriptionController');
 const authController = require('./../controllers/authController');
 
 router.post('/add-sub', authController.protect, subController.Subscription); //authController.protect,
+router.patch(
+  '/renew-subscription',
+  //authController.protect,
+  subController.renewSubscription
+); //authController.protect,
 
 router.get(
   '/get-all-subscriptions',

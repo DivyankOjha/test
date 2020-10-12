@@ -4,16 +4,7 @@ const path = require('path');
 const mime = require('mime');
 const fs = require('fs');
 
-// exports.getAllUsers = catchAsync(async (req, res) => {
-//   const users = await User.find();
-//   res.status(200).json({
-//     status: 'success',
-//     results: users.length,
-//     data: {
-//       users,
-//     },
-//   });
-// });
+
 
 exports.upload = catchAsync(async (req, res, next) => {
   console.log(req.protocol);

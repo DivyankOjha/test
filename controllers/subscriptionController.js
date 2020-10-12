@@ -45,6 +45,60 @@ exports.Subscription = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.renewSubscription = catchAsync(async (req, res, next) => {
+  // if (req.body.userID) {
+  const getUser = await User.findById({ _id: req.body.userID });
+  // console.log(getUser.isSubscribed);
+  // if (getUser.isSubscribed) {
+  //   return next(new AppError('You are Already Subscribed!', 400));
+  // }
+  //}
+
+  const newSub = await Subs.findOne({ userID: req.body.userID });
+  // console.log(newSub);
+  let currentTotalPoints = newSub.totalpoints;
+  let newTotalPoints = currentTotalPoints + req.body.totalpoints;
+  const renewSub = await Subs.findByIdAndUpdate(
+    { _id: newSub._id },
+    {
+      $set: {
+        subscriptionType: req.body.subscriptionType,
+        subscriptionAmount: req.body.subscriptionAmount,
+        totalpoints: newTotalPoints,
+      },
+    }
+  );
+  console.log(newSub._id);
+  //update issubscribed true in user
+  const updateInUser = await User.findByIdAndUpdate(
+    { _id: newSub.userID },
+    {
+      $set: { isSubscribed: true },
+    }
+  );
+  const updateInNewSub = await Subs.findByIdAndUpdate(
+    { _id: newSub._id },
+    {
+      $set: { email: updateInUser.email },
+    }
+  );
+  console.log(updateInNewSub);
+  const message = `<p> Your are Subscription is Renewed  </p> `;
+
+  await sendEmail({
+    email: updateInUser.email,
+    subject: `Hi, ${updateInUser.firstname}, Congratulations! Your Subscription has been activated`,
+    //  subject: 'Your password reset token (valid for 10 min)',
+    message,
+  });
+  res.status(201).json({
+    status: 'success',
+    data: {
+      Subscription: renewSub,
+    },
+  });
+});
+
 exports.getAllSubscription = catchAsync(async (req, res) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
@@ -215,8 +269,8 @@ exports.updateUsedPoints = catchAsync(async (req, res) => {
   //console.log(checkUsedPoints[0].usedPoints);
   if (checkUsedPoints[0].usedPoints === checkUsedPoints[0].totalpoints) {
     //console.log('In here');
-    const updateinUser = await Subs.findOneAndUpdate(
-      { userID: id },
+    const updateinUser = await User.findOneAndUpdate(
+      { _id: id },
       { $set: { isSubscribed: false } }
     );
     // console.log(updateinUser);
@@ -242,7 +296,17 @@ exports.updateUsedPoints = catchAsync(async (req, res) => {
 exports.deleteSubscription = catchAsync(async (req, res) => {
   var ids = req.body.deleteSubscription;
   // console.log('id' + ids);
-
+  for (var i in ids) {
+    const getsub = await Subs.findById({ _id: ids[i] });
+    // console.log(getsub);
+    const getuser = await User.findByIdAndUpdate(
+      { _id: getsub.userID },
+      {
+        $set: { isSubscribed: false },
+      }
+    );
+    // console.log(getuser);
+  }
   const deletemany = await Subs.deleteMany({
     _id: { $in: ids },
   });

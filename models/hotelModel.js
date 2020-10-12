@@ -9,6 +9,7 @@ const hotelSchema = new mongoose.Schema({
   isStatus: { type: Boolean, default: true },
   categoryType: { type: String, default: 'Hotel' },
   createdAt: { type: Date, default: Date.now },
+  isSaved: { type: Boolean, default: false },
   isSelect: { type: Boolean, default: false },
   propertyDetails: {
     propertyName: String,
