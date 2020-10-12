@@ -58,6 +58,8 @@ exports.renewSubscription = catchAsync(async (req, res, next) => {
   // console.log(newSub);
   let currentTotalPoints = newSub.totalpoints;
   let newTotalPoints = currentTotalPoints + req.body.totalpoints;
+  let subscriptionFrequency = newSub.subscriptionFrequency;
+  let newsubscriptionFrequency = subscriptionFrequency + 1;
   const renewSub = await Subs.findByIdAndUpdate(
     { _id: newSub._id },
     {
@@ -65,6 +67,7 @@ exports.renewSubscription = catchAsync(async (req, res, next) => {
         subscriptionType: req.body.subscriptionType,
         subscriptionAmount: req.body.subscriptionAmount,
         totalpoints: newTotalPoints,
+        subscriptionFrequency: newsubscriptionFrequency,
       },
     }
   );
