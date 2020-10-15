@@ -30,4 +30,10 @@ router.patch(
   flipbookController.deleteFlipbook
 );
 
+router.post(
+  '/get-similar-property',
+  //  authController.protect,
+  flipbookController.getsimilarproperties
+);
+
 module.exports = router;

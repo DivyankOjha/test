@@ -1539,3 +1539,72 @@ exports.getFlipbookbyID = catchAsync(async (req, res) => {
 // exports.getFlipbookbyID = catchAsync(async (req, res) => {
 //   propertyid = req.body.propertyId;
 // });
+exports.getsimilarproperties = catchAsync(async (req, res) => {
+  let Type = req.body.Type;
+  console.log(Type);
+  let cost = req.body.cost;
+  if (Type === 'House') {
+    console.log('inside House');
+    const getHouse = await House.aggregate([
+      {
+        $match: {
+          'attributes.cost': { $eq: cost },
+        },
+      },
+    ]);
+    res.status(200).json({
+      status: 'success',
+      results: getHouse.length,
+      similarProperties: getHouse,
+    });
+    // console.log(getHouse);
+  }
+  if (Type === 'Land') {
+    console.log('inside Land');
+    const getLand = await Land.aggregate([
+      {
+        $match: {
+          'attributes.cost': { $eq: cost },
+        },
+      },
+    ]);
+    res.status(200).json({
+      status: 'success',
+      results: getLand.length,
+      similarProperties: getLand,
+    });
+    // console.log(getHouse);
+  }
+  if (Type === 'Hotel') {
+    console.log('inside Hotel');
+    const getHotel = await Hotel.aggregate([
+      {
+        $match: {
+          'attributes.cost': { $eq: cost },
+        },
+      },
+    ]);
+    res.status(200).json({
+      status: 'success',
+      results: getHotel.length,
+      similarProperties: getHotel,
+    });
+    // console.log(getHouse);
+  }
+  if (Type === 'Warehouse') {
+    console.log('inside Warehouse');
+    const getWarehouse = await WareHouse.aggregate([
+      {
+        $match: {
+          'attributes.cost': { $eq: cost },
+        },
+      },
+    ]);
+    res.status(200).json({
+      status: 'success',
+      results: getWarehouse.length,
+      similarProperties: getWarehouse,
+    });
+    // console.log(getHouse);
+  }
+});

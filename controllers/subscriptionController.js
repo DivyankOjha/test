@@ -251,11 +251,14 @@ exports.updateUsedPoints = catchAsync(async (req, res) => {
       },
     }
   );
-  console.log('update' + update);
+  //console.log('update' + update.email);
   const checkUsedPoints = await Subs.find({ userID: id });
-  // console.log(checkUsedPoints[0]);
-  let math70 = (checkUsedPoints[0].totalpoints / 100) * 70;
-  console.log(math70);
+  //url = `https://cuboidtechnologies.com/renew-subscription/${checkUsedPoints[0].subscriptionType}/${checkUsedPoints[0].userID}`;
+  //console.log(url);
+  console.log('check' + checkUsedPoints[0].subscriptionType);
+  let math70 = (checkUsedPoints[0].totalpoints / 100) * 75;
+  let math98 = (checkUsedPoints[0].totalpoints / 100) * 98;
+  console.log(math70, math98);
   const finduser = await User.findById({ _id: id });
   if (checkUsedPoints[0].usedPoints === math70) {
     //math70
@@ -269,6 +272,31 @@ exports.updateUsedPoints = catchAsync(async (req, res) => {
       message,
     });
   }
+  if (checkUsedPoints[0].usedPoints === math98) {
+    //math70
+    console.log('greater than 70');
+    url = `https://cuboidtechnologies.com/renew-subscription/${checkUsedPoints[0].subscriptionType}/${checkUsedPoints[0].userID}`;
+    console.log(url);
+    // const message = `<p> Subscription Message : You have consumed 98 percent of the total points </p>`;
+    const message = `<p>You have consumed 98 percent of the total points.<br> 
+      <br> To renew your subcription, please <a href = "${url}"> <b>Visit this link</b> </a> </p> <hr>  
+      <h3> <b>Having Trouble? </b> </h3> 
+      <p>If the above link does not work try copying this link into your browser. </p> 
+      <p>${url}</p>  <hr>
+      <h3><b> Questions? <b> </h3>
+      <p>Please let us know if there's anything we can help you with by replying to this email or by emailing <b>support@cuboid.com</b></p>
+      `;
+
+    //http://localhost:3000/renew-subscription/rent/5f707472dd65b1161400a771
+
+    await sendEmail({
+      email: finduser.email,
+      subject: `Hi, ${finduser.firstname}, Subscription expiring soon!`,
+      //  subject: 'Your password reset token (valid for 10 min)',
+      message,
+    });
+  }
+  //98
   //console.log(checkUsedPoints[0].usedPoints);
   if (checkUsedPoints[0].usedPoints === checkUsedPoints[0].totalpoints) {
     //console.log('In here');
