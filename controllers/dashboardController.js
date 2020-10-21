@@ -10,7 +10,7 @@ const PostProperty = require('../models/postPropertyModel');
 const Subscription = require('./../models/subscriptionModel');
 
 exports.getAllproperty = catchAsync(async (req, res) => {
-  const users = await User.find();
+  const users = await User.aggregate([{ $match: { role: 'user' } }]);
   const totalMembers = users.length;
   // console.log('total members :' + totalMembers);
   const house = await House.find();

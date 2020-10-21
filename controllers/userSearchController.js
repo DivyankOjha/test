@@ -26,20 +26,13 @@ exports.searchHouse1 = catchAsync(async (req, res) => {
   //let area = req.body.attributes.area;
   // let areaint = parseInt(area);
   // console.log(areaint);
-  let mainCategory;
-  if (attributes.mainCategory) {
-    mainCategory = attributes.mainCategory.toLowerCase();
-  }
-  let propertyStatus;
-  if (attributes.propertyStatus) {
-    propertyStatus = attributes.propertyStatus.toLowerCase();
-  }
-  let subCategory;
-  if (attributes.subCategory) {
-    subCategory = attributes.subCategory.toLowerCase();
-  }
+
+  let mainCategory = attributes.mainCategory;
+  let propertyStatus = attributes.propertyStatus;
+  let subCategory = attributes.subCategory;
+
   // let mainCategory = attributes.mainCategory.toLowerCase();
-  console.log(mainCategory);
+
   // let subCategory = attributes.subCategory.toLowerCase();
   // //console.log(subCategory);
   // let propertyStatus = attributes.propertyStatus.toLowerCase();
@@ -69,25 +62,6 @@ exports.searchHouse1 = catchAsync(async (req, res) => {
 
   //main category, bedroom , subcategory, cost min max , attribute - checkbox number
   var search = await House.aggregate([
-    //   // {
-    //   //   $unwind: { path: '$attributes', preserveNullAndEmptyArrays: true },
-    //   // },
-    //   // {
-    //   //   $match: { $jsonSchema: myschema },
-    //   // },
-    // $and: [
-    //   {
-    //     'attributes.locality': {
-    //       $in: body,
-    //     },
-    //     'attributes.class': {
-    //       $in: body,
-    //     },
-    //     'attributes.area': {
-    //       $in: body,
-    //     },
-    //   },
-    // ],
     {
       $match: {
         $or: [
@@ -179,18 +153,11 @@ exports.searchHouse = catchAsync(async (req, res) => {
   // let area = req.body.attributes.area;
   //  let areaint = parseInt(area);
   // console.log(areaint);
-  let mainCategory;
-  if (attributes.mainCategory) {
-    mainCategory = attributes.mainCategory.toLowerCase();
-  }
-  let propertyStatus;
-  if (attributes.propertyStatus) {
-    propertyStatus = attributes.propertyStatus.toLowerCase();
-  }
-  let subCategory;
-  if (attributes.subCategory) {
-    subCategory = attributes.subCategory.toLowerCase();
-  }
+  let mainCategory = attributes.mainCategory;
+
+  let propertyStatus = attributes.propertyStatus;
+
+  let subCategory = attributes.subCategory;
 
   //const att = attributes.console.log(attributes);
 
@@ -280,8 +247,11 @@ exports.searchHouse = catchAsync(async (req, res) => {
             'attributes.partyarea': { $in: [partyarea] },
           },
           {
-            'attributes.gym': { $gte: 0, $lte: gym },
+            'attributes.gym': { $in: [gym] },
           },
+          // {
+          //   'attributes.gym': { $gte: 0, $lte: gym },
+          // },
 
           {
             'attributes.bathrooms': { $gte: 0, $lte: bathrooms },
@@ -357,10 +327,8 @@ exports.searchLandPage1 = catchAsync(async (req, res) => {
   let attributes = req.body.attributes;
   let freehold = attributes.freehold;
   let lease = attributes.lease;
-  let mainCategory;
-  if (attributes.mainCategory) {
-    mainCategory = attributes.mainCategory.toLowerCase();
-  }
+  let mainCategory = attributes.mainCategory;
+
   console.log(mainCategory);
   var search = await Land.aggregate([
     {
@@ -427,26 +395,13 @@ exports.searchLandPage2 = catchAsync(async (req, res) => {
   let maturegarden = attributes.maturegarden;
   let waterfront = attributes.waterfront;
   let gated = attributes.gated;
-  let mainCategory;
-  if (attributes.mainCategory) {
-    mainCategory = attributes.mainCategory.toLowerCase();
-  }
-  let soilType;
-  if (attributes.soilType) {
-    soilType = attributes.soilType.toLowerCase();
-  }
-  let nature;
-  if (attributes.nature) {
-    nature = attributes.nature.toLowerCase();
-  }
-  let road;
-  if (attributes.road) {
-    road = attributes.road.toLowerCase();
-  }
-  // let soilType = attributes.soilType.toLowerCase();
-  // let nature = attributes.nature.toLowerCase();
-  // let road = attributes.road.toLowerCase();
+  let mainCategory = attributes.mainCategory;
 
+  let soilType = attributes.soilType;
+
+  let nature = attributes.nature;
+
+  let road = attributes.road;
   var search = await Land.aggregate([
     {
       $match: {
@@ -526,8 +481,6 @@ exports.searchLandPage2 = catchAsync(async (req, res) => {
 });
 
 exports.searchLandPage3 = catchAsync(async (req, res) => {
-  //let location = req.body.location;
-
   let sizeinacres = req.body.sizeinacres;
   let minsizeinacres = sizeinacres.min;
   let maxsizeinacres = sizeinacres.max;
@@ -555,26 +508,17 @@ exports.searchLandPage3 = catchAsync(async (req, res) => {
   let waterfront = attributes.waterfront;
   let gated = attributes.gated;
 
-  let soilType;
-  if (attributes.soilType) {
-    soilType = attributes.soilType.toLowerCase();
-  }
-  let nature;
-  if (attributes.nature) {
-    nature = attributes.nature.toLowerCase();
-  }
-  let road;
-  if (attributes.road) {
-    road = attributes.road.toLowerCase();
-  }
+  let soilType = attributes.soilType;
+
+  let nature = attributes.nature;
+
+  let road = attributes.road;
+
   // let soilType = attributes.soilType.toLowerCase();
   // let nature = attributes.nature.toLowerCase();
   // let road = attributes.road.toLowerCase();
-  let mainCategory;
-  console.log(soilType, nature, road);
-  if (attributes.mainCategory) {
-    mainCategory = attributes.mainCategory.toLowerCase();
-  }
+  let mainCategory = attributes.mainCategory;
+
   var search = await Land.aggregate([
     {
       $match: {
@@ -670,8 +614,8 @@ exports.searchHotelPage1 = catchAsync(async (req, res) => {
   let area = req.body.area;
   //let area = areaC.toLowerCase();
   let hotelname = req.body.Hotel;
-  let cls = attributes.class.toLowerCase();
-  let locality = attributes.locality.toLowerCase();
+  let cls = attributes.class;
+  let locality = attributes.locality;
   //let location = req.body.location;
   let bedbreakfastcost = req.body.bedbreakfastcost;
   let minbedbreakfastcost = bedbreakfastcost.min;
@@ -681,25 +625,6 @@ exports.searchHotelPage1 = catchAsync(async (req, res) => {
 
   //this.pet = true;
   var search = await Hotel.aggregate([
-    //   // {
-    //   //   $unwind: { path: '$attributes', preserveNullAndEmptyArrays: true },
-    //   // },
-    //   // {
-    //   //   $match: { $jsonSchema: myschema },
-    //   // },
-    // $and: [
-    //   {
-    //     'attributes.locality': {
-    //       $in: body,
-    //     },
-    //     'attributes.class': {
-    //       $in: body,
-    //     },
-    //     'attributes.area': {
-    //       $in: body,
-    //     },
-    //   },
-    // ],
     {
       $match: {
         $or: [
@@ -806,8 +731,8 @@ exports.searchHotelPage2 = catchAsync(async (req, res) => {
   let hotelname = req.body.Hotel;
   let kmfromtarmac = req.body.kmfromtarmac;
   //let area = req.body.area;
-  let cls = attributes.class.toLowerCase();
-  let locality = attributes.locality.toLowerCase();
+  let cls = attributes.class;
+  let locality = attributes.locality;
   // let location = req.body.location;
   let bedbreakfastcost = req.body.bedbreakfastcost;
   let minbedbreakfastcost = req.body.bedbreakfastcost.min;
@@ -956,8 +881,8 @@ exports.searchHotelPage2 = catchAsync(async (req, res) => {
 exports.searchWarehousePage1 = catchAsync(async (req, res) => {
   //  isSavedStatus: { type: Boolean, default: false },
   let attributes = req.body.attributes;
-  let type = attributes.Type;
-  let Type = type.toLowerCase();
+  let Type = attributes.Type;
+
   let area = req.body.area;
 
   let cost = req.body.cost;
@@ -1005,8 +930,8 @@ exports.searchWarehousePage1 = catchAsync(async (req, res) => {
 exports.searchWarehousePage2 = catchAsync(async (req, res) => {
   //let area = req.body.area;
   let attributes = req.body.attributes;
-  let type = attributes.Type;
-  let Type = type.toLowerCase();
+  let Type = attributes.Type;
+
   let area = req.body.area;
 
   let cost = req.body.cost;
@@ -1085,8 +1010,8 @@ exports.searchWarehousePage2 = catchAsync(async (req, res) => {
 });
 exports.searchWarehousePage3 = catchAsync(async (req, res) => {
   let attributes = req.body.attributes;
-  let type = attributes.Type;
-  let Type = type.toLowerCase();
+  let Type = attributes.Type;
+
   let area = req.body.area;
 
   let cost = req.body.cost;
@@ -1107,56 +1032,25 @@ exports.searchWarehousePage3 = catchAsync(async (req, res) => {
   let sharedsecretary = attributes.sharedsecretary;
 
   // let check = attributes.zoning;
-  let zoning;
-  if (attributes.zoning) {
-    zoning = attributes.zoning.toLowerCase();
-  }
-  let townLocation;
-  if (attributes.townLocation) {
-    townLocation = attributes.townLocation.toLowerCase();
-  }
-  let accessRoad;
-  if (attributes.accessRoad) {
-    accessRoad = attributes.accessRoad.toLowerCase();
-  }
-  let tenants;
-  if (attributes.tenants) {
-    tenants = attributes.tenants.toLowerCase();
-  }
-  let elevator;
-  if (attributes.elevator) {
-    elevator = attributes.elevator.toLowerCase();
-  }
-  let security;
-  if (attributes.security) {
-    security = attributes.security.toLowerCase();
-  }
-  let vehicleTraffic;
-  if (attributes.vehicleTraffic) {
-    vehicleTraffic = attributes.vehicleTraffic.toLowerCase();
-  }
-  let humanTraffic;
-  if (attributes.humanTraffic) {
-    humanTraffic = attributes.humanTraffic.toLowerCase();
-  }
-  let meetingRoom;
-  if (attributes.meetingRoom) {
-    meetingRoom = attributes.meetingRoom.toLowerCase();
-  }
-  let parking;
-  if (attributes.parking) {
-    parking = attributes.parking.toLowerCase();
-  }
+  let zoning = attributes.zoning;
 
-  //let townLocation = attributes.townLocation.toLowerCase();
-  // let accessRoad = attributes.accessRoad.toLowerCase();
-  // let tenants = attributes.tenants.toLowerCase();
-  // let elevator = attributes.elevator.toLowerCase();
-  // let security = attributes.security.toLowerCase();
-  // let vehicleTraffic = attributes.vehicleTraffic.toLowerCase();
-  // let humanTraffic = attributes.humanTraffic.toLowerCase();
-  // let meetingRoom = attributes.meetingRoom.toLowerCase();
-  // let parking = attributes.parking.toLowerCase();
+  let townLocation = attributes.townLocation;
+
+  let accessRoad = attributes.accessRoad;
+
+  let tenants = attributes.tenants;
+
+  let elevator = attributes.elevator;
+
+  let security = attributes.security;
+
+  let vehicleTraffic = attributes.vehicleTraffic;
+
+  let humanTraffic = attributes.humanTraffic;
+
+  let meetingRoom = attributes.meetingRoom;
+
+  let parking = attributes.parking;
 
   var search = await WareHouse.aggregate([
     {

@@ -79,55 +79,12 @@ exports.addProperty = catchAsync(async (req, res, next) => {
       $set: { nationalidimage: urlpath },
     }
   );
-  //console.log(path3);
 
-  // console.log('url' + url);
-  // console.log('propertylinks: ' + propertylinks);
-  //   const imagePath = fs.writeFileSync(
-  //       path3 + '/' + fileName,
-  //       imageBuffer,
-  //       'utf8'
-  //   );
-  //   s const imagepath2 = fs.readFileSync(localpath);
-  //   const imagepath1 = fs.readFileSync(path3 + '/' + 'image.png');
-  //   console.log(path3 + '/' + 'image.png');
-  //   const url = `${req.protocol}://${req.get('host')}/media/${fileName}`;
-  //   console.log('url: ' + url);
-
-  /************************************************************************** *******************************************************/
-
-  // ####################################################################################################################################
-  //console.log(newproperty);
-  //const propertyName = newproperty.email + '_' + newproperty._id;
-  //console.log(newproperty.email + '_' + newproperty._id);
-  //const user = req.user.firstname;
-  // console.log(user);
-  /*Download the base64 image in the server and returns the filename and path of image.*/
-
-  // //Extract base64 data.
-  // const base64Data = baseImage.replace(regex, '');
-  // const rand = Math.ceil(Math.random() * 1000);
-  // //Random photo name with timeStamp so it will not overide previous images.
-  // const filename = `Photo_${Date.now()}_${rand}.${ext}`;
-
-  // //Check that if directory is present or not.
-  // if (!fs.existsSync(`${uploadPath}/uploads/`)) {
-  //   fs.mkdirSync(`${uploadPath}/uploads/`);
-  // }
-  // if (!fs.existsSync(localPath)) {
-  //   fs.mkdirSync(localPath);
-  // }
-  // fs.writeFileSync(localPath + filename, base64Data, 'base64');
-  // console.log(filename, localPath);
-
-  // //return res.send(filename, localPath);
   var propertylinks = [];
-  // const propName = req.body.name;
-  // const propertyName = propName.replace(/\s/g, '_');
+ 
 
   var prop = req.body.propertyimage;
-  //console.log('prop ' + prop);
-  // console.log('prop ' + prop);
+
 
   for (var i in prop) {
     // console.log('prop: ' + prop[i]);

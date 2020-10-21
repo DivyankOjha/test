@@ -23,6 +23,7 @@ const dashboardRoutes = require('./routes/dashboard');
 const flipbookRoutes = require('./routes/flipbook');
 const allAttributes = require('./routes/allAttributes');
 const review = require('./routes/review');
+const transactions = require('./routes/subTransaction');
 
 const globalErrorHandler = require('./controllers/errorController');
 const app = express();
@@ -68,7 +69,7 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(
   bodyParser.urlencoded({
     limit: '50mb',
-    extended: false,
+    extended: true,
     parameterLimit: 5000,
   })
 );
@@ -114,6 +115,7 @@ app.use('/api/property', propertyRoutes);
 app.use('/api/admin/dashboard', dashboardRoutes);
 app.use('/api/admin/flipbook', flipbookRoutes);
 app.use('/api/admin/attributes', allAttributes);
+app.use('/api/admin', transactions);
 
 app.use('/api/review', review);
 

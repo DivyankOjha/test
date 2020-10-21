@@ -14,7 +14,8 @@ const userSchema = new mongoose.Schema({
     Type: String,
   },
 
-  isSubscribed: { type: Boolean, default: false },
+  isSubscribedBuy: { type: Boolean, default: false },
+  isSubscribedRent: { type: Boolean, default: false },
 
   imagepath: { type: String }, //we can set a default profile image for the user ???
   savedflipbook: {

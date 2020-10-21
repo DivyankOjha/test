@@ -40,7 +40,7 @@ router.patch(
 router.post(
   '/admin/get-reviews-by-property-id',
   authController.protect,
-  authController.restrictTo('admin'),
+  // authController.restrictTo('admin'),
   reviewController.getSpecificReviews
 );
 module.exports = router;

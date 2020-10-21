@@ -6,8 +6,8 @@ const subSchema = new mongoose.Schema({
   userID: { type: mongoose.Schema.ObjectId },
 
   subscriptionType: {
-    buy: { type: Boolean, default: false },
-    rent: { type: Boolean, default: false },
+    buy: { type: Boolean },
+    rent: { type: Boolean },
   },
   subscriptionAmount: {
     buy: { type: Number },

@@ -29,45 +29,6 @@ router.post('/warehouse-search-1', searchHouse.searchWarehousePage1);
 router.post('/warehouse-search-2', searchHouse.searchWarehousePage2);
 router.post('/warehouse-search-3', searchHouse.searchWarehousePage3);
 
-//INDEX - show all campgrounds
-// router.get('/', function (req, res) {
-//   console.log(req.query);
-//   var noMatch = null;
-//   const regex = new RegExp(escapeRegex(req.query.search), 'gi');
-//   // Get all campgrounds from DB
-//   Hotel.find(
-//     { 'propertyDetails.propertyName': regex },
 
-//     function (err, hotel) {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         if (hotel.length < 1) {
-//           noMatch = 'No Hotels match that query, please try again.';
-//         }
-//         res.status(200).json({
-//           status: 'success',
-//           results: hotel.length,
-//           hotel,
-//         });
-//       }
-//     }
-//   );
-// });
-//   } else {
-//     // Get all campgrounds from DB
-//     Hotel.find({}, function (err, hotel) {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         res.status(200).json({
-//           status: 'success',
-//           results: hotel.length,
-//           hotel,
-//         });
-//       }
-//     });
-//   }
-// });
 
 module.exports = router;

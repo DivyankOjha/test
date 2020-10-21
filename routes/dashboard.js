@@ -5,8 +5,8 @@ const dashboardController = require('./../controllers/dashboardController');
 const authController = require('../controllers/authController');
 router.get(
   '/summary',
-  authController.protect,
-  authController.restrictTo('admin'),
+  //authController.protect,
+  //authController.restrictTo('admin'),
   dashboardController.getAllproperty
 );
 router.get(

@@ -1374,17 +1374,6 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
   // });
 });
 
-// exports.getFlipbook = catchAsync(async (req, res) => {
-//   const flipbook = await Flipbook.find();
-//   res.status(200).json({
-//     status: 'success',
-//     results: flipbook.length,
-//     data: {
-//       flipbook,
-//     },
-//   });
-// });
-
 exports.saveFlipbook = catchAsync(async (req, res, next) => {
   const _id = req.body.userID;
   let flipbookArray = [];
@@ -1541,17 +1530,27 @@ exports.getFlipbookbyID = catchAsync(async (req, res) => {
 // });
 exports.getsimilarproperties = catchAsync(async (req, res) => {
   let Type = req.body.Type;
-  console.log(Type);
+  let propertyID = req.body.propertyId;
+  console.log(Type, propertyID);
   let cost = req.body.cost;
   if (Type === 'House') {
     console.log('inside House');
-    const getHouse = await House.aggregate([
-      {
-        $match: {
-          'attributes.cost': { $eq: cost },
-        },
-      },
-    ]);
+    // const getHouse = await House.aggregate([
+    //   {
+    //     $match: {
+    //       $and: [
+    //         {
+    //           'attributes.cost': { $eq: cost },
+    //         },
+    //       ],
+    //       $and: [{ _id: { $ne: propertyID } }],
+    //     },
+    //   },
+    // ]);
+    const getHouse = await House.find({
+      _id: { $ne: propertyID },
+      'attributes.cost': { $eq: cost },
+    });
     res.status(200).json({
       status: 'success',
       results: getHouse.length,
@@ -1561,13 +1560,10 @@ exports.getsimilarproperties = catchAsync(async (req, res) => {
   }
   if (Type === 'Land') {
     console.log('inside Land');
-    const getLand = await Land.aggregate([
-      {
-        $match: {
-          'attributes.cost': { $eq: cost },
-        },
-      },
-    ]);
+    const getLand = await Land.find({
+      _id: { $ne: propertyID },
+      'attributes.cost': { $eq: cost },
+    });
     res.status(200).json({
       status: 'success',
       results: getLand.length,
@@ -1577,13 +1573,10 @@ exports.getsimilarproperties = catchAsync(async (req, res) => {
   }
   if (Type === 'Hotel') {
     console.log('inside Hotel');
-    const getHotel = await Hotel.aggregate([
-      {
-        $match: {
-          'attributes.cost': { $eq: cost },
-        },
-      },
-    ]);
+    const getHotel = await Hotel.find({
+      _id: { $ne: propertyID },
+      'attributes.cost': { $eq: cost },
+    });
     res.status(200).json({
       status: 'success',
       results: getHotel.length,
@@ -1593,13 +1586,10 @@ exports.getsimilarproperties = catchAsync(async (req, res) => {
   }
   if (Type === 'Warehouse') {
     console.log('inside Warehouse');
-    const getWarehouse = await WareHouse.aggregate([
-      {
-        $match: {
-          'attributes.cost': { $eq: cost },
-        },
-      },
-    ]);
+    const getWarehouse = await WareHouse.find({
+      _id: { $ne: propertyID },
+      'attributes.cost': { $eq: cost },
+    });
     res.status(200).json({
       status: 'success',
       results: getWarehouse.length,

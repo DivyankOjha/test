@@ -57,7 +57,7 @@ const houseSchema = new mongoose.Schema({
     balcony: { type: Boolean },
     partyarea: { type: Boolean },
 
-    gym: Number,
+    gym: Boolean, //before it was number ,changed on oct 17
     bedroom: { type: Number },
     bathrooms: Number,
     steambath: { type: Number },
