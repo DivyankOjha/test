@@ -126,7 +126,7 @@ exports.activateAccount = catchAsync(async (req, res, next) => {
 
   if (!token) {
     return next(
-      new AppError('You are not logged in! Please log in to continue', 401)
+      new AppError('You are not logged in! Please log in to continue', 200)
     );
   }
   //2. Verification token
@@ -149,13 +149,13 @@ exports.activateAccount = catchAsync(async (req, res, next) => {
 
   if (!user) {
     return next(
-      new AppError('The user belonging to the token does no longer exist', 401)
+      new AppError('The user belonging to the token does no longer exist', 200)
     );
   }
   //4. check if user changed password after the JWT was issued
   if (user.isActive) {
     return next(
-      new AppError('Account Already Verified! Please login again.', 401)
+      new AppError('Account Already Verified! Please login again.', 200)
     );
   }
   return res.send({
@@ -168,7 +168,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // 1) Check if email and password exist
   if (!email || !password) {
-    return next(new AppError('Please provide email and password!', 400));
+    return next(new AppError('Please provide email and password!', 200));
   }
   // 2) Check if user exists && password is correct
   const user = await User.findOne({ email }).select('+password');
@@ -177,26 +177,26 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(
       new AppError(
         'email is not verified , Please verify your email to login',
-        401
+        200
       )
     );
   }
 
   if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError('Incorrect email or password', 401));
+    return next(new AppError('Incorrect email or password', 200));
   }
 
   // 3) If everything ok, send token to client
   createSendToken(user, 200, req, res);
 });
 
-// for google and facebook login
+// for google and facebook signup
 exports.extSignup = catchAsync(async (req, res, next) => {
   const { firstname, lastname, email, imagepath } = req.body;
 
   // 1) Check if email  exist
   if (!email) {
-    return next(new AppError('Please provide email ', 400));
+    return next(new AppError('Please provide email ', 200));
   }
   // if (!user) {
   //   return next(new AppError('Incorrect email', 401));
@@ -231,14 +231,14 @@ exports.extLogin = catchAsync(async (req, res, next) => {
 
   // 1) Check if email exist
   if (!email) {
-    return next(new AppError('Please provide email ', 400));
+    return next(new AppError('Please provide email ', 200));
   }
   // 2) Check if user exists && password is correct
   const user = await User.findOne({ email });
   console.log(user._id);
 
   if (!user) {
-    return next(new AppError('Incorrect email', 401));
+    return next(new AppError('Incorrect email', 200));
   }
 
   // 3) If everything ok, send token to client
@@ -363,7 +363,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   //1. get user based on posted email
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    return next(new AppError('There is no user with email address.', 404));
+    return next(new AppError('There is no user with email address.', 200));
   }
   //2. generate the random reset token
   const resetToken = user.createPasswordResetToken();
@@ -405,7 +405,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     return next(
       new AppError(
         'There was an error sending the email. try again later!',
-        500
+        200
       )
     );
   }
@@ -425,7 +425,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
   //2. if token has not expired , and there is user, set the new password
   if (!user) {
-    return next(new AppError('Token is invalid or has expired', 400));
+    return next(new AppError('Token is invalid or has expired', 200));
   }
 
   user.password = req.body.password;
@@ -452,7 +452,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   // 2) Check if POSTed current password is correct
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
-    return next(new AppError('Your current password is wrong.', 401));
+    return next(new AppError('Your current password is wrong.', 200));
   }
 
   // 3) If so, update password
@@ -505,68 +505,3 @@ exports.editUserProfile = catchAsync(async (req, res, next) => {
 
   //createSendToken(user, 200, res);
 });
-
-//user.isActive = true;
-//await user.save();
-// currentUser.save(function (err) {
-//   if (err) {
-//     return res.status(500).send({ message: 'some error occured' });
-//   }
-//   res.status(200).send('The account has been verified. Please log in.');
-// });
-// console.log(currentUser._id);
-// req.user = user;
-// console.log(req.user);
-// next();
-
-// if (token) {
-//   jwt.verify(token, process.env.JWT_SECRET, function (err, decodedToken) {
-//     if (err) {
-//       return res.status(400).json({ error: 'Incorrect or Expired Link' });
-//     }
-//     const _id = decodedToken;
-//     const user = User.findOne({ email: req.body.email }, (error, user) => {
-//       if (!user) {
-//         return res
-//           .status(400)
-//           .json({ error: 'User with this mail already exists' });
-//       }
-//       console.log('Hello');
-//       user.isActive = true;
-//       user.save(function (err) {
-//         if (err) {
-//           return res.status(500).send({ msg: err.message });
-//         }
-//         res.status(200).send('The account has been verified. Please log in.');
-//       });
-//     });
-//   });
-// }
-
-//Check for validation errors
-
-// exports.verifyUser = catchAsync(async (req, res, next) => {
-//   console.log('SEnding Email');
-//   const verifyToken = 'adsd';
-//   const user = await User.findOne({ email: req.body.email });
-
-//   const verify = `${req.protocol}://${req.get(
-//     host
-//   )}/api/users/confirmation/${verifyToken}`;
-
-//   const message = `Please ${verify} your email before login`;
-
-//   try {
-//     await sendEmail({
-//       email: user.email,
-//       subject: 'Email Verification',
-//       message,
-//     });
-//     res.status(200).json({
-//       status: 'success',
-//       message: 'Token sent to email',
-//     });
-//   } catch (err) {
-//     return next(new AppError('Error sending an email'));
-//   }
-// });
