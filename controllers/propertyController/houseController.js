@@ -4,6 +4,7 @@ const House = require('../../models/houseModel');
 const path = require('path');
 const mime = require('mime');
 const fs = require('fs');
+const { isNullOrUndefined } = require('util');
 
 exports.house = catchAsync(async (req, res, next) => {
   // const currentlogo = req.body.sellerDetails.sellerlogo;
@@ -28,87 +29,67 @@ exports.house = catchAsync(async (req, res, next) => {
       },
     }
   );
-  // console.log(updateing);
-  // console.log(newHouse._id);
-
-  //console.log(req.protocol);
-  // console.log(req.get('host'));
-  //const user = req.user.firstname;
-  // console.log(user);
-  /*Download the base64 image in the server and returns the filename and path of image.*/
-
-  // //Extract base64 data.
-  // const base64Data = baseImage.replace(regex, '');
-  // const rand = Math.ceil(Math.random() * 1000);
-  // //Random photo name with timeStamp so it will not overide previous images.
-  // const filename = `Photo_${Date.now()}_${rand}.${ext}`;
-
-  // //Check that if directory is present or not.
-  // if (!fs.existsSync(`${uploadPath}/uploads/`)) {
-  //   fs.mkdirSync(`${uploadPath}/uploads/`);
-  // }
-  // if (!fs.existsSync(localPath)) {
-  //   fs.mkdirSync(localPath);
-  // }
-  // fs.writeFileSync(localPath + filename, base64Data, 'base64');
-  // console.log(filename, localPath);
-
-  // //return res.send(filename, localPath);
-
-  var matches = await req.body.sellerDetails.sellerlogo.match(
-      /^data:([A-Za-z-+\/]+);base64,(.+)$/
-    ),
-    response = {};
-  //console.log(matches);
-  if (matches.length !== 3) {
-    return new Error('Invalid input string');
-  }
-  response.type = matches[1];
-  //  console.log(response.type);
-  response.data = new Buffer.from(matches[2], 'base64');
-  let decodedImg = response;
-  let imageBuffer = decodedImg.data;
-  let type = decodedImg.type;
-  const name = type.split('/');
-  //  console.log(name);
-  const name1 = name[0];
-  // console.log(name1);
-  let extension = mime.extension(type);
-  // console.log(extension);
-  const rand = Math.ceil(Math.random() * 1000);
-  //Random photo name with timeStamp so it will not overide previous images.
-  const fileName = `${newHouse.sellerDetails.sellername}.${extension}`;
-  //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
-
-  // let fileName = name1 ++ '.' + extension;
-  // console.log(fileName);
-  let abc = 'abc';
-  path3 = path.resolve(`./public/media/admin/house`);
-
-  let localpath = `${path3}/${newHouse._id}/`;
-  //console.log(localpath);
-
-  if (!fs.existsSync(localpath)) {
-    fs.mkdirSync(localpath);
-  }
-  //console.log(localpath);
-
-  fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-  ip = 'cuboidtechnologies.com';
-  //console.log(ip);
-  const url = `${req.protocol}://${ip}/media/admin/house/${newHouse._id}/${fileName}`;
-
-  // console.log(url);
-
-  const logoUpdate = await House.findByIdAndUpdate(
-    { _id: newHouse._id },
-    {
-      $set: {
-        'sellerDetails.sellerlogo': url,
-        //  'attributes.mainCategory': mainlower,
-      },
+  if (
+    req.body.sellerDetails.sellerlogo &&
+    req.body.sellerDetails.sellerlogo != '' &&
+    req.body.sellerDetails.sellerlogo != ' ' &&
+    req.body.sellerDetails.sellerlogo != isNullOrUndefined
+  ) {
+    var matches = await req.body.sellerDetails.sellerlogo.match(
+        /^data:([A-Za-z-+\/]+);base64,(.+)$/
+      ),
+      response = {};
+    //console.log(matches);
+    if (matches.length !== 3) {
+      return new Error('Invalid input string');
     }
-  );
+    response.type = matches[1];
+    //  console.log(response.type);
+    response.data = new Buffer.from(matches[2], 'base64');
+    let decodedImg = response;
+    let imageBuffer = decodedImg.data;
+    let type = decodedImg.type;
+    const name = type.split('/');
+    //  console.log(name);
+    const name1 = name[0];
+    // console.log(name1);
+    let extension = mime.extension(type);
+    // console.log(extension);
+    const rand = Math.ceil(Math.random() * 1000);
+    //Random photo name with timeStamp so it will not overide previous images.
+    const fileName = `${newHouse.sellerDetails.sellername}.${extension}`;
+    //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+
+    // let fileName = name1 ++ '.' + extension;
+    // console.log(fileName);
+    let abc = 'abc';
+    path3 = path.resolve(`./public/media/admin/house`);
+
+    let localpath = `${path3}/${newHouse._id}/`;
+    //console.log(localpath);
+
+    if (!fs.existsSync(localpath)) {
+      fs.mkdirSync(localpath);
+    }
+    //console.log(localpath);
+
+    fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+    ip = 'cuboidtechnologies.com';
+    //console.log(ip);
+    const url = `https://${ip}/media/admin/house/${newHouse._id}/${fileName}`;
+
+    console.log(url);
+
+    const logoUpdate = await House.findByIdAndUpdate(
+      { _id: newHouse._id },
+      {
+        $set: {
+          'sellerDetails.sellerlogo': url,
+          //  'attributes.mainCategory': mainlower,
+        },
+      }
+    );
+  }
   //console.log('logoupdate' + logoUpdate);
   res.status(201).json({
     status: 'success',
@@ -120,67 +101,72 @@ exports.house = catchAsync(async (req, res, next) => {
 exports.updateHouse = catchAsync(async (req, res, next) => {
   // console.log(req.params.id);
   let sellerlogo = req.body.sellerDetails.sellerlogo;
-  var d = sellerlogo.startsWith('http', 0);
-  if (d) {
-    console.log('true');
-    const updatedellerlogo = await House.findByIdAndUpdate(
-      { _id: req.params.id },
-      {
-        $set: { 'sellerDetails.sellerlogo': sellerlogo },
+  if (
+    req.body.sellerDetails.sellerlogo &&
+    req.body.sellerDetails.sellerlogo != ''
+  ) {
+    var d = sellerlogo.startsWith('http', 0);
+    if (d) {
+      console.log('true');
+      const updatedellerlogo = await House.findByIdAndUpdate(
+        { _id: req.params.id },
+        {
+          $set: { 'sellerDetails.sellerlogo': sellerlogo },
+        }
+      );
+    }
+    if (!d) {
+      console.log(false);
+      var matches = await req.body.sellerDetails.sellerlogo.match(
+          /^data:([A-Za-z-+\/]+);base64,(.+)$/
+        ),
+        response = {};
+      //console.log(matches);
+      if (matches.length !== 3) {
+        return new Error('Invalid input string');
       }
-    );
-  }
-  if (!d) {
-    console.log(false);
-    var matches = await req.body.sellerDetails.sellerlogo.match(
-        /^data:([A-Za-z-+\/]+);base64,(.+)$/
-      ),
-      response = {};
-    //console.log(matches);
-    if (matches.length !== 3) {
-      return new Error('Invalid input string');
+      response.type = matches[1];
+      console.log(response.type);
+      response.data = new Buffer.from(matches[2], 'base64');
+      let decodedImg = response;
+      let imageBuffer = decodedImg.data;
+      let type = decodedImg.type;
+      const name = type.split('/');
+      console.log(name);
+      const name1 = name[0];
+      console.log(name1);
+      let extension = mime.extension(type);
+      console.log(extension);
+      const rand = Math.ceil(Math.random() * 1000);
+      //Random photo name with timeStamp so it will not overide previous images.
+      const fileName = `${req.body.sellerDetails.sellername}.${extension}`;
+      //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+
+      // let fileName = name1 ++ '.' + extension;
+      console.log(fileName);
+      let abc = 'abc';
+      path3 = path.resolve(`./public/media/admin/hotel`);
+
+      let localpath = `${path3}/${req.params.id}/`;
+      //console.log(localpath);
+
+      if (!fs.existsSync(localpath)) {
+        fs.mkdirSync(localpath);
+      }
+      //console.log(localpath);
+
+      fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+      ip = 'cuboidtechnologies.com';
+      //console.log(ip);
+      const url = `https://${ip}/media/admin/hotel/${req.params.id}/${fileName}`;
+
+      console.log(url);
+
+      const logoUpdate = await House.findByIdAndUpdate(
+        { _id: req.params.id },
+        { $set: { 'sellerDetails.sellerlogo': url } }
+      );
     }
-    response.type = matches[1];
-    console.log(response.type);
-    response.data = new Buffer.from(matches[2], 'base64');
-    let decodedImg = response;
-    let imageBuffer = decodedImg.data;
-    let type = decodedImg.type;
-    const name = type.split('/');
-    console.log(name);
-    const name1 = name[0];
-    console.log(name1);
-    let extension = mime.extension(type);
-    console.log(extension);
-    const rand = Math.ceil(Math.random() * 1000);
-    //Random photo name with timeStamp so it will not overide previous images.
-    const fileName = `${req.body.sellerDetails.sellername}.${extension}`;
-    //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
-
-    // let fileName = name1 ++ '.' + extension;
-    console.log(fileName);
-    let abc = 'abc';
-    path3 = path.resolve(`./public/media/admin/hotel`);
-
-    let localpath = `${path3}/${req.params.id}/`;
-    //console.log(localpath);
-
-    if (!fs.existsSync(localpath)) {
-      fs.mkdirSync(localpath);
-    }
-    //console.log(localpath);
-
-    fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-    ip = 'cuboidtechnologies.com';
-    //console.log(ip);
-    const url = `${req.protocol}://${ip}/media/admin/hotel/${req.params.id}/${fileName}`;
-
-    console.log(url);
-
-    const logoUpdate = await House.findByIdAndUpdate(
-      { _id: req.params.id },
-      { $set: { 'sellerDetails.sellerlogo': url } }
-    );
   }
 
   const gethouse = await House.findByIdAndUpdate(

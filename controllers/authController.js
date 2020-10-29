@@ -44,18 +44,6 @@ exports.signup = catchAsync(async (req, res, next) => {
   const emailsettings = await Email.findById({
     _id: '5f2e3d86d15a133adc74df50',
   });
-  // createSendToken(newUser, 201, res);
-  // const newUser = await User.create({
-  //   //User.save
-  //   name: req.body.name,
-  //   email: req.body.email,
-  //   mobilenumber: req.body.mobilenumber,
-  //   address: req.body.address,
-  //   zipcode: req.body.zipcode,
-  //   password: req.body.password,
-  //   passwordConfirm: req.body.password,
-  //   passwordChangedAt: req.body.passwordChangedAt,
-  // });
 
   const token = signToken(newUser._id);
 
@@ -70,6 +58,7 @@ exports.signup = catchAsync(async (req, res, next) => {
       pass: pass,
     },
   });
+
   const url = `https://cuboidtechnologies.com/login/${token}`;
   //const url = `${req.protocol}://${req.get('host')}/api/login/${token}`;
   //const url = `http://localhost:3002/api/users/confirmation/${token}`;
@@ -173,6 +162,9 @@ exports.login = catchAsync(async (req, res, next) => {
   // 2) Check if user exists && password is correct
   const user = await User.findOne({ email }).select('+password');
 
+  if (!user || !(await user.correctPassword(password, user.password))) {
+    return next(new AppError('Incorrect email or password', 200));
+  }
   if (user.isActive === false) {
     return next(
       new AppError(
@@ -180,10 +172,6 @@ exports.login = catchAsync(async (req, res, next) => {
         200
       )
     );
-  }
-
-  if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError('Incorrect email or password', 200));
   }
 
   // 3) If everything ok, send token to client
@@ -504,4 +492,63 @@ exports.editUserProfile = catchAsync(async (req, res, next) => {
   // console.log(user);
 
   //createSendToken(user, 200, res);
+});
+
+exports.reVerificationEmail = catchAsync(async (req, res, next) => {
+  //  console.log('email' + emailsettings.host);
+  console.log(req.body);
+  const newUser = await User.findOne({ email: req.body.email });
+  if (!newUser) {
+    return next(new AppError('No user found with that email', 200));
+  }
+  console.log(newUser);
+  const emailsettings = await Email.findById({
+    _id: '5f2e3d86d15a133adc74df50',
+  });
+
+  const token = signToken(newUser._id);
+
+  let host = emailsettings.host;
+  let user = emailsettings.username;
+  let pass = emailsettings.password;
+  //const verify = verifyUser();
+  var transporter = nodemailer.createTransport({
+    service: host,
+    auth: {
+      user: user,
+      pass: pass,
+    },
+  });
+
+  const url = `https://cuboidtechnologies.com/login/${token}`;
+  //const url = `${req.protocol}://${req.get('host')}/api/login/${token}`;
+  //const url = `http://localhost:3002/api/users/confirmation/${token}`;
+  var mailOptions = {
+    from: `CUBOID <noreply@CUBOID.com>`, //CUBOID <${emailsettings.username}>`,
+    to: newUser.email,
+    subject: 'Account Verification',
+    html: `Please click this link to confirm you email: <a href="${url}">${url}</a>  <br>
+    <p>click here to verify your email : <a href="${url}" target="_blank"><button style="background-color:rgb(72, 21, 192); color:aliceblue">Verify!</p>`,
+  };
+  transporter.sendMail(mailOptions, function (err) {
+    if (err) {
+      console.log('ERRor sending mail: ' + err);
+    } else {
+      console.log('Mail sent to: ' + newUser.email);
+    }
+  });
+  //  res
+  //    .status(200)
+  // .send('A verification email has been sent to ' + newUser.email + '.');
+  // .send('A verification email has been sent to ' + user.email + '.');
+
+  createSendToken(newUser, 201, req, res);
+
+  // res.status(201).json({
+  //   status: 'success',
+  //   token,
+  //   data: {
+  //     user: newUser,
+  //   },
+  // });
 });

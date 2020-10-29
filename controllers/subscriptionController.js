@@ -639,59 +639,63 @@ exports.searchSubscription = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.updateUsedPoints = catchAsync(async (req, res) => {
+exports.updateUsedPoints = catchAsync(async (req, res, next) => {
   //  console.log(req.user.id);
   console.log(req.params.id);
   let id = req.params.id; //'5f538841557252230c231db7';
   //  let subscription = await Subs.findOne({ userID: id });
   if (req.body.type === 'buy') {
     let subscription = await Subs.findOne({ userID: id });
-    console.log('subscription Details: ' + subscription);
-    // console.log(subscription.subscription.usedPoints);
-    let n = 1;
-    // console.log(subscription[0]);
-    //console.log(subscription[0].usedPoints);
-    let ups = subscription.usedPointsBuy;
-    up = parseInt(ups);
-    let sum = up + n;
-    console.log('up' + up);
-    const update = await Subs.findOneAndUpdate(
-      { userID: id },
-      {
-        $set: {
-          usedPointsBuy: sum,
-        },
-      }
-    );
-    //console.log('update' + update.email);
-    const checkUsedPoints = await Subs.find({ userID: id });
-    //url = `https://cuboidtechnologies.com/renew-subscription/${checkUsedPoints[0].subscriptionType}/${checkUsedPoints[0].userID}`;
-    //console.log(url);
-    //type
-    console.log('check' + checkUsedPoints[0].subscriptionType);
-    let math70 = (checkUsedPoints[0].totalpoints.buy / 100) * 75;
-    let math98 = (checkUsedPoints[0].totalpoints.buy / 100) * 98;
-    console.log(math70, math98);
-    const finduser = await User.findById({ _id: id });
-    if (checkUsedPoints[0].usedPointsBuy === math70) {
-      //math70
-      console.log('greater than 70');
-      const message = `<p> Subscription Message : You have consumed 70 percent of the total points of your Buy Pack </p> `;
+    console.log(subscription.totalpoints.buy);
+    console.log(subscription.usedPointsBuy);
 
-      await sendEmail({
-        email: finduser.email,
-        subject: `Hi, ${finduser.firstname}, Subscription expiring soon!`,
-        //  subject: 'Your password reset token (valid for 10 min)',
-        message,
-      });
-    }
-    if (checkUsedPoints[0].usedPointsBuy === math98) {
-      //math70
-      console.log('greater than 70');
-      url = `https://cuboidtechnologies.com/renew-subscription/buy/${checkUsedPoints[0].userID}`;
-      console.log(url);
-      // const message = `<p> Subscription Message : You have consumed 98 percent of the total points </p>`;
-      const message = `<p>You have consumed 98 percent of the total points in you <b>buy pack</b>.<br> 
+    if (subscription.usedPointsBuy < subscription.totalpoints.buy) {
+      // console.log(subscription.usedPointsRent);
+
+      let n = 1;
+      // console.log(subscription[0]);
+      //console.log(subscription[0].usedPoints);
+      let ups = subscription.usedPointsBuy;
+      up = parseInt(ups);
+      let sum = up + n;
+      console.log('up' + up);
+      const update = await Subs.findOneAndUpdate(
+        { userID: id },
+        {
+          $set: {
+            usedPointsBuy: sum,
+          },
+        }
+      );
+      //console.log('update' + update.email);
+      const checkUsedPoints = await Subs.find({ userID: id });
+      //url = `https://cuboidtechnologies.com/renew-subscription/${checkUsedPoints[0].subscriptionType}/${checkUsedPoints[0].userID}`;
+      //console.log(url);
+      //type
+      console.log('check' + checkUsedPoints[0].subscriptionType);
+      let math70 = (checkUsedPoints[0].totalpoints.buy / 100) * 75;
+      let math98 = (checkUsedPoints[0].totalpoints.buy / 100) * 98;
+      console.log(math70, math98);
+      const finduser = await User.findById({ _id: id });
+      if (checkUsedPoints[0].usedPointsBuy === math70) {
+        //math70
+        console.log('greater than 70');
+        const message = `<p> Subscription Message : You have consumed 70 percent of the total points of your Buy Pack </p> `;
+
+        await sendEmail({
+          email: finduser.email,
+          subject: `Hi, ${finduser.firstname}, Subscription expiring soon!`,
+          //  subject: 'Your password reset token (valid for 10 min)',
+          message,
+        });
+      }
+      if (checkUsedPoints[0].usedPointsBuy === math98) {
+        //math70
+        console.log('greater than 70');
+        url = `https://cuboidtechnologies.com/renew-subscription/buy/${checkUsedPoints[0].userID}`;
+        console.log(url);
+        // const message = `<p> Subscription Message : You have consumed 98 percent of the total points </p>`;
+        const message = `<p>You have consumed 98 percent of the total points in you <b>buy pack</b>.<br> 
       <br> To renew your subcription, please <a href = "${url}"> <b>Visit this link</b> </a> </p> <hr>  
       <h3> <b>Having Trouble? </b> </h3> 
       <p>If the above link does not work try copying this link into your browser. </p> 
@@ -700,90 +704,98 @@ exports.updateUsedPoints = catchAsync(async (req, res) => {
       <p>Please let us know if there's anything we can help you with by replying to this email or by emailing <b>support@cuboid.com</b></p>
       `;
 
-      //http://localhost:3000/renew-subscription/rent/5f707472dd65b1161400a771
+        //http://localhost:3000/renew-subscription/rent/5f707472dd65b1161400a771
 
-      await sendEmail({
-        email: finduser.email,
-        subject: `Hi, ${finduser.firstname}, Subscription expiring soon!`,
-        //  subject: 'Your password reset token (valid for 10 min)',
-        message,
-      });
-    }
-    //98
-    //console.log(checkUsedPoints[0].usedPoints);
-    if (
-      checkUsedPoints[0].usedPointsBuy === checkUsedPoints[0].totalpoints.buy
-    ) {
-      //console.log('In here');
-      const updateinUser = await User.findOneAndUpdate(
-        { _id: id },
-        { $set: { isSubscribedBuy: false } }
-      );
-      // console.log(updateinUser);
-      //console.log('greater than  total');
-      const message = `<p> Your subscription has expired! Please Subscribe / renew to resume services of your Buy Pack </p> `;
+        await sendEmail({
+          email: finduser.email,
+          subject: `Hi, ${finduser.firstname}, Subscription expiring soon!`,
+          //  subject: 'Your password reset token (valid for 10 min)',
+          message,
+        });
+      }
+      //98
+      //console.log(checkUsedPoints[0].usedPoints);
+      if (
+        checkUsedPoints[0].usedPointsBuy === checkUsedPoints[0].totalpoints.buy
+      ) {
+        //console.log('In here');
+        const updateinUser = await User.findOneAndUpdate(
+          { _id: id },
+          { $set: { isSubscribedBuy: false } }
+        );
+        // console.log(updateinUser);
+        //console.log('greater than  total');
+        const message = `<p> Your subscription has expired! Please Subscribe / renew to resume services of your Buy Pack </p> `;
 
-      await sendEmail({
-        email: finduser.email,
-        subject: `Hi, ${finduser.firstname}, Subscription expired!`,
-        //  subject: 'Your password reset token (valid for 10 min)',
-        message,
+        await sendEmail({
+          email: finduser.email,
+          subject: `Hi, ${finduser.firstname}, Subscription expired!`,
+          //  subject: 'Your password reset token (valid for 10 min)',
+          message,
+        });
+      }
+      res.status(200).json({
+        status: 'success',
+        // results: subscription.length,
+        data: {
+          checkUsedPoints,
+        },
       });
+    } else {
+      return next(new AppError('Fail', 200));
     }
-    res.status(200).json({
-      status: 'success',
-      // results: subscription.length,
-      data: {
-        checkUsedPoints,
-      },
-    });
   } else if (req.body.type === 'rent') {
-    const subscription = await Subs.findOne({ userID: id });
-    console.log(subscription);
-    // console.log(subscription.subscription.usedPoints);
-    let n = 1;
-    // console.log(subscription[0]);
-    //console.log(subscription[0].usedPoints);
-    let up = await subscription.usedPointsRent;
-    let sum = up + n;
-    // console.log('up' + up);
-    const update = await Subs.findOneAndUpdate(
-      { userID: id },
-      {
-        $set: {
-          usedPointsRent: sum,
-        },
-      }
-    );
-    console.log('update' + update);
-    const checkUsedPoints = await Subs.find({ userID: id });
-    //url = `https://cuboidtechnologies.com/renew-subscription/${checkUsedPoints[0].subscriptionType}/${checkUsedPoints[0].userID}`;
-    //console.log(url);
-    //type
-    console.log('check' + checkUsedPoints[0].subscriptionType);
-    let math70 = (checkUsedPoints[0].totalpoints.rent / 100) * 75;
-    let math98 = (checkUsedPoints[0].totalpoints.rent / 100) * 98;
-    console.log(math70, math98);
-    const finduser = await User.findById({ _id: id });
-    if (checkUsedPoints[0].usedPointsRent === math70) {
-      //math70
-      console.log('greater than 70');
-      const message = `<p> Subscription Message : You have consumed 70 percent of the total points of your <b>Rent Pack</b> </p> `;
+    console.log('in');
+    let subscription = await Subs.findOne({ userID: id });
+    // console.log(subscription);
+    console.log(subscription.usedPointsRent);
+    console.log(subscription.totalpoints.rent);
 
-      await sendEmail({
-        email: finduser.email,
-        subject: `Hi, ${finduser.firstname}, Subscription expiring soon!`,
-        //  subject: 'Your password reset token (valid for 10 min)',
-        message,
-      });
-    }
-    if (checkUsedPoints[0].usedPointsRent === math98) {
-      //math70
-      console.log('greater than 70');
-      url = `https://cuboidtechnologies.com/renew-subscription/rent/${checkUsedPoints[0].userID}`;
-      console.log(url);
-      // const message = `<p> Subscription Message : You have consumed 98 percent of the total points </p>`;
-      const message = `<p>You have consumed 98 percent of the total points of your <b>Rent Pack</b>.<br> 
+    if (subscription.usedPointsRent < subscription.totalpoints.rent) {
+      console.log(subscription);
+      let n = 1;
+      // console.log(subscription[0]);
+      //console.log(subscription[0].usedPoints);
+      let up = await subscription.usedPointsRent;
+      let sum = up + n;
+      // console.log('up' + up);
+      const update = await Subs.findOneAndUpdate(
+        { userID: id },
+        {
+          $set: {
+            usedPointsRent: sum,
+          },
+        }
+      );
+      console.log('update' + update);
+      const checkUsedPoints = await Subs.find({ userID: id });
+      //url = `https://cuboidtechnologies.com/renew-subscription/${checkUsedPoints[0].subscriptionType}/${checkUsedPoints[0].userID}`;
+      //console.log(url);
+      //type
+      console.log('check' + checkUsedPoints[0].subscriptionType);
+      let math70 = (checkUsedPoints[0].totalpoints.rent / 100) * 75;
+      let math98 = (checkUsedPoints[0].totalpoints.rent / 100) * 98;
+      console.log(math70, math98);
+      const finduser = await User.findById({ _id: id });
+      if (checkUsedPoints[0].usedPointsRent === math70) {
+        //math70
+        console.log('greater than 70');
+        const message = `<p> Subscription Message : You have consumed 70 percent of the total points of your <b>Rent Pack</b> </p> `;
+
+        await sendEmail({
+          email: finduser.email,
+          subject: `Hi, ${finduser.firstname}, Subscription expiring soon!`,
+          //  subject: 'Your password reset token (valid for 10 min)',
+          message,
+        });
+      }
+      if (checkUsedPoints[0].usedPointsRent === math98) {
+        //math70
+        console.log('greater than 70');
+        url = `https://cuboidtechnologies.com/renew-subscription/rent/${checkUsedPoints[0].userID}`;
+        console.log(url);
+        // const message = `<p> Subscription Message : You have consumed 98 percent of the total points </p>`;
+        const message = `<p>You have consumed 98 percent of the total points of your <b>Rent Pack</b>.<br> 
       <br> To renew your subcription, please <a href = "${url}"> <b>Visit this link</b> </a> </p> <hr>  
       <h3> <b>Having Trouble? </b> </h3> 
       <p>If the above link does not work try copying this link into your browser. </p> 
@@ -792,43 +804,48 @@ exports.updateUsedPoints = catchAsync(async (req, res) => {
       <p>Please let us know if there's anything we can help you with by replying to this email or by emailing <b>support@cuboid.com</b></p>
       `;
 
-      //http://localhost:3000/renew-subscription/rent/5f707472dd65b1161400a771
+        //http://localhost:3000/renew-subscription/rent/5f707472dd65b1161400a771
 
-      await sendEmail({
-        email: finduser.email,
-        subject: `Hi, ${finduser.firstname}, Subscription expiring soon!`,
-        //  subject: 'Your password reset token (valid for 10 min)',
-        message,
-      });
-    }
-    //98
-    //console.log(checkUsedPoints[0].usedPoints);
-    if (
-      checkUsedPoints[0].usedPointsRent === checkUsedPoints[0].totalpoints.rent
-    ) {
-      //console.log('In here');
-      const updateinUser = await User.findOneAndUpdate(
-        { _id: id },
-        { $set: { isSubscribedRent: false } }
-      );
-      // console.log(updateinUser);
-      //console.log('greater than  total');
-      const message = `<p> Your subscription has expired for the Rent Pack! Please Subscribe / renew to resume services </p> `;
+        await sendEmail({
+          email: finduser.email,
+          subject: `Hi, ${finduser.firstname}, Subscription expiring soon!`,
+          //  subject: 'Your password reset token (valid for 10 min)',
+          message,
+        });
+      }
+      //98
+      //console.log(checkUsedPoints[0].usedPoints);
+      if (
+        checkUsedPoints[0].usedPointsRent ===
+        checkUsedPoints[0].totalpoints.rent
+      ) {
+        //console.log('In here');
+        const updateinUser = await User.findOneAndUpdate(
+          { _id: id },
+          { $set: { isSubscribedRent: false } }
+        );
+        // console.log(updateinUser);
+        //console.log('greater than  total');
+        const message = `<p> Your subscription has expired for the Rent Pack! Please Subscribe / renew to resume services </p> `;
 
-      await sendEmail({
-        email: finduser.email,
-        subject: `Hi, ${finduser.firstname}, Subscription expired!`,
-        //  subject: 'Your password reset token (valid for 10 min)',
-        message,
+        await sendEmail({
+          email: finduser.email,
+          subject: `Hi, ${finduser.firstname}, Subscription expired!`,
+          //  subject: 'Your password reset token (valid for 10 min)',
+          message,
+        });
+      }
+      res.status(200).json({
+        status: 'success',
+        // results: subscription.length,
+        data: {
+          checkUsedPoints,
+        },
       });
-    }
-    res.status(200).json({
-      status: 'success',
-      // results: subscription.length,
-      data: {
-        checkUsedPoints,
-      },
-    });
+      // } else {
+      //   //return next(new AppError('Fail', 200));
+      // }
+    } else return next(new AppError('Fail', 200));
   }
 });
 

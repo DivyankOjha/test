@@ -2,7 +2,6 @@ const AppError = require('./../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const Review = require('../models/reviewModel');
 const User = require('../models/userModel');
-const { update } = require('../models/userModel');
 
 exports.postReview = catchAsync(async (req, res, next) => {
   const postReview = await Review.create(req.body);

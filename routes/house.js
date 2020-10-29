@@ -6,14 +6,14 @@ const authController = require('.././controllers/authController');
 
 router.post(
   '/post-house',
-  authController.protect,
-  authController.restrictTo('admin'),
+  // authController.protect,
+  //authController.restrictTo('admin'),
   houseController.house
 );
 router.put(
   '/edit-house/:id',
-  authController.protect,
-  authController.restrictTo('admin'),
+  // authController.protect,
+  // authController.restrictTo('admin'),
   houseController.updateHouse
 );
 router.get(

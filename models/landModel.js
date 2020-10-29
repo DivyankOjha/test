@@ -19,6 +19,10 @@ const landSchema = new mongoose.Schema({
     otherDetails: String,
     mapLink: String,
     selectSimilarProperties: Array, //this field not clear image icon is displayed in design
+    coordinates: {
+      longitude: Number,
+      latitude: Number,
+    },
     // price: Number,
   },
 
@@ -33,6 +37,9 @@ const landSchema = new mongoose.Schema({
 
     freehold: { type: Boolean },
     lease: { type: Boolean },
+
+    leasefreehold: String,
+
     councilwater: { type: Boolean },
     electricity: { type: Boolean },
     borehole: { type: Boolean },

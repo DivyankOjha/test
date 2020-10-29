@@ -81,10 +81,8 @@ exports.addProperty = catchAsync(async (req, res, next) => {
   );
 
   var propertylinks = [];
- 
 
   var prop = req.body.propertyimage;
-
 
   for (var i in prop) {
     // console.log('prop: ' + prop[i]);
@@ -306,7 +304,7 @@ exports.filterbydate = catchAsync(async (req, res) => {
 });
 
 exports.postPropertyEmail = catchAsync(async (req, res) => {
-  //console.log(req.body.reciever);
+  console.log(req.body.reciever);
   const emailsettings = await Email.findById({
     _id: '5f2e3d86d15a133adc74df50',
   });
@@ -322,23 +320,37 @@ exports.postPropertyEmail = catchAsync(async (req, res) => {
       pass: pass,
     },
   });
-  // const url = `http://54.164.209.42/login/${token}`;
-  //const url = `${req.protocol}://${req.get('host')}/api/login/${token}`;
-  //const url = `http://localhost:3002/api/users/confirmation/${token}`;
-  for (var i in req.body.reciever) {
-    const inquiryemail = await postProperty.findById({
-      _id: req.body.reciever[i],
+
+  let idArr = [];
+  idArr = req.body.reciever;
+  //console.log(idArr);
+  // let data = await postProperty.findById({
+  //   _id: idArr[0],
+  // });
+  //console.log(data);
+  for (var i in idArr) {
+    console.log(idArr);
+    let inquiryemail = await postProperty.findById({
+      _id: idArr[i],
     });
-    console.log(inquiryemail.email);
-    if (req.body.reciever[i] >= req.body.reciever[0]) {
-      var mailOptions = {
-        from: `CUBOID <${emailsettings.username}>`,
-        to: inquiryemail.email,
-        subject: req.body.subject[0],
-        html: `<p>Hello ${req.body.message[0]}</p>`,
-      };
-      console.log('if 1');
-    }
+    console.log(inquiryemail);
+    //if (req.body.reciever[i] >= req.body.reciever[0]) {
+    var mailOptions = {
+      from: `CUBOID <${emailsettings.username}>`,
+      to: inquiryemail.email,
+      subject: req.body.subject[0],
+      html: `<p>${req.body.message[0]}</p>`,
+    };
+    console.log(inquiryemail);
+    // if (req.body.reciever[i] >= req.body.reciever[0]) {
+    // var mailOptions = {
+    //   from: `CUBOID <${emailsettings.username}>`,
+    //   to: inquiryemail.email,
+    //   subject: req.body.subject[0],
+    //   html: `<p>${req.body.message[0]}</p>`,
+    // };
+    // console.log('if 1');
+    // }
     // if (req.body.reciever[i] === req.body.reciever[0]) {
     //   var mailOptions = {
     //     from: `CUBOID <${emailsettings.username}>`,
@@ -353,7 +365,7 @@ exports.postPropertyEmail = catchAsync(async (req, res) => {
       if (err) {
         console.log('ERRor sending mail: ' + err);
       } else {
-        console.log('Mail sent to : ' + req.body.reciever[i]); //inquiryemail.email
+        console.log('Mail sent to: ' + idArr[i] + ' ' + inquiryemail.email); //inquiryemail.email
       }
     });
   }
@@ -363,6 +375,6 @@ exports.postPropertyEmail = catchAsync(async (req, res) => {
     // results: inquiry.length,
     // data: {
     //   inquiry,
-    // },
+    //},
   });
 });

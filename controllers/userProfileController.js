@@ -35,6 +35,7 @@ exports.getuser = catchAsync(async (req, res) => {
     );
   }
   const user = {
+    id: currentUser._id,
     firstname: currentUser.firstname,
     lastname: currentUser.lastname,
     email: currentUser.email,

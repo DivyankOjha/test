@@ -8,6 +8,7 @@ const Land = require('./../models/landModel');
 const Hotel = require('./../models/hotelModel');
 const WareHouse = require('./../models/warehouseModel');
 const User = require('../models/userModel');
+const { isNullOrUndefined, isUndefined } = require('util');
 
 exports.addFlipbook = catchAsync(async (req, res, next) => {
   // console.log(updatefields);
@@ -59,95 +60,26 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       }
     );
     /******************============BANNER==========********************/
-    var d = banner.startsWith('http', 0);
-    if (d) {
-      //  console.log('true');
-      const updateflipbook = await House.findByIdAndUpdate(
-        { _id },
-        {
-          $set: { 'flipbook.flipbookBanner': banner },
-        }
-      );
-    }
-    //BANNER
-    if (!d) {
-      // console.log('false');
-      let matches = await banner.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
-        response = {};
-      if (matches.length !== 3) {
-        return new Error('Invalid input string');
+    if (
+      banner != isNullOrUndefined &&
+      banner != '' &&
+      banner != ' ' &&
+      banner != undefined
+    ) {
+      var d = banner.startsWith('http', 0);
+      if (d) {
+        //  console.log('true');
+        const updateflipbook = await House.findByIdAndUpdate(
+          { _id },
+          {
+            $set: { 'flipbook.flipbookBanner': banner },
+          }
+        );
       }
-      response.type = matches[1];
-      // console.log(response.type);
-      response.data = new Buffer.from(matches[2], 'base64');
-      let decodedImg = response;
-      let imageBuffer = decodedImg.data;
-      let type = decodedImg.type;
-      const name = type.split('/');
-      // console.log(name);
-      const name1 = name[0];
-      // console.log(name1);
-      let extension = mime.extension(type);
-      // console.log(extension);
-      const rand = Math.ceil(Math.random() * 1000);
-      //Random photo name with timeStamp so it will not overide previous images.
-      const fileName = `${title}-${'BANNER'}.${extension}`;
-      //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
-
-      // let fileName = name1 ++ '.' + extension;
-      // console.log(filename);
-
-      path3 = path.resolve(`./public/media/flipbook/House`);
-
-      let localpath = `${path3}/${_id}/`;
-      //console.log(localpath);
-
-      if (!fs.existsSync(localpath)) {
-        fs.mkdirSync(localpath);
-      }
-      // console.log(localpath);
-
-      fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-      ip = 'cuboidtechnologies.com';
-      //console.log(ip);
-      const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${fileName}`;
-
-      //const imagepath2 = fs.readFileSync(localpath + fileName);
-      //console.log('imagepath2  ' + imagepath2);
-      // const updating = User.findByIdAndUpdate(req.user._id, {
-      //   $set: { imagepath: url },
-      // });
-      // console.log(url);
-
-      /************************************** */
-
-      const updateflipbook = await House.findByIdAndUpdate(
-        { _id },
-        {
-          $set: { 'flipbook.flipbookBanner': url },
-        }
-      );
-    }
-
-    /***********  2D Image Array****** */
-    for (let i in image2D) {
-      var e = image2D[i].startsWith('http', 0);
-      if (e) {
-        // console.log('true');
-        // const update2dimage = await House.findByIdAndUpdate(
-        //   { _id },
-        //   {
-        //     $set: { 'flipbook.image2D': image2D[i] },
-        //   }
-        // );
-        image2Dlinks.push(image2D[i]);
-        //  console.log(image2Dlinks);
-      }
-      if (!e) {
-        //  console.log('false');
-        let matches = await image2D[i].match(
-            /^data:([A-Za-z-+\/]+);base64,(.+)$/
-          ),
+      //BANNER
+      if (!d) {
+        // console.log('false');
+        let matches = await banner.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
           response = {};
         if (matches.length !== 3) {
           return new Error('Invalid input string');
@@ -166,7 +98,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(extension);
         const rand = Math.ceil(Math.random() * 1000);
         //Random photo name with timeStamp so it will not overide previous images.
-        const fileName = `${title}_${'2D'}_${[i]}.${extension}`;
+        const fileName = `${title}-${'BANNER'}.${extension}`;
         //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
         // let fileName = name1 ++ '.' + extension;
@@ -187,195 +119,279 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         //console.log(ip);
         const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${fileName}`;
 
-        image2Dlinks.push(url);
-
         //const imagepath2 = fs.readFileSync(localpath + fileName);
         //console.log('imagepath2  ' + imagepath2);
         // const updating = User.findByIdAndUpdate(req.user._id, {
         //   $set: { imagepath: url },
         // });
+        // console.log(url);
 
         /************************************** */
+
+        const updateflipbook = await House.findByIdAndUpdate(
+          { _id },
+          {
+            $set: { 'flipbook.flipbookBanner': url },
+          }
+        );
       }
     }
-    const update2dimage = await House.findByIdAndUpdate(
-      { _id },
-      {
-        $set: { 'flipbook.image2D': image2Dlinks },
-      }
-    );
 
+    /***********  2D Image Array****** */
+    if (
+      image2D != isNullOrUndefined &&
+      image2D != '' &&
+      image2D != ' ' &&
+      image2D != undefined
+    ) {
+      for (let i in image2D) {
+        var e = image2D[i].startsWith('http', 0);
+        if (e) {
+          // console.log('true');
+          // const update2dimage = await House.findByIdAndUpdate(
+          //   { _id },
+          //   {
+          //     $set: { 'flipbook.image2D': image2D[i] },
+          //   }
+          // );
+          image2Dlinks.push(image2D[i]);
+          //  console.log(image2Dlinks);
+        }
+        if (!e) {
+          //  console.log('false');
+          let matches = await image2D[i].match(
+              /^data:([A-Za-z-+\/]+);base64,(.+)$/
+            ),
+            response = {};
+          if (matches.length !== 3) {
+            return new Error('Invalid input string');
+          }
+          response.type = matches[1];
+          // console.log(response.type);
+          response.data = new Buffer.from(matches[2], 'base64');
+          let decodedImg = response;
+          let imageBuffer = decodedImg.data;
+          let type = decodedImg.type;
+          const name = type.split('/');
+          // console.log(name);
+          const name1 = name[0];
+          // console.log(name1);
+          let extension = mime.extension(type);
+          // console.log(extension);
+          const rand = Math.ceil(Math.random() * 1000);
+          //Random photo name with timeStamp so it will not overide previous images.
+          const fileName = `${title}_${'2D'}_${[i]}.${extension}`;
+          //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+
+          // let fileName = name1 ++ '.' + extension;
+          // console.log(filename);
+
+          path3 = path.resolve(`./public/media/flipbook/House`);
+
+          let localpath = `${path3}/${_id}/`;
+          //console.log(localpath);
+
+          if (!fs.existsSync(localpath)) {
+            fs.mkdirSync(localpath);
+          }
+          // console.log(localpath);
+
+          fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+          ip = 'cuboidtechnologies.com';
+          //console.log(ip);
+          const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${fileName}`;
+
+          image2Dlinks.push(url);
+
+          //const imagepath2 = fs.readFileSync(localpath + fileName);
+          //console.log('imagepath2  ' + imagepath2);
+          // const updating = User.findByIdAndUpdate(req.user._id, {
+          //   $set: { imagepath: url },
+          // });
+
+          /************************************** */
+        }
+      }
+      const update2dimage = await House.findByIdAndUpdate(
+        { _id },
+        {
+          $set: { 'flipbook.image2D': image2Dlinks },
+        }
+      );
+    }
     /*****************======Image 3D==================***********/
 
     // for (let i in image3D)
     //var str = req.protocol;
-    var c = image3D.startsWith('http', 0);
-    let image3DUrl = '';
-    if (req.body.image3D) {
-      if (c) {
-        // console.log('true');
-        const update3dimage = await House.findByIdAndUpdate(
-          { _id },
-          {
-            $set: { 'flipbook.image3D': image3D },
-          }
-        );
-      }
-      if (!c) {
-        // console.log('false');
-        //console.log(image3D);
-        // console.log(image3D);
-        let matches = await image3D.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
-          response = {};
-        if (matches.length !== 3) {
-          return new Error('Invalid input string');
+    if (
+      image3D != isNullOrUndefined &&
+      image3D != '' &&
+      image3D != ' ' &&
+      image3D != undefined
+    ) {
+      console.log('Image 3D : ' + image3D);
+      var c = image3D.startsWith('http', 0);
+      let image3DUrl = '';
+      if (req.body.image3D) {
+        if (c) {
+          // console.log('true');
+          const update3dimage = await House.findByIdAndUpdate(
+            { _id },
+            {
+              $set: { 'flipbook.image3D': image3D },
+            }
+          );
         }
-        response.type = matches[1];
-        // console.log(response.type);
-        response.data = new Buffer.from(matches[2], 'base64');
-        let decodedImg = response;
-        let imageBuffer = decodedImg.data;
-        let type = decodedImg.type;
-        const name = type.split('/');
-        // console.log(name);
-        const name1 = name[0];
-        // console.log(name1);
-        let extension = mime.extension(type);
-        // console.log(extension);
-        const rand = Math.ceil(Math.random() * 1000);
-        //Random photo name with timeStamp so it will not overide previous images.
-        const fileName = `${'3D'}_${title}.${extension}`;
-        //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
-
-        // let fileName = name1 ++ '.' + extension;
-        // console.log(filename);
-
-        path3 = path.resolve(`./public/media/flipbook/House`);
-
-        let localpath = `${path3}/${_id}/`;
-        //console.log(localpath);
-
-        if (!fs.existsSync(localpath)) {
-          fs.mkdirSync(localpath);
-        }
-        // console.log(localpath);
-
-        fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-        ip = 'cuboidtechnologies.com';
-        //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${fileName}`;
-        image3DUrl = url;
-        //const imagepath2 = fs.readFileSync(localpath + fileName);
-        //console.log('imagepath2  ' + imagepath2);
-        // const updating = User.findByIdAndUpdate(req.user._id, {
-        //   $set: { imagepath: url },
-        // });
-
-        /************************************** */
-        const update3dimage = await House.findByIdAndUpdate(
-          { _id },
-          {
-            $set: { 'flipbook.image3D': image3DUrl },
+        if (!c) {
+          // console.log('false');
+          //console.log(image3D);
+          // console.log(image3D);
+          let matches = await image3D.match(
+              /^data:([A-Za-z-+\/]+);base64,(.+)$/
+            ),
+            response = {};
+          if (matches.length !== 3) {
+            return new Error('Invalid input string');
           }
-        );
+          response.type = matches[1];
+          // console.log(response.type);
+          response.data = new Buffer.from(matches[2], 'base64');
+          let decodedImg = response;
+          let imageBuffer = decodedImg.data;
+          let type = decodedImg.type;
+          const name = type.split('/');
+          // console.log(name);
+          const name1 = name[0];
+          // console.log(name1);
+          let extension = mime.extension(type);
+          // console.log(extension);
+          const rand = Math.ceil(Math.random() * 1000);
+          //Random photo name with timeStamp so it will not overide previous images.
+          const fileName = `${'3D'}_${title}.${extension}`;
+          //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+
+          // let fileName = name1 ++ '.' + extension;
+          // console.log(filename);
+
+          path3 = path.resolve(`./public/media/flipbook/House`);
+
+          let localpath = `${path3}/${_id}/`;
+          //console.log(localpath);
+
+          if (!fs.existsSync(localpath)) {
+            fs.mkdirSync(localpath);
+          }
+          // console.log(localpath);
+
+          fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+          ip = 'cuboidtechnologies.com';
+          //console.log(ip);
+          const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${fileName}`;
+          image3DUrl = url;
+          //const imagepath2 = fs.readFileSync(localpath + fileName);
+          //console.log('imagepath2  ' + imagepath2);
+          // const updating = User.findByIdAndUpdate(req.user._id, {
+          //   $set: { imagepath: url },
+          // });
+
+          /************************************** */
+          const update3dimage = await House.findByIdAndUpdate(
+            { _id },
+            {
+              $set: { 'flipbook.image3D': image3DUrl },
+            }
+          );
+        }
+        //console.log(image3DUrl);
       }
-      //console.log(image3DUrl);
     }
 
     /*******++++++++++++====Floor Plan=============********* */
-
-    for (let i in floor) {
-      var f = floor[i].url.startsWith('http', 0);
-      console.log('f : ' + f);
-      if (f) {
-        console.log('true');
-        // const update2dimage = await House.findByIdAndUpdate(
-        //   { _id },
-        //   {
-        //     $set: { 'flipbook.image2D': image2D[i] },
-        //   }
-        // );
-        //image2Dlinks.push(image2D[i]);
-        floorplan.push(floor[i]);
-        console.log(floorplan);
-      }
-      if (!f) {
-        console.log(floor[i].Name);
-        let matches = await floor[i].url.match(
-            /^data:([A-Za-z-+\/]+);base64,(.+)$/
-          ),
-          response = {};
-        if (matches.length !== 3) {
-          return new Error('Invalid input string');
+    if (
+      floor != isNullOrUndefined &&
+      floor != '' &&
+      floor != ' ' &&
+      floor != undefined
+    ) {
+      for (let i in floor) {
+        var f = floor[i].url.startsWith('http', 0);
+        console.log('f : ' + f);
+        if (f) {
+          console.log('true');
+          // const update2dimage = await House.findByIdAndUpdate(
+          //   { _id },
+          //   {
+          //     $set: { 'flipbook.image2D': image2D[i] },
+          //   }
+          // );
+          //image2Dlinks.push(image2D[i]);
+          floorplan.push(floor[i]);
+          console.log(floorplan);
         }
-        response.type = matches[1];
-        // console.log(response.type);
-        response.data = new Buffer.from(matches[2], 'base64');
-        let decodedImg = response;
-        let imageBuffer = decodedImg.data;
-        let type = decodedImg.type;
-        const name = type.split('/');
-        // console.log(name);
-        const name1 = name[0];
-        // console.log(name1);
-        let extension = mime.extension(type);
-        // console.log(extension);
-        const rand = Math.ceil(Math.random() * 1000);
-        //Random photo name with timeStamp so it will not overide previous images.
-        const FileName = `${[i]}-${'floor-plan'}_${
-          floor[i].Name
-        } _${title}.${extension}`;
-        //const FileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+        if (!f) {
+          console.log(floor[i].Name);
+          let matches = await floor[i].url.match(
+              /^data:([A-Za-z-+\/]+);base64,(.+)$/
+            ),
+            response = {};
+          if (matches.length !== 3) {
+            return new Error('Invalid input string');
+          }
+          response.type = matches[1];
+          // console.log(response.type);
+          response.data = new Buffer.from(matches[2], 'base64');
+          let decodedImg = response;
+          let imageBuffer = decodedImg.data;
+          let type = decodedImg.type;
+          const name = type.split('/');
+          // console.log(name);
+          const name1 = name[0];
+          // console.log(name1);
+          let extension = mime.extension(type);
+          // console.log(extension);
+          const rand = Math.ceil(Math.random() * 1000);
+          //Random photo name with timeStamp so it will not overide previous images.
+          const FileName = `${[i]}-${'floor-plan'}_${
+            floor[i].Name
+          } _${title}.${extension}`;
+          //const FileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
-        // let FileName = name1 ++ '.' + extension;
-        console.log('filename' + FileName);
+          // let FileName = name1 ++ '.' + extension;
+          console.log('filename' + FileName);
 
-        path3 = path.resolve(`./public/media/flipbook/House`);
+          path3 = path.resolve(`./public/media/flipbook/House`);
 
-        let localpath = `${path3}/${_id}/`;
-        //console.log(localpath);
+          let localpath = `${path3}/${_id}/`;
+          //console.log(localpath);
 
-        if (!fs.existsSync(localpath)) {
-          fs.mkdirSync(localpath);
+          if (!fs.existsSync(localpath)) {
+            fs.mkdirSync(localpath);
+          }
+          // console.log(localpath);
+
+          fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
+          ip = 'cuboidtechnologies.com';
+          //console.log(ip);
+          const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${FileName}`;
+          //  let image = url;
+          let fileName = `${floor[i].fileName}`;
+          floorplan.push({ fileName, url });
         }
-        // console.log(localpath);
-
-        fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
-        ip = 'cuboidtechnologies.com';
-        //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/House/${_id}/${FileName}`;
-        //  let image = url;
-        let fileName = `${floor[i].fileName}`;
-        floorplan.push({ fileName, url });
       }
+
+      const updatefloorPlan = await House.findByIdAndUpdate(
+        { _id },
+        {
+          $set: { 'flipbook.floorPlan': floorplan },
+        }
+      );
     }
-
-    const updatefloorPlan = await House.findByIdAndUpdate(
-      { _id },
-      {
-        $set: { 'flipbook.floorPlan': floorplan },
-      }
-    );
 
     /*************************************************************/
 
     // const data = await House.find({ _id }, { flipbook: 1 });
     res.status(201).json({
       status: 'success',
-      // banner: url,
-      // image2D: image2Dlinks,
-      // image3D: image3DUrl,
-      // floorplan: floorplan,
-      // description,
-      // tour360Property,
-      // map,
-      // contactSeller,
-      // propertyAvailability,
-      // sendmessageToSeller,
-      // data,
-      // data: {
-      //   flipbook: newFlipbook,
-      // },
     });
   }
   if (req.body.propertyType === 'Hotel') {
@@ -396,166 +412,24 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       }
     );
     /******************============BANNER==========********************/
-    var d = banner.startsWith('http', 0);
-    if (d) {
-      //  console.log('true');
-      const updateflipbook = await Hotel.findByIdAndUpdate(
-        { _id },
-        {
-          $set: { 'flipbook.flipbookBanner': banner },
-        }
-      );
-    }
-    if (!d) {
-      let matches = await banner.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
-        response = {};
-      if (matches.length !== 3) {
-        return new Error('Invalid input string');
-      }
-      response.type = matches[1];
-      // console.log(response.type);
-      response.data = new Buffer.from(matches[2], 'base64');
-      let decodedImg = response;
-      let imageBuffer = decodedImg.data;
-      let type = decodedImg.type;
-      const name = type.split('/');
-      // console.log(name);
-      const name1 = name[0];
-      // console.log(name1);
-      let extension = mime.extension(type);
-      // console.log(extension);
-      const rand = Math.ceil(Math.random() * 1000);
-      //Random photo name with timeStamp so it will not overide previous images.
-      const fileName = `${title}-${'BANNER'}.${extension}`;
-      //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
-
-      // let fileName = name1 ++ '.' + extension;
-      // console.log(filename);
-
-      path3 = path.resolve(`./public/media/flipbook/Hotel`);
-
-      let localpath = `${path3}/${_id}/`;
-      //console.log(localpath);
-
-      if (!fs.existsSync(localpath)) {
-        fs.mkdirSync(localpath);
-      }
-      // console.log(localpath);
-
-      fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-      ip = 'cuboidtechnologies.com';
-      //console.log(ip);
-      const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${fileName}`;
-
-      //const imagepath2 = fs.readFileSync(localpath + fileName);
-      //console.log('imagepath2  ' + imagepath2);
-      // const updating = User.findByIdAndUpdate(req.user._id, {
-      //   $set: { imagepath: url },
-      // });
-      console.log(url);
-
-      /************************************** */
-
-      const updateflipbook = await Hotel.findByIdAndUpdate(
-        { _id },
-        {
-          $set: { 'flipbook.flipbookBanner': url },
-          'flipbook.title': req.body.title,
-        }
-      );
-    }
-
-    /***********  2D Image Array****** */
-    for (let i in image2D) {
-      var e = image2D[i].startsWith('http', 0);
-      if (e) {
-        // console.log('true');
-        // const update2dimage = await House.findByIdAndUpdate(
-        //   { _id },
-        //   {
-        //     $set: { 'flipbook.image2D': image2D[i] },
-        //   }
-        // );
-        image2Dlinks.push(image2D[i]);
-        //  console.log(image2Dlinks);
-      }
-      if (!e) {
-        let matches = await image2D[i].match(
-            /^data:([A-Za-z-+\/]+);base64,(.+)$/
-          ),
-          response = {};
-        if (matches.length !== 3) {
-          return new Error('Invalid input string');
-        }
-        response.type = matches[1];
-        // console.log(response.type);
-        response.data = new Buffer.from(matches[2], 'base64');
-        let decodedImg = response;
-        let imageBuffer = decodedImg.data;
-        let type = decodedImg.type;
-        const name = type.split('/');
-        // console.log(name);
-        const name1 = name[0];
-        // console.log(name1);
-        let extension = mime.extension(type);
-        // console.log(extension);
-        const rand = Math.ceil(Math.random() * 1000);
-        //Random photo name with timeStamp so it will not overide previous images.
-        const fileName = `${title}_${'2D'}_${[i]}.${extension}`;
-        //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
-
-        // let fileName = name1 ++ '.' + extension;
-        // console.log(filename);
-
-        path3 = path.resolve(`./public/media/flipbook/Hotel`);
-
-        let localpath = `${path3}/${_id}/`;
-        //console.log(localpath);
-
-        if (!fs.existsSync(localpath)) {
-          fs.mkdirSync(localpath);
-        }
-        // console.log(localpath);
-
-        fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-        ip = 'cuboidtechnologies.com';
-        //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${fileName}`;
-
-        image2Dlinks.push(url);
-        //const imagepath2 = fs.readFileSync(localpath + fileName);
-        //console.log('imagepath2  ' + imagepath2);
-        // const updating = User.findByIdAndUpdate(req.user._id, {
-        //   $set: { imagepath: url },
-        // });
-
-        /************************************** */
-      }
-    }
-    const update2dimage = await Hotel.findByIdAndUpdate(
-      { _id },
-      {
-        $set: { 'flipbook.image2D': image2Dlinks },
-      }
-    );
-
-    /*****************======Image 3D==================***********/
-
-    // for (let i in image3D)
-    var c = image3D.startsWith('http', 0);
-    let image3DUrl = '';
-    if (req.body.image3D) {
-      if (c) {
-        // console.log('true');
-        const update3dimage = await Hotel.findByIdAndUpdate(
+    if (
+      banner != isNullOrUndefined &&
+      banner != '' &&
+      banner != ' ' &&
+      banner != undefined
+    ) {
+      var d = banner.startsWith('http', 0);
+      if (d) {
+        //  console.log('true');
+        const updateflipbook = await Hotel.findByIdAndUpdate(
           { _id },
           {
-            $set: { 'flipbook.image3D': image3D },
+            $set: { 'flipbook.flipbookBanner': banner },
           }
         );
       }
-      if (!c) {
-        let matches = await image3D.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+      if (!d) {
+        let matches = await banner.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
           response = {};
         if (matches.length !== 3) {
           return new Error('Invalid input string');
@@ -574,7 +448,7 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(extension);
         const rand = Math.ceil(Math.random() * 1000);
         //Random photo name with timeStamp so it will not overide previous images.
-        const fileName = `${'3D'}_${title}.${extension}`;
+        const fileName = `${title}-${'BANNER'}.${extension}`;
         //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
         // let fileName = name1 ++ '.' + extension;
@@ -594,120 +468,266 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         ip = 'cuboidtechnologies.com';
         //console.log(ip);
         const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${fileName}`;
-        image3DUrl = url;
-        //const imagepath2 = fs.readFileSync(localpath + fileName);
-        //console.log('imagepath2  ' + imagepath2);
-        // const updating = User.findByIdAndUpdate(req.user._id, {
-        //   $set: { imagepath: url },
-        // });
+
+        console.log(url);
 
         /************************************** */
-      }
-      //console.log(image3DUrl);
 
-      const update3dimage = await Hotel.findByIdAndUpdate(
+        const updateflipbook = await Hotel.findByIdAndUpdate(
+          { _id },
+          {
+            $set: { 'flipbook.flipbookBanner': url },
+            'flipbook.title': req.body.title,
+          }
+        );
+      }
+    }
+
+    /***********  2D Image Array****** */
+    if (
+      image2D != isNullOrUndefined &&
+      image2D != '' &&
+      image2D != ' ' &&
+      image2D != undefined
+    ) {
+      for (let i in image2D) {
+        var e = image2D[i].startsWith('http', 0);
+        if (e) {
+          // console.log('true');
+          // const update2dimage = await House.findByIdAndUpdate(
+          //   { _id },
+          //   {
+          //     $set: { 'flipbook.image2D': image2D[i] },
+          //   }
+          // );
+          image2Dlinks.push(image2D[i]);
+          //  console.log(image2Dlinks);
+        }
+        if (!e) {
+          let matches = await image2D[i].match(
+              /^data:([A-Za-z-+\/]+);base64,(.+)$/
+            ),
+            response = {};
+          if (matches.length !== 3) {
+            return new Error('Invalid input string');
+          }
+          response.type = matches[1];
+          // console.log(response.type);
+          response.data = new Buffer.from(matches[2], 'base64');
+          let decodedImg = response;
+          let imageBuffer = decodedImg.data;
+          let type = decodedImg.type;
+          const name = type.split('/');
+          // console.log(name);
+          const name1 = name[0];
+          // console.log(name1);
+          let extension = mime.extension(type);
+          // console.log(extension);
+          const rand = Math.ceil(Math.random() * 1000);
+          //Random photo name with timeStamp so it will not overide previous images.
+          const fileName = `${title}_${'2D'}_${[i]}.${extension}`;
+          //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+
+          // let fileName = name1 ++ '.' + extension;
+          // console.log(filename);
+
+          path3 = path.resolve(`./public/media/flipbook/Hotel`);
+
+          let localpath = `${path3}/${_id}/`;
+          //console.log(localpath);
+
+          if (!fs.existsSync(localpath)) {
+            fs.mkdirSync(localpath);
+          }
+          // console.log(localpath);
+
+          fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+          ip = 'cuboidtechnologies.com';
+          //console.log(ip);
+          const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${fileName}`;
+
+          image2Dlinks.push(url);
+          //const imagepath2 = fs.readFileSync(localpath + fileName);
+          //console.log('imagepath2  ' + imagepath2);
+          // const updating = User.findByIdAndUpdate(req.user._id, {
+          //   $set: { imagepath: url },
+          // });
+
+          /************************************** */
+        }
+      }
+      const update2dimage = await Hotel.findByIdAndUpdate(
         { _id },
         {
-          $set: { 'flipbook.image3D': image3DUrl },
+          $set: { 'flipbook.image2D': image2Dlinks },
         }
       );
     }
-    //console.log(image3D);
-    // console.log(image3D);
 
-    /*******++++++++++++====Floor Plan=============********* */
-    for (let i in floor) {
-      var f = floor[i].url.startsWith('http', 0);
-      console.log('f : ' + f);
-      if (f) {
-        console.log('true');
-        // const update2dimage = await House.findByIdAndUpdate(
-        //   { _id },
-        //   {
-        //     $set: { 'flipbook.image2D': image2D[i] },
-        //   }
-        // );
-        //image2Dlinks.push(image2D[i]);
-        floorplan.push(floor[i]);
-        console.log(floorplan);
-      }
-      // console.log(floor[i]);
-      //console.log(image3D);
-      // console.log(image3D);
-      if (!f) {
-        let matches = await floor[i].url.match(
-            /^data:([A-Za-z-+\/]+);base64,(.+)$/
-          ),
-          response = {};
-        if (matches.length !== 3) {
-          return new Error('Invalid input string');
+    /*****************======Image 3D==================***********/
+    if (
+      image3D != isNullOrUndefined &&
+      image3D != '' &&
+      image3D != ' ' &&
+      image3D != undefined
+    ) {
+      var c = image3D.startsWith('http', 0);
+      let image3DUrl = '';
+      if (req.body.image3D) {
+        if (c) {
+          // console.log('true');
+          const update3dimage = await Hotel.findByIdAndUpdate(
+            { _id },
+            {
+              $set: { 'flipbook.image3D': image3D },
+            }
+          );
         }
-        response.type = matches[1];
-        // console.log(response.type);
-        response.data = new Buffer.from(matches[2], 'base64');
-        let decodedImg = response;
-        let imageBuffer = decodedImg.data;
-        let type = decodedImg.type;
-        const name = type.split('/');
-        // console.log(name);
-        const name1 = name[0];
-        // console.log(name1);
-        let extension = mime.extension(type);
-        // console.log(extension);
-        const rand = Math.ceil(Math.random() * 1000);
-        //Random photo name with timeStamp so it will not overide previous images.
-        const FileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
-        //const FileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+        if (!c) {
+          let matches = await image3D.match(
+              /^data:([A-Za-z-+\/]+);base64,(.+)$/
+            ),
+            response = {};
+          if (matches.length !== 3) {
+            return new Error('Invalid input string');
+          }
+          response.type = matches[1];
+          // console.log(response.type);
+          response.data = new Buffer.from(matches[2], 'base64');
+          let decodedImg = response;
+          let imageBuffer = decodedImg.data;
+          let type = decodedImg.type;
+          const name = type.split('/');
+          // console.log(name);
+          const name1 = name[0];
+          // console.log(name1);
+          let extension = mime.extension(type);
+          // console.log(extension);
+          const rand = Math.ceil(Math.random() * 1000);
+          //Random photo name with timeStamp so it will not overide previous images.
+          const fileName = `${'3D'}_${title}.${extension}`;
+          //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
-        // let FileName = name1 ++ '.' + extension;
-        // console.log(filename);
+          // let fileName = name1 ++ '.' + extension;
+          // console.log(filename);
 
-        path3 = path.resolve(`./public/media/flipbook/Hotel`);
+          path3 = path.resolve(`./public/media/flipbook/Hotel`);
 
-        let localpath = `${path3}/${_id}/`;
-        //console.log(localpath);
+          let localpath = `${path3}/${_id}/`;
+          //console.log(localpath);
 
-        if (!fs.existsSync(localpath)) {
-          fs.mkdirSync(localpath);
+          if (!fs.existsSync(localpath)) {
+            fs.mkdirSync(localpath);
+          }
+          // console.log(localpath);
+
+          fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+          ip = 'cuboidtechnologies.com';
+          //console.log(ip);
+          const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${fileName}`;
+          image3DUrl = url;
+          const update3dimage = await Hotel.findByIdAndUpdate(
+            { _id },
+            {
+              $set: { 'flipbook.image3D': image3DUrl },
+            }
+          );
+          //const imagepath2 = fs.readFileSync(localpath + fileName);
+          //console.log('imagepath2  ' + imagepath2);
+          // const updating = User.findByIdAndUpdate(req.user._id, {
+          //   $set: { imagepath: url },
+          // });
+
+          /************************************** */
         }
-        // console.log(localpath);
-
-        fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
-        ip = 'cuboidtechnologies.com';
-        //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${FileName}`;
-
-        let fileName = `${floor[i].fileName}`;
-        floorplan.push({ fileName, url });
       }
     }
 
-    const updatefloorPlan = await Hotel.findByIdAndUpdate(
-      { _id },
-      {
-        $set: { 'flipbook.floorPlan': floorplan },
+    /*******++++++++++++====Floor Plan=============********* */
+    if (
+      floor != isNullOrUndefined &&
+      floor != '' &&
+      floor != ' ' &&
+      floor != undefined
+    ) {
+      for (let i in floor) {
+        var f = floor[i].url.startsWith('http', 0);
+        console.log('f : ' + f);
+        if (f) {
+          console.log('true');
+          // const update2dimage = await House.findByIdAndUpdate(
+          //   { _id },
+          //   {
+          //     $set: { 'flipbook.image2D': image2D[i] },
+          //   }
+          // );
+          //image2Dlinks.push(image2D[i]);
+          floorplan.push(floor[i]);
+          console.log(floorplan);
+        }
+        // console.log(floor[i]);
+        //console.log(image3D);
+        // console.log(image3D);
+        if (!f) {
+          let matches = await floor[i].url.match(
+              /^data:([A-Za-z-+\/]+);base64,(.+)$/
+            ),
+            response = {};
+          if (matches.length !== 3) {
+            return new Error('Invalid input string');
+          }
+          response.type = matches[1];
+          // console.log(response.type);
+          response.data = new Buffer.from(matches[2], 'base64');
+          let decodedImg = response;
+          let imageBuffer = decodedImg.data;
+          let type = decodedImg.type;
+          const name = type.split('/');
+          // console.log(name);
+          const name1 = name[0];
+          // console.log(name1);
+          let extension = mime.extension(type);
+          // console.log(extension);
+          const rand = Math.ceil(Math.random() * 1000);
+          //Random photo name with timeStamp so it will not overide previous images.
+          const FileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
+          //const FileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+
+          // let FileName = name1 ++ '.' + extension;
+          // console.log(filename);
+
+          path3 = path.resolve(`./public/media/flipbook/Hotel`);
+
+          let localpath = `${path3}/${_id}/`;
+          //console.log(localpath);
+
+          if (!fs.existsSync(localpath)) {
+            fs.mkdirSync(localpath);
+          }
+          // console.log(localpath);
+
+          fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
+          ip = 'cuboidtechnologies.com';
+          //console.log(ip);
+          const url = `${req.protocol}://${ip}/media/flipbook/Hotel/${_id}/${FileName}`;
+
+          let fileName = `${floor[i].fileName}`;
+          floorplan.push({ fileName, url });
+        }
       }
-    );
+
+      const updatefloorPlan = await Hotel.findByIdAndUpdate(
+        { _id },
+        {
+          $set: { 'flipbook.floorPlan': floorplan },
+        }
+      );
+    }
 
     /*************************************************************/
 
-    // const data = await House.find({ _id }, { flipbook: 1 });
     res.status(201).json({
       status: 'success',
-      // banner: url,
-      // image2D: image2Dlinks,
-      // image3D: image3DUrl,
-      // floorplan: floorplan,
-      // description,
-      // tour360Property,
-      // map,
-      // contactSeller,
-      // propertyAvailability,
-      // sendmessageToSeller,
-      // data,
-      // data: {
-      //   flipbook: newFlipbook,
-      // },
     });
   }
   if (req.body.propertyType === 'Land') {
@@ -728,240 +748,24 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       }
     );
     /******************============BANNER==========********************/
-    var d = banner.startsWith('http', 0);
-    if (d) {
-      //  console.log('true');
-      const updateflipbook = await Land.findByIdAndUpdate(
-        { _id },
-        {
-          $set: { 'flipbook.flipbookBanner': banner },
-        }
-      );
-    }
-    if (!d) {
-      let matches = await banner.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
-        response = {};
-      if (matches.length !== 3) {
-        return new Error('Invalid input string');
-      }
-      response.type = matches[1];
-      // console.log(response.type);
-      response.data = new Buffer.from(matches[2], 'base64');
-      let decodedImg = response;
-      let imageBuffer = decodedImg.data;
-      let type = decodedImg.type;
-      const name = type.split('/');
-      // console.log(name);
-      const name1 = name[0];
-      // console.log(name1);
-      let extension = mime.extension(type);
-      // console.log(extension);
-      const rand = Math.ceil(Math.random() * 1000);
-      //Random photo name with timeStamp so it will not overide previous images.
-      const fileName = `${title}-${'BANNER'}.${extension}`;
-      //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
-
-      // let fileName = name1 ++ '.' + extension;
-      // console.log(filename);
-
-      path3 = path.resolve(`./public/media/flipbook/Land`);
-
-      let localpath = `${path3}/${_id}/`;
-      console.log(localpath);
-
-      if (!fs.existsSync(localpath)) {
-        fs.mkdirSync(localpath);
-      }
-      // console.log(localpath);
-
-      fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-      ip = 'cuboidtechnologies.com';
-      //console.log(ip);
-      const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${fileName}`;
-
-      //const imagepath2 = fs.readFileSync(localpath + fileName);
-      //console.log('imagepath2  ' + imagepath2);
-      // const updating = User.findByIdAndUpdate(req.user._id, {
-      //   $set: { imagepath: url },
-      // });
-      console.log(url);
-
-      /************************************** */
-
-      const updateflipbook = await Land.findByIdAndUpdate(
-        { _id },
-        {
-          $set: { 'flipbook.flipbookBanner': url },
-        }
-      );
-    }
-
-    /***********  2D Image Array****** */
-    for (let i in image2D) {
-      var e = image2D[i].startsWith('http', 0);
-      if (e) {
-        // console.log('true');
-        // const update2dimage = await House.findByIdAndUpdate(
-        //   { _id },
-        //   {
-        //     $set: { 'flipbook.image2D': image2D[i] },
-        //   }
-        // );
-        image2Dlinks.push(image2D[i]);
-        //  console.log(image2Dlinks);
-      }
-      if (!e) {
-        let matches = await image2D[i].match(
-            /^data:([A-Za-z-+\/]+);base64,(.+)$/
-          ),
-          response = {};
-        if (matches.length !== 3) {
-          return new Error('Invalid input string');
-        }
-        response.type = matches[1];
-        // console.log(response.type);
-        response.data = new Buffer.from(matches[2], 'base64');
-        let decodedImg = response;
-        let imageBuffer = decodedImg.data;
-        let type = decodedImg.type;
-        const name = type.split('/');
-        // console.log(name);
-        const name1 = name[0];
-        // console.log(name1);
-        let extension = mime.extension(type);
-        // console.log(extension);
-        const rand = Math.ceil(Math.random() * 1000);
-        //Random photo name with timeStamp so it will not overide previous images.
-        const fileName = `${title}_${'2D'}_${[i]}.${extension}`;
-        //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
-
-        // let fileName = name1 ++ '.' + extension;
-        // console.log(filename);
-
-        path3 = path.resolve(`./public/media/flipbook/Land`);
-
-        let localpath = `${path3}/${_id}/`;
-        //console.log(localpath);
-
-        if (!fs.existsSync(localpath)) {
-          fs.mkdirSync(localpath);
-        }
-        // console.log(localpath);
-
-        fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-        ip = 'cuboidtechnologies.com';
-        //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${fileName}`;
-
-        image2Dlinks.push(url);
-        //const imagepath2 = fs.readFileSync(localpath + fileName);
-        //console.log('imagepath2  ' + imagepath2);
-        // const updating = User.findByIdAndUpdate(req.user._id, {
-        //   $set: { imagepath: url },
-        // });
-
-        /************************************** */
-      }
-
-      const update2dimage = await Land.findByIdAndUpdate(
-        { _id },
-        {
-          $set: { 'flipbook.image2D': image2Dlinks },
-        }
-      );
-    }
-    /*****************======Image 3D==================***********/
-
-    // for (let i in image3D)
-    var c = image3D.startsWith('http', 0);
-    let image3DUrl = '';
-    if (req.body.image3D) {
-      if (c) {
-        console.log('true');
-        // const update3dimage = await Land.findByIdAndUpdate(
-        //   { _id },
-        //   {
-        //     $set: { 'flipbook.image3D': image3D },
-        //   }
-        // );
-      }
-      if (!c) {
-        let matches = await image3D.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
-          response = {};
-        if (matches.length !== 3) {
-          return new Error('Invalid input string');
-        }
-        response.type = matches[1];
-        // console.log(response.type);
-        response.data = new Buffer.from(matches[2], 'base64');
-        let decodedImg = response;
-        let imageBuffer = decodedImg.data;
-        let type = decodedImg.type;
-        const name = type.split('/');
-        // console.log(name);
-        const name1 = name[0];
-        // console.log(name1);
-        let extension = mime.extension(type);
-        // console.log(extension);
-        const rand = Math.ceil(Math.random() * 1000);
-        //Random photo name with timeStamp so it will not overide previous images.
-        const fileName = `${'3D'}_${title}.${extension}`;
-        //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
-
-        // let fileName = name1 ++ '.' + extension;
-        // console.log(filename);
-
-        path3 = path.resolve(`./public/media/flipbook/Land`);
-
-        let localpath = `${path3}/${_id}/`;
-        //console.log(localpath);
-
-        if (!fs.existsSync(localpath)) {
-          fs.mkdirSync(localpath);
-        }
-        // console.log(localpath);
-
-        fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-        ip = 'cuboidtechnologies.com';
-        //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${fileName}`;
-        image3DUrl = url;
-        //const imagepath2 = fs.readFileSync(localpath + fileName);
-        //console.log('imagepath2  ' + imagepath2);
-        // const updating = User.findByIdAndUpdate(req.user._id, {
-        //   $set: { imagepath: url },
-        // });
-
-        /************************************** */
-        const update3dimage = await Land.findByIdAndUpdate(
+    if (
+      banner != isNullOrUndefined &&
+      banner != '' &&
+      banner != ' ' &&
+      banner != undefined
+    ) {
+      var d = banner.startsWith('http', 0);
+      if (d) {
+        //  console.log('true');
+        const updateflipbook = await Land.findByIdAndUpdate(
           { _id },
           {
-            $set: { 'flipbook.image3D': image3DUrl },
+            $set: { 'flipbook.flipbookBanner': banner },
           }
         );
       }
-      //console.log(image3DUrl);
-    }
-
-    /*******++++++++++++====Floor Plan=============********* */
-    for (let i in floor) {
-      var f = floor[i].url.startsWith('http', 0);
-      if (f) {
-        console.log('true');
-        // const update2dimage = await House.findByIdAndUpdate(
-        //   { _id },
-        //   {
-        //     $set: { 'flipbook.image2D': image2D[i] },
-        //   }
-        // );
-        //image2Dlinks.push(image2D[i]);
-        floorplan.push(floor[i]);
-        console.log(floorplan);
-      }
-      if (!f) {
-        let matches = await floor[i].url.match(
-            /^data:([A-Za-z-+\/]+);base64,(.+)$/
-          ),
+      if (!d) {
+        let matches = await banner.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
           response = {};
         if (matches.length !== 3) {
           return new Error('Invalid input string');
@@ -980,58 +784,289 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
         // console.log(extension);
         const rand = Math.ceil(Math.random() * 1000);
         //Random photo name with timeStamp so it will not overide previous images.
-        const FileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
-        //const FileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+        const fileName = `${title}-${'BANNER'}.${extension}`;
+        //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
-        // let FileName = name1 ++ '.' + extension;
+        // let fileName = name1 ++ '.' + extension;
         // console.log(filename);
 
         path3 = path.resolve(`./public/media/flipbook/Land`);
 
         let localpath = `${path3}/${_id}/`;
-        //console.log(localpath);
+        console.log(localpath);
 
         if (!fs.existsSync(localpath)) {
           fs.mkdirSync(localpath);
         }
         // console.log(localpath);
 
-        fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
+        fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
         ip = 'cuboidtechnologies.com';
         //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${FileName}`;
+        const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${fileName}`;
 
-        let fileName = `${floor[i].fileName}`;
-        floorplan.push({ fileName, url });
+        //const imagepath2 = fs.readFileSync(localpath + fileName);
+        //console.log('imagepath2  ' + imagepath2);
+        // const updating = User.findByIdAndUpdate(req.user._id, {
+        //   $set: { imagepath: url },
+        // });
+        console.log(url);
+
+        /************************************** */
+
+        const updateflipbook = await Land.findByIdAndUpdate(
+          { _id },
+          {
+            $set: { 'flipbook.flipbookBanner': url },
+          }
+        );
       }
     }
 
-    const updatefloorPlan = await Land.findByIdAndUpdate(
-      { _id },
-      {
-        $set: { 'flipbook.floorPlan': floorplan },
-      }
-    );
+    /***********  2D Image Array****** */
+    if (
+      image2D != isNullOrUndefined &&
+      image2D != '' &&
+      image2D != ' ' &&
+      image2D != undefined
+    ) {
+      for (let i in image2D) {
+        var e = image2D[i].startsWith('http', 0);
+        if (e) {
+          // console.log('true');
+          // const update2dimage = await House.findByIdAndUpdate(
+          //   { _id },
+          //   {
+          //     $set: { 'flipbook.image2D': image2D[i] },
+          //   }
+          // );
+          image2Dlinks.push(image2D[i]);
+          //  console.log(image2Dlinks);
+        }
+        if (!e) {
+          let matches = await image2D[i].match(
+              /^data:([A-Za-z-+\/]+);base64,(.+)$/
+            ),
+            response = {};
+          if (matches.length !== 3) {
+            return new Error('Invalid input string');
+          }
+          response.type = matches[1];
+          // console.log(response.type);
+          response.data = new Buffer.from(matches[2], 'base64');
+          let decodedImg = response;
+          let imageBuffer = decodedImg.data;
+          let type = decodedImg.type;
+          const name = type.split('/');
+          // console.log(name);
+          const name1 = name[0];
+          // console.log(name1);
+          let extension = mime.extension(type);
+          // console.log(extension);
+          const rand = Math.ceil(Math.random() * 1000);
+          //Random photo name with timeStamp so it will not overide previous images.
+          const fileName = `${title}_${'2D'}_${[i]}.${extension}`;
+          //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
+          // let fileName = name1 ++ '.' + extension;
+          // console.log(filename);
+
+          path3 = path.resolve(`./public/media/flipbook/Land`);
+
+          let localpath = `${path3}/${_id}/`;
+          //console.log(localpath);
+
+          if (!fs.existsSync(localpath)) {
+            fs.mkdirSync(localpath);
+          }
+          // console.log(localpath);
+
+          fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+          ip = 'cuboidtechnologies.com';
+          //console.log(ip);
+          const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${fileName}`;
+
+          image2Dlinks.push(url);
+          //const imagepath2 = fs.readFileSync(localpath + fileName);
+          //console.log('imagepath2  ' + imagepath2);
+          // const updating = User.findByIdAndUpdate(req.user._id, {
+          //   $set: { imagepath: url },
+          // });
+
+          /************************************** */
+        }
+
+        const update2dimage = await Land.findByIdAndUpdate(
+          { _id },
+          {
+            $set: { 'flipbook.image2D': image2Dlinks },
+          }
+        );
+      }
+    }
+
+    /*****************======Image 3D==================***********/
+
+    if (
+      image3D != isNullOrUndefined &&
+      image3D != '' &&
+      image3D != ' ' &&
+      image3D != undefined
+    ) {
+      // for (let i in image3D)
+      var c = image3D.startsWith('http', 0);
+      let image3DUrl = '';
+      if (req.body.image3D) {
+        if (c) {
+          console.log('true');
+          // const update3dimage = await Land.findByIdAndUpdate(
+          //   { _id },
+          //   {
+          //     $set: { 'flipbook.image3D': image3D },
+          //   }
+          // );
+        }
+        if (!c) {
+          let matches = await image3D.match(
+              /^data:([A-Za-z-+\/]+);base64,(.+)$/
+            ),
+            response = {};
+          if (matches.length !== 3) {
+            return new Error('Invalid input string');
+          }
+          response.type = matches[1];
+          // console.log(response.type);
+          response.data = new Buffer.from(matches[2], 'base64');
+          let decodedImg = response;
+          let imageBuffer = decodedImg.data;
+          let type = decodedImg.type;
+          const name = type.split('/');
+          // console.log(name);
+          const name1 = name[0];
+          // console.log(name1);
+          let extension = mime.extension(type);
+          // console.log(extension);
+          const rand = Math.ceil(Math.random() * 1000);
+          //Random photo name with timeStamp so it will not overide previous images.
+          const fileName = `${'3D'}_${title}.${extension}`;
+          //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+
+          // let fileName = name1 ++ '.' + extension;
+          // console.log(filename);
+
+          path3 = path.resolve(`./public/media/flipbook/Land`);
+
+          let localpath = `${path3}/${_id}/`;
+          //console.log(localpath);
+
+          if (!fs.existsSync(localpath)) {
+            fs.mkdirSync(localpath);
+          }
+          // console.log(localpath);
+
+          fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+          ip = 'cuboidtechnologies.com';
+          //console.log(ip);
+          const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${fileName}`;
+          image3DUrl = url;
+          //const imagepath2 = fs.readFileSync(localpath + fileName);
+          //console.log('imagepath2  ' + imagepath2);
+          // const updating = User.findByIdAndUpdate(req.user._id, {
+          //   $set: { imagepath: url },
+          // });
+
+          /************************************** */
+          const update3dimage = await Land.findByIdAndUpdate(
+            { _id },
+            {
+              $set: { 'flipbook.image3D': image3DUrl },
+            }
+          );
+        }
+        //console.log(image3DUrl);
+      }
+    }
+
+    /*******++++++++++++====Floor Plan=============********* */
+    if (
+      floor != isNullOrUndefined &&
+      floor != '' &&
+      floor != ' ' &&
+      floor != undefined
+    ) {
+      for (let i in floor) {
+        var f = floor[i].url.startsWith('http', 0);
+        if (f) {
+          console.log('true');
+          // const update2dimage = await House.findByIdAndUpdate(
+          //   { _id },
+          //   {
+          //     $set: { 'flipbook.image2D': image2D[i] },
+          //   }
+          // );
+          //image2Dlinks.push(image2D[i]);
+          floorplan.push(floor[i]);
+          console.log(floorplan);
+        }
+        if (!f) {
+          let matches = await floor[i].url.match(
+              /^data:([A-Za-z-+\/]+);base64,(.+)$/
+            ),
+            response = {};
+          if (matches.length !== 3) {
+            return new Error('Invalid input string');
+          }
+          response.type = matches[1];
+          // console.log(response.type);
+          response.data = new Buffer.from(matches[2], 'base64');
+          let decodedImg = response;
+          let imageBuffer = decodedImg.data;
+          let type = decodedImg.type;
+          const name = type.split('/');
+          // console.log(name);
+          const name1 = name[0];
+          // console.log(name1);
+          let extension = mime.extension(type);
+          // console.log(extension);
+          const rand = Math.ceil(Math.random() * 1000);
+          //Random photo name with timeStamp so it will not overide previous images.
+          const FileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
+          //const FileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+
+          // let FileName = name1 ++ '.' + extension;
+          // console.log(filename);
+
+          path3 = path.resolve(`./public/media/flipbook/Land`);
+
+          let localpath = `${path3}/${_id}/`;
+          //console.log(localpath);
+
+          if (!fs.existsSync(localpath)) {
+            fs.mkdirSync(localpath);
+          }
+          // console.log(localpath);
+
+          fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
+          ip = 'cuboidtechnologies.com';
+          //console.log(ip);
+          const url = `${req.protocol}://${ip}/media/flipbook/Land/${_id}/${FileName}`;
+
+          let fileName = `${floor[i].fileName}`;
+          floorplan.push({ fileName, url });
+        }
+      }
+
+      const updatefloorPlan = await Land.findByIdAndUpdate(
+        { _id },
+        {
+          $set: { 'flipbook.floorPlan': floorplan },
+        }
+      );
+    }
     /*************************************************************/
 
-    // const data = await House.find({ _id }, { flipbook: 1 });
     res.status(201).json({
       status: 'success',
-      // banner: url,
-      // image2D: image2Dlinks,
-      // image3D: image3DUrl,
-      // floorplan: floorplan,
-      // description,
-      // tour360Property,
-      // map,
-      // contactSeller,
-      // propertyAvailability,
-      // sendmessageToSeller,
-      // data,
-      // data: {
-      //   flipbook: newFlipbook,
-      // },
     });
   }
   if (req.body.propertyType === 'Warehouse') {
@@ -1052,75 +1087,89 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
       }
     );
     /******************============BANNER==========********************/
-    var d = banner.startsWith('http', 0);
-    if (d) {
-      //  console.log('true');
-      const updateflipbook = await WareHouse.findByIdAndUpdate(
-        { _id },
-        {
-          $set: { 'flipbook.flipbookBanner': banner },
-        }
-      );
-    }
-    if (!d) {
-      let matches = await banner.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
-        response = {};
-      if (matches.length !== 3) {
-        return new Error('Invalid input string');
+    if (
+      banner != isNullOrUndefined &&
+      banner != '' &&
+      banner != ' ' &&
+      banner != undefined
+    ) {
+      var d = banner.startsWith('http', 0);
+      if (d) {
+        //  console.log('true');
+        const updateflipbook = await WareHouse.findByIdAndUpdate(
+          { _id },
+          {
+            $set: { 'flipbook.flipbookBanner': banner },
+          }
+        );
       }
-      response.type = matches[1];
-      // console.log(response.type);
-      response.data = new Buffer.from(matches[2], 'base64');
-      let decodedImg = response;
-      let imageBuffer = decodedImg.data;
-      let type = decodedImg.type;
-      const name = type.split('/');
-      // console.log(name);
-      const name1 = name[0];
-      // console.log(name1);
-      let extension = mime.extension(type);
-      // console.log(extension);
-      const rand = Math.ceil(Math.random() * 1000);
-      //Random photo name with timeStamp so it will not overide previous images.
-      const fileName = `${title}-${'BANNER'}.${extension}`;
-      //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
-
-      // let fileName = name1 ++ '.' + extension;
-      // console.log(filename);
-
-      path3 = path.resolve(`./public/media/flipbook/WareHouse`);
-
-      let localpath = `${path3}/${_id}/`;
-      console.log(localpath);
-
-      if (!fs.existsSync(localpath)) {
-        fs.mkdirSync(localpath);
-      }
-      // console.log(localpath);
-
-      fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-      ip = 'cuboidtechnologies.com';
-      //console.log(ip);
-      const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${fileName}`;
-
-      //const imagepath2 = fs.readFileSync(localpath + fileName);
-      //console.log('imagepath2  ' + imagepath2);
-      // const updating = User.findByIdAndUpdate(req.user._id, {
-      //   $set: { imagepath: url },
-      // });
-      console.log(url);
-
-      /************************************** */
-
-      const updateflipbook = await WareHouse.findByIdAndUpdate(
-        { _id },
-        {
-          $set: { 'flipbook.flipbookBanner': url },
+      if (!d) {
+        let matches = await banner.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+          response = {};
+        if (matches.length !== 3) {
+          return new Error('Invalid input string');
         }
-      );
+        response.type = matches[1];
+        // console.log(response.type);
+        response.data = new Buffer.from(matches[2], 'base64');
+        let decodedImg = response;
+        let imageBuffer = decodedImg.data;
+        let type = decodedImg.type;
+        const name = type.split('/');
+        // console.log(name);
+        const name1 = name[0];
+        // console.log(name1);
+        let extension = mime.extension(type);
+        // console.log(extension);
+        const rand = Math.ceil(Math.random() * 1000);
+        //Random photo name with timeStamp so it will not overide previous images.
+        const fileName = `${title}-${'BANNER'}.${extension}`;
+        //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+
+        // let fileName = name1 ++ '.' + extension;
+        // console.log(filename);
+
+        path3 = path.resolve(`./public/media/flipbook/WareHouse`);
+
+        let localpath = `${path3}/${_id}/`;
+        console.log(localpath);
+
+        if (!fs.existsSync(localpath)) {
+          fs.mkdirSync(localpath);
+        }
+        // console.log(localpath);
+
+        fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+        ip = 'cuboidtechnologies.com';
+        //console.log(ip);
+        const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${fileName}`;
+
+        //const imagepath2 = fs.readFileSync(localpath + fileName);
+        //console.log('imagepath2  ' + imagepath2);
+        // const updating = User.findByIdAndUpdate(req.user._id, {
+        //   $set: { imagepath: url },
+        // });
+        console.log(url);
+
+        /************************************** */
+
+        const updateflipbook = await WareHouse.findByIdAndUpdate(
+          { _id },
+          {
+            $set: { 'flipbook.flipbookBanner': url },
+          }
+        );
+      }
     }
 
     /***********  2D Image Array****** */
+    if (
+      image2D != isNullOrUndefined &&
+      image2D != '' &&
+      image2D != ' ' &&
+      image2D != undefined
+    ) {
+    }
     for (let i in image2D) {
       var e = image2D[i].startsWith('http', 0);
       if (e) {
@@ -1196,182 +1245,172 @@ exports.addFlipbook = catchAsync(async (req, res, next) => {
     );
 
     /*****************======Image 3D==================***********/
-
-    // for (let i in image3D)
-    var c = image3D.startsWith('http', 0);
-    let image3DUrl = '';
-    if (req.body.image3D) {
-      if (c) {
-        // console.log('true');
-        const update3dimage = await WareHouse.findByIdAndUpdate(
-          { _id },
-          {
-            $set: { 'flipbook.image3D': image3D },
+    if (
+      image3D != isNullOrUndefined &&
+      image3D != '' &&
+      image3D != ' ' &&
+      image3D != undefined
+    ) {
+      var c = image3D.startsWith('http', 0);
+      let image3DUrl = '';
+      if (req.body.image3D) {
+        if (c) {
+          // console.log('true');
+          const update3dimage = await WareHouse.findByIdAndUpdate(
+            { _id },
+            {
+              $set: { 'flipbook.image3D': image3D },
+            }
+          );
+        }
+        if (!c) {
+          let matches = await image3D.match(
+              /^data:([A-Za-z-+\/]+);base64,(.+)$/
+            ),
+            response = {};
+          if (matches.length !== 3) {
+            return new Error('Invalid input string');
           }
-        );
-      }
-      if (!c) {
-        let matches = await image3D.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
-          response = {};
-        if (matches.length !== 3) {
-          return new Error('Invalid input string');
+          response.type = matches[1];
+          // console.log(response.type);
+          response.data = new Buffer.from(matches[2], 'base64');
+          let decodedImg = response;
+          let imageBuffer = decodedImg.data;
+          let type = decodedImg.type;
+          const name = type.split('/');
+          // console.log(name);
+          const name1 = name[0];
+          // console.log(name1);
+          let extension = mime.extension(type);
+          // console.log(extension);
+          const rand = Math.ceil(Math.random() * 1000);
+          //Random photo name with timeStamp so it will not overide previous images.
+          const fileName = `${'3D'}_${title}.${extension}`;
+          //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+
+          // let fileName = name1 ++ '.' + extension;
+          // console.log(filename);
+
+          path3 = path.resolve(`./public/media/flipbook/WareHouse`);
+
+          let localpath = `${path3}/${_id}/`;
+          //console.log(localpath);
+
+          if (!fs.existsSync(localpath)) {
+            fs.mkdirSync(localpath);
+          }
+          // console.log(localpath);
+
+          fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+          ip = 'cuboidtechnologies.com';
+          //console.log(ip);
+          const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${fileName}`;
+          image3DUrl = url;
+          const update3dimage = await WareHouse.findByIdAndUpdate(
+            { _id },
+            {
+              $set: { 'flipbook.image3D': image3DUrl },
+            }
+          );
+          //const imagepath2 = fs.readFileSync(localpath + fileName);
+          //console.log('imagepath2  ' + imagepath2);
+          // const updating = User.findByIdAndUpdate(req.user._id, {
+          //   $set: { imagepath: url },
+          // });
+
+          /************************************** */
         }
-        response.type = matches[1];
-        // console.log(response.type);
-        response.data = new Buffer.from(matches[2], 'base64');
-        let decodedImg = response;
-        let imageBuffer = decodedImg.data;
-        let type = decodedImg.type;
-        const name = type.split('/');
-        // console.log(name);
-        const name1 = name[0];
-        // console.log(name1);
-        let extension = mime.extension(type);
-        // console.log(extension);
-        const rand = Math.ceil(Math.random() * 1000);
-        //Random photo name with timeStamp so it will not overide previous images.
-        const fileName = `${'3D'}_${title}.${extension}`;
-        //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
-
-        // let fileName = name1 ++ '.' + extension;
-        // console.log(filename);
-
-        path3 = path.resolve(`./public/media/flipbook/WareHouse`);
-
-        let localpath = `${path3}/${_id}/`;
-        //console.log(localpath);
-
-        if (!fs.existsSync(localpath)) {
-          fs.mkdirSync(localpath);
-        }
-        // console.log(localpath);
-
-        fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-        ip = 'cuboidtechnologies.com';
-        //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${fileName}`;
-        image3DUrl = url;
-        //const imagepath2 = fs.readFileSync(localpath + fileName);
-        //console.log('imagepath2  ' + imagepath2);
-        // const updating = User.findByIdAndUpdate(req.user._id, {
-        //   $set: { imagepath: url },
-        // });
-
-        /************************************** */
+        //console.log(image3DUrl);
       }
-      //console.log(image3DUrl);
+      //console.log(image3D);
+      // console.log(image3D);
+    }
 
-      const update3dimage = await WareHouse.findByIdAndUpdate(
+    /*******++++++++++++====Floor Plan=============********* */
+    if (
+      floor != isNullOrUndefined &&
+      floor != '' &&
+      floor != ' ' &&
+      floor != undefined
+    ) {
+      for (let i in floor) {
+        var f = floor[i].url.startsWith('http', 0);
+        console.log(f);
+        //console.log(image3D);
+        // console.log(image3D);
+        if (f) {
+          console.log('true');
+          // const update2dimage = await House.findByIdAndUpdate(
+          //   { _id },
+          //   {
+          //     $set: { 'flipbook.image2D': image2D[i] },
+          //   }
+          // );
+          //image2Dlinks.push(image2D[i]);
+          floorplan.push(floor[i]);
+          console.log(floorplan);
+        }
+        if (!f) {
+          let matches = await floor[i].url.match(
+              /^data:([A-Za-z-+\/]+);base64,(.+)$/
+            ),
+            response = {};
+          if (matches.length !== 3) {
+            return new Error('Invalid input string');
+          }
+          response.type = matches[1];
+          // console.log(response.type);
+          response.data = new Buffer.from(matches[2], 'base64');
+          let decodedImg = response;
+          let imageBuffer = decodedImg.data;
+          let type = decodedImg.type;
+          const name = type.split('/');
+          // console.log(name);
+          const name1 = name[0];
+          // console.log(name1);
+          let extension = mime.extension(type);
+          // console.log(extension);
+          const rand = Math.ceil(Math.random() * 1000);
+          //Random photo name with timeStamp so it will not overide previous images.
+          const FileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
+          //const FileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+
+          // let FileName = name1 ++ '.' + extension;
+          // console.log(filename);
+
+          path3 = path.resolve(`./public/media/flipbook/WareHouse`);
+
+          let localpath = `${path3}/${_id}/`;
+          //console.log(localpath);
+
+          if (!fs.existsSync(localpath)) {
+            fs.mkdirSync(localpath);
+          }
+          // console.log(localpath);
+
+          fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
+          ip = 'cuboidtechnologies.com';
+          //console.log(ip);
+          const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${FileName}`;
+
+          let fileName = `${floor[i].fileName}`;
+          floorplan.push({ fileName, url });
+        }
+      }
+
+      const updatefloorPlan = await WareHouse.findByIdAndUpdate(
         { _id },
         {
-          $set: { 'flipbook.image3D': image3DUrl },
+          $set: { 'flipbook.floorPlan': floorplan },
         }
       );
     }
-    //console.log(image3D);
-    // console.log(image3D);
-
-    /*******++++++++++++====Floor Plan=============********* */
-    for (let i in floor) {
-      var f = floor[i].url.startsWith('http', 0);
-      console.log(f);
-      //console.log(image3D);
-      // console.log(image3D);
-      if (f) {
-        console.log('true');
-        // const update2dimage = await House.findByIdAndUpdate(
-        //   { _id },
-        //   {
-        //     $set: { 'flipbook.image2D': image2D[i] },
-        //   }
-        // );
-        //image2Dlinks.push(image2D[i]);
-        floorplan.push(floor[i]);
-        console.log(floorplan);
-      }
-      if (!f) {
-        let matches = await floor[i].url.match(
-            /^data:([A-Za-z-+\/]+);base64,(.+)$/
-          ),
-          response = {};
-        if (matches.length !== 3) {
-          return new Error('Invalid input string');
-        }
-        response.type = matches[1];
-        // console.log(response.type);
-        response.data = new Buffer.from(matches[2], 'base64');
-        let decodedImg = response;
-        let imageBuffer = decodedImg.data;
-        let type = decodedImg.type;
-        const name = type.split('/');
-        // console.log(name);
-        const name1 = name[0];
-        // console.log(name1);
-        let extension = mime.extension(type);
-        // console.log(extension);
-        const rand = Math.ceil(Math.random() * 1000);
-        //Random photo name with timeStamp so it will not overide previous images.
-        const FileName = `${[i]}-${'floor-plan'}_${title}.${extension}`;
-        //const FileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
-
-        // let FileName = name1 ++ '.' + extension;
-        // console.log(filename);
-
-        path3 = path.resolve(`./public/media/flipbook/WareHouse`);
-
-        let localpath = `${path3}/${_id}/`;
-        //console.log(localpath);
-
-        if (!fs.existsSync(localpath)) {
-          fs.mkdirSync(localpath);
-        }
-        // console.log(localpath);
-
-        fs.writeFileSync(`${localpath}` + FileName, imageBuffer, 'utf8');
-        ip = 'cuboidtechnologies.com';
-        //console.log(ip);
-        const url = `${req.protocol}://${ip}/media/flipbook/WareHouse/${_id}/${FileName}`;
-
-        let fileName = `${floor[i].fileName}`;
-        floorplan.push({ fileName, url });
-      }
-    }
-
-    const updatefloorPlan = await WareHouse.findByIdAndUpdate(
-      { _id },
-      {
-        $set: { 'flipbook.floorPlan': floorplan },
-      }
-    );
 
     /*************************************************************/
-
-    // const data = await House.find({ _id }, { flipbook: 1 });
     res.status(201).json({
       status: 'success',
-      // banner: url,
-      // image2D: image2Dlinks,
-      // image3D: image3DUrl,
-      // floorplan: floorplan,
-      // description,
-      // tour360Property,
-      // map,
-      // contactSeller,
-      // propertyAvailability,
-      // sendmessageToSeller,
-      // data,
-      // data: {
-      //   flipbook: newFlipbook,
-      // },
     });
   }
-  //const newFlipbook = await Flipbook.create(req.body);
-  // res.status(201).json({/
-  // status: 'success',
-  // data: {
-  //   flipbook: newFlipbook,
-  // },
-  // });
 });
 
 exports.saveFlipbook = catchAsync(async (req, res, next) => {
@@ -1423,9 +1462,9 @@ exports.saveFlipbook = catchAsync(async (req, res, next) => {
 exports.getFlipbookSavedByUser = catchAsync(async (req, res) => {
   let saveflipbook = [];
 
-  const _id = req.params.id;
-  const user = await User.findById({ _id }, { savedflipbook: 1 });
-
+  const id = req.params.id;
+  const user = await User.findById({ _id: id }, { savedflipbook: 1 });
+  console.log(user);
   for (var i in user.savedflipbook) {
     let flipbookdata = [];
     const house = await House.findById({ _id: user.savedflipbook[i] });

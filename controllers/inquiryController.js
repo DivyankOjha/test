@@ -6,6 +6,10 @@ const User = require('../models/userModel');
 const sendEmail = require('./../utils/email');
 
 const Customer = require('../models/customerInquiry');
+const House = require('../models/houseModel');
+const Land = require('../models/landModel');
+const Hotel = require('../models/hotelModel');
+const WareHouse = require('../models/warehouseModel');
 
 //post inquiry
 exports.Inquiry = catchAsync(async (req, res, next) => {
@@ -142,7 +146,7 @@ exports.InquiryEmail = catchAsync(async (req, res) => {
       from: `CUBOID <${emailsettings.username}>`,
       to: inquiryemail.email,
       subject: req.body.subject[0],
-      html: `<p>Hello ${req.body.message[0]}</p>`,
+      html: `<p>${req.body.message[0]}</p>`,
     };
     console.log('if 1');
     //  }
@@ -198,31 +202,173 @@ exports.filterbydate = catchAsync(async (req, res) => {
 
 //Customer Inquiry
 exports.customerInquiry = catchAsync(async (req, res, next) => {
-  const newInquiry = await Customer.create(req.body);
-  console.log(newInquiry.userEmail);
-  console.log(req.body.userId);
-  const finduser = await User.findById({ _id: req.body.userId });
-  console.log(finduser.email);
-  str1 = finduser.firstname;
-  str2 = finduser.lastname;
-  const username = str1.concat(' ', str2);
+  console.log(req.body);
 
-  const updateInquiry = await Customer.updateMany(
-    { _id: newInquiry._id },
-    { $set: { userEmail: finduser.email, username: username } }
-  );
-  const message = `<p> ${newInquiry.message} </p> `;
+  let findpropertyHouse = await House.findById({ _id: req.body.propertyID });
+  let findpropertyLand = await Land.findById({ _id: req.body.propertyID });
+  let findpropertyHotel = await Hotel.findById({
+    _id: req.body.propertyID,
+  });
+  let findpropertyWarehouse = await WareHouse.findById({
+    _id: req.body.propertyID,
+  });
+  //  console.log(findpropertyHouse);
+  if (findpropertyHouse) {
+    console.log('found house');
 
-  await sendEmail({
-    email: newInquiry.sellerEmail,
-    subject: `Hi, ${newInquiry.sellerName}, i am customer and this is my inquiry`,
-    //  subject: 'Your password reset token (valid for 10 min)',
-    message,
-  });
-  res.status(201).json({
-    status: 'success',
-    inquiry: newInquiry,
-  });
+    let newInquiry = await Customer.create(req.body);
+    let updatedata = await Customer.findByIdAndUpdate(
+      { _id: newInquiry._id },
+      {
+        $set: {
+          sellerEmail: findpropertyHouse.sellerDetails.selleremail,
+          sellerName: findpropertyHouse.sellerDetails.sellername,
+          flipbookName: findpropertyHouse.flipbook.title,
+        },
+      }
+    );
+    //console.log(newInquiry.userEmail);
+    console.log(req.body.userId);
+    const finduser = await User.findById({ _id: req.body.userId });
+    console.log(finduser.email);
+    str1 = finduser.firstname;
+    str2 = finduser.lastname;
+    const username = str1.concat(' ', str2);
+
+    const updateInquiry = await Customer.updateMany(
+      { _id: newInquiry._id },
+      { $set: { userEmail: finduser.email, username: username } }
+    );
+    const message = `<p> ${newInquiry.message} </p> `;
+    let currentinquiry = await Customer.findById({ _id: newInquiry._id });
+    await sendEmail({
+      email: currentinquiry.sellerEmail,
+      subject: `Hi, ${currentinquiry.sellerName}, i am customer and this is my inquiry`,
+      //  subject: 'Your password reset token (valid for 10 min)',
+      message,
+    });
+    res.status(201).json({
+      status: 'success',
+      inquiry: newInquiry,
+    });
+  }
+  if (findpropertyLand) {
+    console.log('found');
+
+    const newInquiry = await Customer.create(req.body);
+    let updatedata = await Customer.findByIdAndUpdate(
+      { _id: newInquiry._id },
+      {
+        $set: {
+          sellerEmail: findpropertyLand.sellerDetails.selleremail,
+          sellerName: findpropertyLand.sellerDetails.sellername,
+          flipbookName: findpropertyLand.flipbook.title,
+        },
+      }
+    );
+    //console.log(newInquiry.userEmail);
+    console.log(req.body.userId);
+    const finduser = await User.findById({ _id: req.body.userId });
+    console.log(finduser.email);
+    str1 = finduser.firstname;
+    str2 = finduser.lastname;
+    const username = str1.concat(' ', str2);
+
+    const updateInquiry = await Customer.updateMany(
+      { _id: newInquiry._id },
+      { $set: { userEmail: finduser.email, username: username } }
+    );
+    const message = `<p> ${newInquiry.message} </p> `;
+    let currentinquiry = await Customer.findById({ _id: newInquiry._id });
+    await sendEmail({
+      email: currentinquiry.sellerEmail,
+      subject: `Hi, ${currentinquiry.sellerName}, i am customer and this is my inquiry`,
+      //  subject: 'Your password reset token (valid for 10 min)',
+      message,
+    });
+    res.status(201).json({
+      status: 'success',
+      inquiry: newInquiry,
+    });
+  }
+  if (findpropertyHotel) {
+    console.log('found');
+
+    const newInquiry = await Customer.create(req.body);
+    let updatedata = await Customer.findByIdAndUpdate(
+      { _id: newInquiry._id },
+      {
+        $set: {
+          sellerEmail: findpropertyHotel.sellerDetails.selleremail,
+          sellerName: findpropertyHotel.sellerDetails.sellername,
+          flipbookName: findpropertyHotel.flipbook.title,
+        },
+      }
+    );
+    //console.log(newInquiry.userEmail);
+    console.log(req.body.userId);
+    const finduser = await User.findById({ _id: req.body.userId });
+    console.log(finduser.email);
+    str1 = finduser.firstname;
+    str2 = finduser.lastname;
+    const username = str1.concat(' ', str2);
+
+    const updateInquiry = await Customer.updateMany(
+      { _id: newInquiry._id },
+      { $set: { userEmail: finduser.email, username: username } }
+    );
+    const message = `<p> ${newInquiry.message} </p> `;
+    let currentinquiry = await Customer.findById({ _id: newInquiry._id });
+
+    await sendEmail({
+      email: currentinquiry.sellerEmail,
+      subject: `Hi, ${currentinquiry.sellerName}, i am customer and this is my inquiry`,
+      //  subject: 'Your password reset token (valid for 10 min)',
+      message,
+    });
+    res.status(201).json({
+      status: 'success',
+      inquiry: newInquiry,
+    });
+  }
+  if (findpropertyWarehouse) {
+    const newInquiry = await Customer.create(req.body);
+    let updatedata = await Customer.findByIdAndUpdate(
+      { _id: newInquiry._id },
+      {
+        $set: {
+          sellerEmail: findpropertyWarehouse.sellerDetails.selleremail,
+          sellerName: findpropertyWarehouse.sellerDetails.sellername,
+          flipbookName: findpropertyWarehouse.flipbook.title,
+        },
+      }
+    );
+    //console.log(newInquiry.userEmail);
+    console.log(req.body.userId);
+    const finduser = await User.findById({ _id: req.body.userId });
+    console.log(finduser.email);
+    str1 = finduser.firstname;
+    str2 = finduser.lastname;
+    const username = str1.concat(' ', str2);
+
+    const updateInquiry = await Customer.updateMany(
+      { _id: newInquiry._id },
+      { $set: { userEmail: finduser.email, username: username } }
+    );
+    const message = `<p> ${newInquiry.message} </p> `;
+    let currentinquiry = await Customer.findById({ _id: newInquiry._id });
+
+    await sendEmail({
+      email: currentinquiry.sellerEmail,
+      subject: `Hi, ${currentinquiry.sellerName}, i am customer and this is my inquiry`,
+      //  subject: 'Your password reset token (valid for 10 min)',
+      message,
+    });
+    res.status(201).json({
+      status: 'success',
+      inquiry: newInquiry,
+    });
+  }
 });
 
 exports.getAllCustomerInquiry = catchAsync(async (req, res, next) => {

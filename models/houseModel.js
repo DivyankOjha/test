@@ -18,6 +18,10 @@ const houseSchema = new mongoose.Schema({
     otherDetails: String,
     mapLink: String,
     selectSimilarProperties: Array, //this field not clear image icon is displayed in design
+    coordinates: {
+      longitude: Number,
+      latitude: Number,
+    },
     //area: { type: Number },
     // price: Number,
   },

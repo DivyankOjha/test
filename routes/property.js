@@ -61,7 +61,7 @@ router.post(
 
 router.post(
   '/admin/post-property-reply-email',
-  authController.protect,
+  //authController.protect,
 
   propertyController.postPropertyEmail
 );

@@ -25,6 +25,9 @@ const allAttributes = require('./routes/allAttributes');
 const review = require('./routes/review');
 const transactions = require('./routes/subTransaction');
 
+const maxSlider = require('./routes/maxFindSlider');
+const QueryRoutes = require('./routes/queryRoutes/houseQuery');
+
 const globalErrorHandler = require('./controllers/errorController');
 const app = express();
 
@@ -116,9 +119,10 @@ app.use('/api/admin/dashboard', dashboardRoutes);
 app.use('/api/admin/flipbook', flipbookRoutes);
 app.use('/api/admin/attributes', allAttributes);
 app.use('/api/admin', transactions);
+app.use('/api/admin/max', maxSlider);
+app.use('/api/admin/', QueryRoutes);
 
 app.use('/api/review', review);
-
 app.use(globalErrorHandler);
 
 module.exports = app;

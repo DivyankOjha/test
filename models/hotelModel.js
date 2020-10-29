@@ -18,6 +18,10 @@ const hotelSchema = new mongoose.Schema({
     propertyType: { type: String },
     otherDetails: String,
     mapLink: String,
+    coordinates: {
+      longitude: Number,
+      latitude: Number,
+    },
     selectSimilarProperties: Array,
   },
 

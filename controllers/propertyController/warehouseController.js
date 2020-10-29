@@ -5,6 +5,7 @@ const WareHouse = require('../../models/warehouseModel');
 const path = require('path');
 const mime = require('mime');
 const fs = require('fs');
+const { isNullOrUndefined } = require('util');
 
 exports.addWarehouse = catchAsync(async (req, res, next) => {
   const warehouse = await WareHouse.create(req.body);
@@ -56,79 +57,10 @@ exports.addWarehouse = catchAsync(async (req, res, next) => {
     }
   );
 
-  var matches = await req.body.sellerDetails.sellerlogo.match(
-      /^data:([A-Za-z-+\/]+);base64,(.+)$/
-    ),
-    response = {};
-  //console.log(matches);
-  if (matches.length !== 3) {
-    return new Error('Invalid input string');
-  }
-  response.type = matches[1];
-  console.log(response.type);
-  response.data = new Buffer.from(matches[2], 'base64');
-  let decodedImg = response;
-  let imageBuffer = decodedImg.data;
-  let type = decodedImg.type;
-  const name = type.split('/');
-  console.log(name);
-  const name1 = name[0];
-  console.log(name1);
-  let extension = mime.extension(type);
-  console.log(extension);
-  const rand = Math.ceil(Math.random() * 1000);
-  //Random photo name with timeStamp so it will not overide previous images.
-  const fileName = `${warehouse.sellerDetails.sellername}.${extension}`;
-  //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
-
-  // let fileName = name1 ++ '.' + extension;
-  console.log(fileName);
-  let abc = 'abc';
-  path3 = path.resolve(`./public/media/admin/warehouse`);
-
-  let localpath = `${path3}/${warehouse._id}/`;
-  //console.log(localpath);
-
-  if (!fs.existsSync(localpath)) {
-    fs.mkdirSync(localpath);
-  }
-  //console.log(localpath);
-
-  fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
-  ip = 'cuboidtechnologies.com';
-  //console.log(ip);
-  const url = `${req.protocol}://${ip}/media/admin/warehouse/${warehouse._id}/${fileName}`;
-
-  console.log(url);
-
-  const logoUpdate = await WareHouse.findByIdAndUpdate(
-    { _id: warehouse._id },
-    { $set: { 'sellerDetails.sellerlogo': url } }
-  );
-
-  res.status(201).json({
-    status: 'success',
-    data: {
-      warehouse: warehouse,
-    },
-  });
-});
-
-exports.updateWarehouse = catchAsync(async (req, res, next) => {
-  // console.log(req.params.id);
-  let sellerlogo = req.body.sellerDetails.sellerlogo;
-  var d = sellerlogo.startsWith('http', 0);
-  if (d) {
-    console.log('true');
-    const updatedellerlogo = await WareHouse.findByIdAndUpdate(
-      { _id: req.params.id },
-      {
-        $set: { 'sellerDetails.sellerlogo': sellerlogo },
-      }
-    );
-  }
-  if (!d) {
-    console.log(false);
+  if (
+    req.body.sellerDetails.sellerlogo &&
+    req.body.sellerDetails.sellerlogo !== ''
+  ) {
     var matches = await req.body.sellerDetails.sellerlogo.match(
         /^data:([A-Za-z-+\/]+);base64,(.+)$/
       ),
@@ -151,15 +83,15 @@ exports.updateWarehouse = catchAsync(async (req, res, next) => {
     console.log(extension);
     const rand = Math.ceil(Math.random() * 1000);
     //Random photo name with timeStamp so it will not overide previous images.
-    const fileName = `${req.body.sellerDetails.sellername}.${extension}`;
+    const fileName = `${warehouse.sellerDetails.sellername}.${extension}`;
     //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
     // let fileName = name1 ++ '.' + extension;
     console.log(fileName);
     let abc = 'abc';
-    path3 = path.resolve(`./public/media/admin/hotel`);
+    path3 = path.resolve(`./public/media/admin/warehouse`);
 
-    let localpath = `${path3}/${req.params.id}/`;
+    let localpath = `${path3}/${warehouse._id}/`;
     //console.log(localpath);
 
     if (!fs.existsSync(localpath)) {
@@ -170,14 +102,94 @@ exports.updateWarehouse = catchAsync(async (req, res, next) => {
     fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
     ip = 'cuboidtechnologies.com';
     //console.log(ip);
-    const url = `${req.protocol}://${ip}/media/admin/hotel/${req.params.id}/${fileName}`;
+    const url = `https:://${ip}/media/admin/warehouse/${warehouse._id}/${fileName}`;
 
     console.log(url);
 
     const logoUpdate = await WareHouse.findByIdAndUpdate(
-      { _id: req.params.id },
+      { _id: warehouse._id },
       { $set: { 'sellerDetails.sellerlogo': url } }
     );
+  }
+  res.status(201).json({
+    status: 'success',
+    data: {
+      warehouse: warehouse,
+    },
+  });
+});
+
+exports.updateWarehouse = catchAsync(async (req, res, next) => {
+  // console.log(req.params.id);
+  let sellerlogo = req.body.sellerDetails.sellerlogo;
+  if (
+    req.body.sellerDetails.sellerlogo &&
+    req.body.sellerDetails.sellerlogo != '' &&
+    req.body.sellerDetails.sellerlogo != ' ' &&
+    req.body.sellerDetails.sellerlogo != isNullOrUndefined
+  ) {
+    var d = sellerlogo.startsWith('http', 0);
+    if (d) {
+      console.log('true');
+      const updatedellerlogo = await WareHouse.findByIdAndUpdate(
+        { _id: req.params.id },
+        {
+          $set: { 'sellerDetails.sellerlogo': sellerlogo },
+        }
+      );
+    }
+    if (!d) {
+      console.log(false);
+      var matches = await req.body.sellerDetails.sellerlogo.match(
+          /^data:([A-Za-z-+\/]+);base64,(.+)$/
+        ),
+        response = {};
+      //console.log(matches);
+      if (matches.length !== 3) {
+        return new Error('Invalid input string');
+      }
+      response.type = matches[1];
+      console.log(response.type);
+      response.data = new Buffer.from(matches[2], 'base64');
+      let decodedImg = response;
+      let imageBuffer = decodedImg.data;
+      let type = decodedImg.type;
+      const name = type.split('/');
+      console.log(name);
+      const name1 = name[0];
+      console.log(name1);
+      let extension = mime.extension(type);
+      console.log(extension);
+      const rand = Math.ceil(Math.random() * 1000);
+      //Random photo name with timeStamp so it will not overide previous images.
+      const fileName = `${req.body.sellerDetails.sellername}.${extension}`;
+      //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
+
+      // let fileName = name1 ++ '.' + extension;
+      console.log(fileName);
+      let abc = 'abc';
+      path3 = path.resolve(`./public/media/admin/hotel`);
+
+      let localpath = `${path3}/${req.params.id}/`;
+      //console.log(localpath);
+
+      if (!fs.existsSync(localpath)) {
+        fs.mkdirSync(localpath);
+      }
+      //console.log(localpath);
+
+      fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
+      ip = 'cuboidtechnologies.com';
+      //console.log(ip);
+      const url = `https://${ip}/media/admin/hotel/${req.params.id}/${fileName}`;
+
+      console.log(url);
+
+      const logoUpdate = await WareHouse.findByIdAndUpdate(
+        { _id: req.params.id },
+        { $set: { 'sellerDetails.sellerlogo': url } }
+      );
+    }
   }
 
   const getware = await WareHouse.findByIdAndUpdate(
