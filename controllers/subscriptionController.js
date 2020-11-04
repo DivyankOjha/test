@@ -62,8 +62,15 @@ exports.Subscription = catchAsync(async (req, res, next) => {
       email: getUser.email,
     };
     //console.log(addInRecordData);
+    let home = 'https://cuboidtechnologies.com';
     let addRecord = await subTransaction.create(addInRecordData);
-    const message = `<p> Your are Subscribed  </p> `;
+    const message = `<h1>Hi, ${getUser.firstname} , <br> Congratulations!<br>  Your subscription has been activated! </h1>
+     <br><p>You signed up - now it's time to search fro properties like a hero within the shortest time possible <br>
+     You can start at our  <a href = "${home}"> <b>Home Page</b></a> we have classified the properties in a way that get you
+     started easily.
+     
+
+     </p> `;
 
     await sendEmail({
       email: getUser.email,

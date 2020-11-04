@@ -173,6 +173,10 @@ exports.updateHouse = catchAsync(async (req, res, next) => {
     { _id: req.params.id },
     {
       $set: {
+        'location.coordinates.longitude':
+          req.body.location.coordinates.longitude,
+        'location.coordinates.lattitude':
+          req.body.location.coordinates.lattitude,
         propertyDetails: req.body.propertyDetails,
         attributes: req.body.attributes,
         'sellerDetails.sellername': req.body.sellerDetails.sellername,

@@ -8,6 +8,7 @@ const User = require('../models/userModel');
 const HouseQuery = require('../models/queryModels/houseModel');
 const LandQuery = require('../models/queryModels/landModel');
 const HotelQuery = require('../models/queryModels/hotelModel');
+const WarehouseQuery = require('../models/queryModels/warehouseModel');
 
 exports.searchHouse1 = catchAsync(async (req, res) => {
   let testbodt = req.body;
@@ -42,70 +43,161 @@ exports.searchHouse1 = catchAsync(async (req, res) => {
 
   let bedroom = attributes.bedroom;
 
-  if (mainCategory && !bedroom && !subCategory && !propertyStatus && !area) {
-    console.log('inside main category');
-    var search = await House.aggregate([
-      {
-        $match: {
-          isFlipbook: true,
-          'attributes.mainCategory': { $in: [mainCategory] },
-        },
+  // if (mainCategory && !bedroom && !subCategory && !propertyStatus && !area) {
+  //   console.log('inside main category');
+  //   var search = await House.aggregate([
+  //     {
+  //       $match: {
+  //         isFlipbook: true,
+  //         'attributes.mainCategory': { $in: [mainCategory] },
+  //       },
+  //     },
+  //   ]);
+  //   let SData;
+  //   if (search.length > 0) {
+  //     /**************************************************** */
+  //     SData = await HouseQuery.create(req.body);
+  //     console.log(SData._id);
+
+  //     res.status(200).json({
+  //       status: 'success',
+  //       results: search.length,
+  //       queryId: SData._id,
+  //       search,
+  //     });
+
+  //     /**************************************************** */
+  //   } else {
+  //     res.status(200).json({
+  //       status: 'success',
+  //       results: search.length,
+  //       search,
+  //     });
+  //   }
+  // } else if (mainCategory && bedroom && !subCategory && !area) {
+  //   console.log('inside maincategory+bedroom');
+  //   var search = await House.aggregate([
+  //     {
+  //       $match: {
+  //         'attributes.mainCategory': { $in: [mainCategory] },
+  //         'attributes.bedroom': { $eq: bedroom },
+  //       },
+  //     },
+  //   ]);
+  //   let SData;
+  //   if (search.length > 0) {
+  //     /**************************************************** */
+  //     SData = await HouseQuery.create(req.body);
+  //     console.log(SData._id);
+
+  //     res.status(200).json({
+  //       status: 'success',
+  //       results: search.length,
+  //       queryId: SData._id,
+  //       search,
+  //     });
+
+  //     /**************************************************** */
+  //   } else {
+  //     res.status(200).json({
+  //       status: 'success',
+  //       results: search.length,
+  //       search,
+  //     });
+  //   }
+  // }
+  var search = await House.aggregate([
+    {
+      $match: {
+        $or: [
+          //$or
+          {
+            'attributes.bedroom': {
+              $in: [bedroom],
+            },
+          },
+          {
+            'attributes.opticalfiber': {
+              $in: [opticalfiber],
+            },
+          },
+          {
+            'attributes.swimmingpool': {
+              $in: [swimmingpool],
+            },
+          },
+          {
+            'attributes.fireplace': {
+              $in: [fireplace],
+            },
+          },
+          {
+            'attributes.petsallowed': {
+              $in: [petsallowed],
+            },
+          },
+          {
+            'attributes.solarhotwater': {
+              $in: [solarhotwater],
+            },
+          },
+          {
+            'attributes.waterfront': {
+              $in: [waterfront],
+            },
+          },
+          {
+            'attributes.disabilityfeature': {
+              $in: [disabilityfeature],
+            },
+          },
+          {
+            'attributes.maturegarden': {
+              $in: [maturegarden],
+            },
+          },
+          {
+            'attributes.cctv': { $in: [cctv] },
+          },
+          {
+            'attributes.borehole': {
+              $in: [borehole],
+            },
+          },
+          {
+            'attributes.balcony': {
+              $in: [balcony],
+            },
+          },
+          {
+            'attributes.partyarea': {
+              $in: [partyarea],
+            },
+          },
+          {
+            'attributes.mainCategory': {
+              $in: [mainCategory],
+            },
+          },
+          {
+            'sellerDetails.location': {
+              $in: [area],
+            },
+            'attributes.cost': { $lte: maxcost, $gte: mincost },
+          },
+        ],
       },
-    ]);
-    let SData;
-    if (search.length > 0) {
-      /**************************************************** */
-      SData = await HouseQuery.create(req.body);
-      console.log(SData._id);
+    },
 
-      res.status(200).json({
-        status: 'success',
-        results: search.length,
-        queryId: SData._id,
-        search,
-      });
-
-      /**************************************************** */
-    } else {
-      res.status(200).json({
-        status: 'success',
-        results: search.length,
-        search,
-      });
-    }
-  } else if (mainCategory && bedroom && !subCategory && !area) {
-    console.log('inside maincategory+bedroom');
-    var search = await House.aggregate([
-      {
-        $match: {
-          'attributes.mainCategory': { $in: [mainCategory] },
-          'attributes.bedroom': { $eq: bedroom },
-        },
+    {
+      $match: {
+        isFlipbook: true,
+        'attributes.mainCategory': `${mainCategory}`,
+        'attributes.subCategory': `${subCategory}`,
+        'attributes.propertyStatus': `${propertyStatus}`,
       },
-    ]);
-    let SData;
-    if (search.length > 0) {
-      /**************************************************** */
-      SData = await HouseQuery.create(req.body);
-      console.log(SData._id);
-
-      res.status(200).json({
-        status: 'success',
-        results: search.length,
-        queryId: SData._id,
-        search,
-      });
-
-      /**************************************************** */
-    } else {
-      res.status(200).json({
-        status: 'success',
-        results: search.length,
-        search,
-      });
-    }
-  }
-
+    },
+  ]);
   // var search = await House.aggregate([
   //   {
   //     $match: {
@@ -194,27 +286,27 @@ exports.searchHouse1 = catchAsync(async (req, res) => {
   //   //  $group: { _id: null, count: { $sum: 1 } },
   // ]);
 
-  // let SData;
-  // if (search.length > 0) {
-  //   /**************************************************** */
-  //   SData = await HouseQuery.create(req.body);
-  //   console.log(SData._id);
+  let SData;
+  if (search.length > 0) {
+    /**************************************************** */
+    SData = await HouseQuery.create(req.body);
+    console.log(SData._id);
 
-  //   res.status(200).json({
-  //     status: 'success',
-  //     results: search.length,
-  //     queryId: SData._id,
-  //     search,
-  //   });
+    res.status(200).json({
+      status: 'success',
+      results: search.length,
+      queryId: SData._id,
+      search,
+    });
 
-  //   /**************************************************** */
-  // } else {
-  //   res.status(200).json({
-  //     status: 'success',
-  //     results: search.length,
-  //     search,
-  //   });
-  // }
+    /**************************************************** */
+  } else {
+    res.status(200).json({
+      status: 'success',
+      results: search.length,
+      search,
+    });
+  }
 });
 exports.searchHouse = catchAsync(async (req, res) => {
   let testbodt = req.body;
@@ -258,12 +350,12 @@ exports.searchHouse = catchAsync(async (req, res) => {
   let bathtab = attributes.bathtab;
   let parking = attributes.parking;
 
-  let minliv = req.body.livingArea.min;
-  let maxliv = req.body.livingArea.max;
-  let mingarden = req.body.gardenArea.min;
-  let maxgarden = req.body.gardenArea.max;
-  let minkit = req.body.kitchenArea.min;
-  let maxkit = req.body.kitchenArea.max;
+  let minliv = req.body.livingsize.min;
+  let maxliv = req.body.livingsize.max;
+  let mingarden = req.body.gardensize.min;
+  let maxgarden = req.body.gardensize.max;
+  let minkit = req.body.kitchensize.min;
+  let maxkit = req.body.kitchensize.max;
 
   /********************Query************************************ */
 
@@ -1020,7 +1112,8 @@ exports.searchWarehousePage1 = catchAsync(async (req, res) => {
   let minsizeinfeet = req.body.sizeinfeet.min;
   let maxsizeinfeet = req.body.sizeinfeet.max;
 
-  let kmfromtarmac = req.body.kmfromtarmac; //tarmac change in frontend also.
+  let kmfromtarmac = req.body.kmfromtarmac;
+
   console.log(kmfromtarmac);
 
   var search = await WareHouse.aggregate([
@@ -1048,11 +1141,26 @@ exports.searchWarehousePage1 = catchAsync(async (req, res) => {
 
   //  console.log(req.user.id); //add login check
 
-  res.status(200).json({
-    status: 'success',
-    results: search.length,
-    search,
-  });
+  let SData;
+  if (search.length > 0) {
+    SData = await WarehouseQuery.create(req.body);
+
+    //  console.log(SData);
+    console.log(SData._id);
+    res.status(200).json({
+      status: 'success',
+      results: search.length,
+      search,
+      queryId: SData._id,
+    });
+    /**************************************************** */
+  } else {
+    res.status(200).json({
+      status: 'success',
+      results: search.length,
+      search,
+    });
+  }
 });
 exports.searchWarehousePage2 = catchAsync(async (req, res) => {
   //let area = req.body.area;
@@ -1127,13 +1235,35 @@ exports.searchWarehousePage2 = catchAsync(async (req, res) => {
     },
   ]);
 
-  //  console.log(req.user.id); //add login check
+  let SData;
+  if (search.length > 0) {
+    SData = await WarehouseQuery.create(req.body);
 
-  res.status(200).json({
-    status: 'success',
-    results: search.length,
-    search,
-  });
+    //  console.log(SData);
+    console.log(SData._id);
+    let updateSdata = await WarehouseQuery.findByIdAndUpdate(
+      { _id: SData._id },
+      {
+        $set: {
+          page2: true,
+        },
+      }
+    );
+    console.log(updateSdata);
+    res.status(200).json({
+      status: 'success',
+      results: search.length,
+      search,
+      queryId: SData._id,
+    });
+    /**************************************************** */
+  } else {
+    res.status(200).json({
+      status: 'success',
+      results: search.length,
+      search,
+    });
+  }
 });
 exports.searchWarehousePage3 = catchAsync(async (req, res) => {
   let attributes = req.body.attributes;
@@ -1253,11 +1383,32 @@ exports.searchWarehousePage3 = catchAsync(async (req, res) => {
       },
     },
   ]);
+  let SData;
+  if (search.length > 0) {
+    SData = await WarehouseQuery.create(req.body);
 
-  //  console.log(req.user.id); //add login check
-  res.status(200).json({
-    status: 'success',
-    results: search.length,
-    search,
-  });
+    console.log(SData._id);
+    let updateSdata = await WarehouseQuery.findByIdAndUpdate(
+      { _id: SData._id },
+      {
+        $set: {
+          page3: true,
+        },
+      }
+    );
+    console.log(updateSdata);
+    res.status(200).json({
+      status: 'success',
+      results: search.length,
+      search,
+      queryId: SData._id,
+    });
+    /**************************************************** */
+  } else {
+    res.status(200).json({
+      status: 'success',
+      results: search.length,
+      search,
+    });
+  }
 });

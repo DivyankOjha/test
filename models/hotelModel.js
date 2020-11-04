@@ -4,7 +4,13 @@ const Currency = mongoose.Types.Currency;
 
 const hotelSchema = new mongoose.Schema({
   //page1 in admin add property details
-
+  location: {
+    coordinates: {
+      lattitude: { type: Number },
+      longitude: { type: Number },
+    },
+    type: { type: String, default: 'Point' },
+  },
   isFlipbook: { type: Boolean, default: false },
   isStatus: { type: Boolean, default: true },
   categoryType: { type: String, default: 'Hotel' },
@@ -17,12 +23,6 @@ const hotelSchema = new mongoose.Schema({
     propertyDescription: String,
     propertyType: { type: String },
     otherDetails: String,
-    mapLink: String,
-    coordinates: {
-      longitude: Number,
-      latitude: Number,
-    },
-    selectSimilarProperties: Array,
   },
 
   attributes: {
@@ -74,11 +74,11 @@ const hotelSchema = new mongoose.Schema({
     //minimumprice: Number,
     location: String, //address
     description: String, // this point - !cleared
-    maplink: String,
-    nearestplace: {
-      placename: String,
-      kms: String,
-    },
+    // maplink: String,
+    // nearestplace: {
+    //   placename: String,
+    //   kms: String,
+    // },
   },
 
   //FlipbookSchema

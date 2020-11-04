@@ -5,6 +5,9 @@ const queryHouseController = require('../../controllers/QueryController/queryHou
 const router = express.Router();
 
 router.get('/get-query-by-id/:id', queryHouseController.getQueryById);
-//router.get('/get-land-query-by-id/:id', queryHouseController.getQueryById);
+router.post(
+  '/get-properties-in-neighbourhood',
+  queryHouseController.getGeoLocation
+);
 
 module.exports = router;

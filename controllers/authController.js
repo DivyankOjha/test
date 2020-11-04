@@ -27,8 +27,7 @@ const createSendToken = (user, statusCode, req, res) => {
 
   // Remove password from output
   user.password = undefined;
-  user.imagepath = undefined;
-
+  //  user.imagepath = undefined;
   res.status(statusCode).json({
     status: 'success',
     token,
@@ -79,7 +78,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   };
   transporter.sendMail(mailOptions, function (err) {
     if (err) {
-      console.log('ERRor sending mail: ' + err);
+      console.log('Error sending mail: ' + err);
     } else {
       console.log('Mail sent to: ' + newUser.email);
     }
@@ -161,7 +160,8 @@ exports.login = catchAsync(async (req, res, next) => {
   }
   // 2) Check if user exists && password is correct
   const user = await User.findOne({ email }).select('+password');
-
+  console.log(user.passsword);
+  //console.log(user.correctPassword(password, user.password));
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 200));
   }

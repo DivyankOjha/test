@@ -4,11 +4,18 @@ const Currency = mongoose.Types.Currency;
 
 const landQuery = new mongoose.Schema({
   //page1 in admin add property details
-
+  location: {
+    coordinates: {
+      lattitude: { type: Number },
+      longitude: { type: Number },
+    },
+    type: { type: String, default: 'Point' },
+  },
   categoryType: { type: String, default: 'Land' },
   page2: { type: Boolean, default: false },
   page3: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
+
   area: String,
   cost: {
     min: Number,
@@ -22,7 +29,9 @@ const landQuery = new mongoose.Schema({
   attributes: {
     mainCategory: String,
 
-    leasefreehold: String,
+    // leasefreehold: String,
+    lease: Boolean,
+    freehold: Boolean,
 
     councilwater: { type: Boolean },
     electricity: { type: Boolean },

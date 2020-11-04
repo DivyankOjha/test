@@ -144,6 +144,7 @@ exports.addProperty = catchAsync(async (req, res, next) => {
     $set: { propertyimage: propertylinks },
   });
   return res.status(200).json({
+    status: 'success',
     propertylinks,
     urlpath,
   });

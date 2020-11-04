@@ -16,7 +16,6 @@ const hotelQuery = new mongoose.Schema({
   kmfromtarmac: { type: Number },
   conferenceroom: { type: Number },
   attributes: {
-    mainCategory: { type: String, default: 'let' },
     class: { type: String },
     locality: { type: String },
 

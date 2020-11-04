@@ -2,7 +2,13 @@ const mongoose = require('mongoose');
 
 const houseSchema = new mongoose.Schema({
   //page1 in admin add property details
-
+  location: {
+    coordinates: {
+      longitude: { type: Number },
+      lattitude: { type: Number },
+    },
+    type: { type: String, default: 'Point' },
+  },
   isFlipbook: { type: Boolean, default: false },
   isStatus: { type: Boolean, default: true },
   categoryType: { type: String, default: 'House' },
@@ -16,12 +22,12 @@ const houseSchema = new mongoose.Schema({
     propertyDescription: String,
     propertyType: { type: String, default: 'House' },
     otherDetails: String,
-    mapLink: String,
-    selectSimilarProperties: Array, //this field not clear image icon is displayed in design
-    coordinates: {
-      longitude: Number,
-      latitude: Number,
-    },
+    // mapLink: String,
+    // selectSimilarProperties: Array, //this field not clear image icon is displayed in design
+    // coordinates: {
+    //   longitude: Number,
+    //   latitude: Number,
+    // },
     //area: { type: Number },
     // price: Number,
   },
@@ -97,11 +103,11 @@ const houseSchema = new mongoose.Schema({
     // minimumprice: Number,
     location: String, //address
     description: String, // this point - !cleared
-    maplink: String,
-    nearestplace: {
-      placename: String,
-      kms: String,
-    },
+    // maplink: String,
+    // nearestplace: {
+    //   placename: String,
+    //   kms: String,
+    // },
   },
   //FlipbookSchema
   flipbook: {

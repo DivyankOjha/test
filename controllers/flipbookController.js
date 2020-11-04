@@ -9,6 +9,11 @@ const Hotel = require('./../models/hotelModel');
 const WareHouse = require('./../models/warehouseModel');
 const User = require('../models/userModel');
 const { isNullOrUndefined, isUndefined } = require('util');
+const SimilarPropQuery = require('../models/queryModels/similarPropertyModel');
+const HouseQuery = require('../models/queryModels/houseModel');
+const LandQuery = require('../models/queryModels/landModel');
+const HotelQuery = require('../models/queryModels/hotelModel');
+const WarehouseQuery = require('../models/queryModels/warehouseModel');
 
 exports.addFlipbook = catchAsync(async (req, res, next) => {
   // console.log(updatefields);
@@ -1460,48 +1465,90 @@ exports.saveFlipbook = catchAsync(async (req, res, next) => {
 });
 
 exports.getFlipbookSavedByUser = catchAsync(async (req, res) => {
-  let saveflipbook = [];
-
-  const id = req.params.id;
-  const user = await User.findById({ _id: id }, { savedflipbook: 1 });
-  console.log(user);
-  for (var i in user.savedflipbook) {
-    let flipbookdata = [];
-    const house = await House.findById({ _id: user.savedflipbook[i] });
-    const land = await Land.findById({ _id: user.savedflipbook[i] });
-    const hotel = await Hotel.findByIdAndDelete({ _id: user.savedflipbook[i] });
-    const warehouse = await WareHouse.findByIdAndDelete({
-      _id: user.savedflipbook[i],
+  // query id
+  console.log(req.params);
+  let userData = await User.findById({ _id: req.params.id });
+  console.log(userData.savedflipbook);
+  let getflipbookid = [];
+  for (var i in userData.savedflipbook) {
+    let getqueryHouse = await HouseQuery.findById({
+      _id: userData.savedflipbook[i],
     });
-    if (house) {
-      flipbookdata.push(user.savedflipbook[i], house.flipbook.image2D[0]);
-      saveflipbook.push([flipbookdata]);
-    }
-    if (land) {
-      flipbookdata.push(user.savedflipbook[i], land.flipbook.image2D[0]);
-      saveflipbook.push([flipbookdata]);
-    }
-    if (hotel) {
-      flipbookdata.push(user.savedflipbook[i], hotel.flipbook.image2D[0]);
-      saveflipbook.push([flipbookdata]);
-    }
-    if (warehouse) {
-      flipbookdata.push(user.savedflipbook[i], warehouse.flipbook.image2D[0]);
-      saveflipbook.push([flipbookdata]);
+    if (getqueryHouse) {
+      getflipbookid.push(getqueryHouse);
     }
 
-    // saveflipbook.push(property.flipbook.image2D[0]);
+    let getqueryland = await LandQuery.findById({
+      _id: userData.savedflipbook[i],
+    });
+    if (getqueryland) {
+      getflipbookid.push(getqueryland);
+    }
+
+    let getqueryhotel = await HotelQuery.findById({
+      _id: userData.savedflipbook[i],
+    });
+    if (getqueryhotel) {
+      getflipbookid.push(getqueryhotel);
+    }
+
+    let getquerywarehouse = await WarehouseQuery.findById({
+      _id: userData.savedflipbook[i],
+    });
+    if (getquerywarehouse) {
+      getflipbookid.push(getquerywarehouse);
+    }
   }
-  // saveflipbook.push(flipbookdata);
 
-  // console.log('2d image path ' + property.flipbook.image2D);
-  //console.log(user.savedflipbook);
   res.status(200).json({
     status: 'success',
-    results: user.length,
-    //savedflipbook: user.savedflipbook + property.flipbook.image2D[0],
-    saveflipbook,
+    results: getflipbookid.length,
+    getQuery: getflipbookid,
   });
+
+  // let saveflipbook = [];
+
+  // const id = req.params.id;
+  // const user = await User.findById({ _id: id }, { savedflipbook: 1 });
+  // console.log(user.savedflipbook[0]);
+  // for (var i in user.savedflipbook) {
+  //   let flipbookdata = [];
+  //   const house = await House.findById({ _id: user.savedflipbook[i] });
+  //   const land = await Land.findById({ _id: user.savedflipbook[i] });
+  //   const hotel = await Hotel.findById({ _id: user.savedflipbook[i] });
+  //   const warehouse = await WareHouse.findById({
+  //     _id: user.savedflipbook[i],
+  //   });
+  //   if (house) {
+  //     flipbookdata.push(user.savedflipbook[i], house.flipbook.image2D[0]);
+  //     saveflipbook.push([flipbookdata]);
+  //   }
+  //   console.log(house);
+  //   if (land) {
+  //     flipbookdata.push(user.savedflipbook[i], land.flipbook.image2D[0]);
+  //     saveflipbook.push([flipbookdata]);
+  //   }
+  //   if (hotel) {
+  //     flipbookdata.push(user.savedflipbook[i], hotel.flipbook.image2D[0]);
+  //     saveflipbook.push([flipbookdata]);
+  //   }
+  //   if (warehouse) {
+  //     flipbookdata.push(user.savedflipbook[i], warehouse.flipbook.image2D[0]);
+  //     saveflipbook.push([flipbookdata]);
+  //   }
+
+  //   // saveflipbook.push(property.flipbook.image2D[0]);
+  // }
+  // // saveflipbook.push(flipbookdata);
+
+  // // console.log('2d image path ' + property.flipbook.image2D);
+  // //console.log(user.savedflipbook);
+  // res.status(200).json({
+  //   status: 'success',
+  //   results: user.length,
+  //   //savedflipbook: user.savedflipbook + property.flipbook.image2D[0],
+  //   saveflipbook,
+  // });
 });
 
 exports.deleteFlipbook = catchAsync(async (req, res) => {
@@ -1568,72 +1615,152 @@ exports.getFlipbookbyID = catchAsync(async (req, res) => {
 //   propertyid = req.body.propertyId;
 // });
 exports.getsimilarproperties = catchAsync(async (req, res) => {
-  let Type = req.body.Type;
+  // let Type = req.body.Type;
   let propertyID = req.body.propertyId;
-  console.log(Type, propertyID);
-  let cost = req.body.cost;
-  if (Type === 'House') {
-    console.log('inside House');
-    // const getHouse = await House.aggregate([
-    //   {
-    //     $match: {
-    //       $and: [
-    //         {
-    //           'attributes.cost': { $eq: cost },
-    //         },
-    //       ],
-    //       $and: [{ _id: { $ne: propertyID } }],
-    //     },
-    //   },
-    // ]);
-    const getHouse = await House.find({
+  console.log(propertyID);
+  let getHouse = await House.findById({ _id: propertyID });
+  let getLand = await Land.findById({ _id: propertyID });
+  let getHotel = await Hotel.findById({ _id: propertyID });
+  let getWarehouse = await WareHouse.findById({ _id: propertyID });
+
+  if (getHouse) {
+    console.log('inside house similar');
+    let cost = getHouse.attributes.cost;
+    let Type = getHouse.categoryType;
+    console.log(cost, Type);
+    let similarpropQuery = {
+      propertyId: propertyID,
+      cost: cost,
+      Type: Type,
+    };
+    const getHouseFind = await House.find({
       _id: { $ne: propertyID },
       'attributes.cost': { $eq: cost },
     });
-    res.status(200).json({
-      status: 'success',
-      results: getHouse.length,
-      similarProperties: getHouse,
+
+    let SData;
+    if (getHouseFind.length > 0) {
+      SData = await SimilarPropQuery.create(similarpropQuery);
+
+      res.status(200).json({
+        status: 'success',
+        results: getHouseFind.length,
+        similarProperties: getHouseFind,
+        queryId: SData._id,
+      });
+      /**************************************************** */
+    } else {
+      res.status(200).json({
+        status: 'success',
+        results: getHouse.length,
+        message: 'No Similar Properties Found',
+      });
+    }
+  }
+  if (getLand) {
+    console.log('inside land similar');
+
+    let cost = getLand.attributes.cost;
+    let Type = getLand.categoryType;
+    console.log(cost, Type);
+    let similarpropQuery = {
+      propertyId: propertyID,
+      cost: cost,
+      Type: Type,
+    };
+    const getLandFind = await Land.find({
+      _id: { $ne: propertyID },
+      'attributes.cost': { $eq: cost },
     });
+
+    let SData;
+    if (getLandFind.length > 0) {
+      SData = await SimilarPropQuery.create(similarpropQuery);
+      res.status(200).json({
+        status: 'success',
+        results: getLandFind.length,
+        similarProperties: getLandFind,
+        queryId: SData._id,
+      });
+      /**************************************************** */
+    } else {
+      res.status(200).json({
+        status: 'success',
+        results: getLandFind.length,
+        message: 'No Similar Properties Found',
+      });
+    }
     // console.log(getHouse);
   }
-  if (Type === 'Land') {
-    console.log('inside Land');
-    const getLand = await Land.find({
+  if (getHotel) {
+    console.log('inside hotel similar');
+
+    //console.log(getHotel);
+    let cost = getHotel.attributes.bedbreakfastcost;
+
+    let Type = getHotel.categoryType;
+    console.log(cost, Type);
+    let similarpropQuery = {
+      propertyId: propertyID,
+      bedbreakfastcost: cost,
+      Type: Type,
+    };
+    // console.log(similarpropQuery);
+    const getHotelFind = await Hotel.find({
       _id: { $ne: propertyID },
-      'attributes.cost': { $eq: cost },
+      'attributes.bedbreakfastcost': { $eq: cost },
     });
-    res.status(200).json({
-      status: 'success',
-      results: getLand.length,
-      similarProperties: getLand,
-    });
+    let SData;
+    if (getHotelFind.length > 0) {
+      SData = await SimilarPropQuery.create(similarpropQuery);
+      res.status(200).json({
+        status: 'success',
+        results: getHotelFind.length,
+        similarProperties: getHotelFind,
+        queryId: SData._id,
+      });
+      /**************************************************** */
+    } else {
+      res.status(200).json({
+        status: 'success',
+        results: getHotelFind.length,
+        message: 'No Similar Properties Found',
+      });
+    }
     // console.log(getHouse);
   }
-  if (Type === 'Hotel') {
-    console.log('inside Hotel');
-    const getHotel = await Hotel.find({
+  if (getWarehouse) {
+    console.log('inside warehouse similar');
+
+    let cost = getWarehouse.attributes.cost;
+    let Type = getWarehouse.categoryType;
+    console.log(cost, Type);
+
+    let similarpropQuery = {
+      propertyId: propertyID,
+      cost: cost,
+      Type: Type,
+    };
+    const getWarehouseFind = await WareHouse.find({
       _id: { $ne: propertyID },
       'attributes.cost': { $eq: cost },
     });
-    res.status(200).json({
-      status: 'success',
-      results: getHotel.length,
-      similarProperties: getHotel,
-    });
-    // console.log(getHouse);
-  }
-  if (Type === 'Warehouse') {
-    console.log('inside Warehouse');
-    const getWarehouse = await WareHouse.find({
-      _id: { $ne: propertyID },
-      'attributes.cost': { $eq: cost },
-    });
-    res.status(200).json({
-      status: 'success',
-      results: getWarehouse.length,
-      similarProperties: getWarehouse,
-    });
-    // console.log(getHouse);
+    let SData;
+    if (getWarehouseFind.length > 0) {
+      SData = await SimilarPropQuery.create(similarpropQuery);
+      res.status(200).json({
+        status: 'success',
+        results: getWarehouseFind.length,
+        similarProperties: getWarehouseFind,
+        queryId: SData._id,
+      });
+      /**************************************************** */
+    } else {
+      res.status(200).json({
+        status: 'success',
+        results: getWarehouseFind.length,
+        message: 'No Similar Properties Found',
+      });
+    }
   }
 });
