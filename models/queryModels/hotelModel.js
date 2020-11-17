@@ -2,11 +2,10 @@ const mongoose = require('mongoose');
 require('mongoose-currency').loadType(mongoose);
 
 const hotelQuery = new mongoose.Schema({
-  //page1 in admin add property details
   Hotel: String,
   area: { type: String },
   categoryType: { type: String, default: 'Hotel' },
-  page2: { type: Boolean, default: false },
+
   createdAt: { type: Date, default: Date.now },
 
   bedbreakfastcost: {

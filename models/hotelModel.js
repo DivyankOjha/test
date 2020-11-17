@@ -46,16 +46,6 @@ const hotelSchema = new mongoose.Schema({
     barlounge: { type: Boolean },
     hairsalon: { type: Boolean },
     petsallowed: { type: Boolean },
-    // worldclass: { type: Boolean },
-    // midrange: { type: Boolean },
-    // budget: { type: Boolean },
-
-    // city: { type: Boolean },
-    // airport: { type: Boolean },
-    // outskirts: { type: Boolean },
-    // gamehotel: { type: Boolean },
-
-    //hotelname: { type: String }, == propertyName
   },
 
   //page 3

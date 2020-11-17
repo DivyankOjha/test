@@ -28,6 +28,8 @@ const transactions = require('./routes/subTransaction');
 const maxSlider = require('./routes/maxFindSlider');
 const QueryRoutes = require('./routes/queryRoutes/houseQuery');
 
+const gatewayRouter = require('./routes/gateway');
+
 const globalErrorHandler = require('./controllers/errorController');
 const app = express();
 
@@ -120,9 +122,9 @@ app.use('/api/admin/flipbook', flipbookRoutes);
 app.use('/api/admin/attributes', allAttributes);
 app.use('/api/admin', transactions);
 app.use('/api/admin/max', maxSlider);
-app.use('/api/admin/', QueryRoutes);
-
+app.use('/api/admin', QueryRoutes);
 app.use('/api/review', review);
-app.use(globalErrorHandler);
+app.use('/api/gateway', gatewayRouter);
+//app.use(globalErrorHandler);
 
 module.exports = app;

@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const subTransactionSchema = new mongoose.Schema({
   userID: { type: mongoose.Schema.ObjectId },
+  transactionid: String,
+  paymentstatus: String,
   subscriptionType: { type: String },
   subscriptionAmount: { type: Number },
   totalpoints: { type: Number },

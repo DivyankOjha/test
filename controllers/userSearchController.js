@@ -1,483 +1,252 @@
 const catchAsync = require('./../utils/catchAsync');
+const { isNullOrUndefined } = require('util');
 
 const House = require('./../models/houseModel');
 const Land = require('./../models/landModel');
 const Hotel = require('./../models/hotelModel');
 const WareHouse = require('./../models/warehouseModel');
-const User = require('../models/userModel');
+
 const HouseQuery = require('../models/queryModels/houseModel');
 const LandQuery = require('../models/queryModels/landModel');
 const HotelQuery = require('../models/queryModels/hotelModel');
 const WarehouseQuery = require('../models/queryModels/warehouseModel');
-
-exports.searchHouse1 = catchAsync(async (req, res) => {
-  let testbodt = req.body;
-  console.log(testbodt);
-  let mincost;
-  let maxcost;
-  if (req.body.cost) {
-    mincost = req.body.cost.min;
-    maxcost = req.body.cost.max;
-  }
-
-  console.log(mincost, maxcost);
-  let attributes = req.body.attributes;
-  let area = req.body.area;
-
-  let mainCategory = attributes.mainCategory;
-  let propertyStatus = attributes.propertyStatus;
-  let subCategory = attributes.subCategory;
-
-  let opticalfiber = attributes.opticalfiber;
-  let swimmingpool = attributes.swimmingpool;
-  let fireplace = attributes.fireplace;
-  let petsallowed = attributes.petsallowed;
-  let solarhotwater = attributes.solarhotwater;
-  let waterfront = attributes.waterfront;
-  let cctv = attributes.cctv;
-  let borehole = attributes.borehole;
-  let disabilityfeature = attributes.disabilityfeature;
-  let maturegarden = attributes.maturegarden;
-  let balcony = attributes.balcony;
-  let partyarea = attributes.partyarea;
-
-  let bedroom = attributes.bedroom;
-
-  // if (mainCategory && !bedroom && !subCategory && !propertyStatus && !area) {
-  //   console.log('inside main category');
-  //   var search = await House.aggregate([
-  //     {
-  //       $match: {
-  //         isFlipbook: true,
-  //         'attributes.mainCategory': { $in: [mainCategory] },
-  //       },
-  //     },
-  //   ]);
-  //   let SData;
-  //   if (search.length > 0) {
-  //     /**************************************************** */
-  //     SData = await HouseQuery.create(req.body);
-  //     console.log(SData._id);
-
-  //     res.status(200).json({
-  //       status: 'success',
-  //       results: search.length,
-  //       queryId: SData._id,
-  //       search,
-  //     });
-
-  //     /**************************************************** */
-  //   } else {
-  //     res.status(200).json({
-  //       status: 'success',
-  //       results: search.length,
-  //       search,
-  //     });
-  //   }
-  // } else if (mainCategory && bedroom && !subCategory && !area) {
-  //   console.log('inside maincategory+bedroom');
-  //   var search = await House.aggregate([
-  //     {
-  //       $match: {
-  //         'attributes.mainCategory': { $in: [mainCategory] },
-  //         'attributes.bedroom': { $eq: bedroom },
-  //       },
-  //     },
-  //   ]);
-  //   let SData;
-  //   if (search.length > 0) {
-  //     /**************************************************** */
-  //     SData = await HouseQuery.create(req.body);
-  //     console.log(SData._id);
-
-  //     res.status(200).json({
-  //       status: 'success',
-  //       results: search.length,
-  //       queryId: SData._id,
-  //       search,
-  //     });
-
-  //     /**************************************************** */
-  //   } else {
-  //     res.status(200).json({
-  //       status: 'success',
-  //       results: search.length,
-  //       search,
-  //     });
-  //   }
-  // }
-  var search = await House.aggregate([
-    {
-      $match: {
-        $or: [
-          //$or
-          {
-            'attributes.bedroom': {
-              $in: [bedroom],
-            },
-          },
-          {
-            'attributes.opticalfiber': {
-              $in: [opticalfiber],
-            },
-          },
-          {
-            'attributes.swimmingpool': {
-              $in: [swimmingpool],
-            },
-          },
-          {
-            'attributes.fireplace': {
-              $in: [fireplace],
-            },
-          },
-          {
-            'attributes.petsallowed': {
-              $in: [petsallowed],
-            },
-          },
-          {
-            'attributes.solarhotwater': {
-              $in: [solarhotwater],
-            },
-          },
-          {
-            'attributes.waterfront': {
-              $in: [waterfront],
-            },
-          },
-          {
-            'attributes.disabilityfeature': {
-              $in: [disabilityfeature],
-            },
-          },
-          {
-            'attributes.maturegarden': {
-              $in: [maturegarden],
-            },
-          },
-          {
-            'attributes.cctv': { $in: [cctv] },
-          },
-          {
-            'attributes.borehole': {
-              $in: [borehole],
-            },
-          },
-          {
-            'attributes.balcony': {
-              $in: [balcony],
-            },
-          },
-          {
-            'attributes.partyarea': {
-              $in: [partyarea],
-            },
-          },
-          {
-            'attributes.mainCategory': {
-              $in: [mainCategory],
-            },
-          },
-          {
-            'sellerDetails.location': {
-              $in: [area],
-            },
-            'attributes.cost': { $lte: maxcost, $gte: mincost },
-          },
-        ],
-      },
-    },
-
-    {
-      $match: {
-        isFlipbook: true,
-        'attributes.mainCategory': `${mainCategory}`,
-        'attributes.subCategory': `${subCategory}`,
-        'attributes.propertyStatus': `${propertyStatus}`,
-      },
-    },
-  ]);
-  // var search = await House.aggregate([
-  //   {
-  //     $match: {
-  //       'attributes.mainCategory': { $in: [mainCategory] },
-  //       'attributes.subCategory': `${subCategory}`,
-
-  //       $or: [
-  //         {
-  //           'attributes.mainCategory': { $in: [mainCategory] },
-  //         },
-
-  //         {
-  //           'attributes.subCategory': `${subCategory}`,
-  //         },
-  //         {
-  //           'attributes.subCategory': `${propertyStatus}`,
-  //         },
-  //       ],
-  //       $or: [
-  //         //$or
-  //         {
-  //           'attributes.bedroom': { $in: [bedroom] },
-  //         },
-  //         {
-  //           'attributes.opticalfiber': { $in: [opticalfiber] },
-  //         },
-  //         {
-  //           'attributes.swimmingpool': { $in: [swimmingpool] },
-  //         },
-  //         {
-  //           'attributes.fireplace': { $in: [fireplace] },
-  //         },
-  //         {
-  //           'attributes.petsallowed': { $in: [petsallowed] },
-  //         },
-  //         {
-  //           'attributes.solarhotwater': { $in: [solarhotwater] },
-  //         },
-  //         {
-  //           'attributes.waterfront': { $in: [waterfront] },
-  //         },
-  //         {
-  //           'attributes.disabilityfeature': { $in: [disabilityfeature] },
-  //         },
-  //         {
-  //           'attributes.maturegarden': { $in: [maturegarden] },
-  //         },
-  //         {
-  //           'attributes.cctv': { $in: [cctv] },
-  //         },
-  //         {
-  //           'attributes.borehole': { $in: [borehole] },
-  //         },
-  //         {
-  //           'attributes.balcony': { $in: [balcony] },
-  //         },
-  //         {
-  //           'attributes.partyarea': { $in: [partyarea] },
-  //         },
-  //         {
-  //           'attributes.mainCategory': `${mainCategory}`,
-  //         },
-  //         {
-  //           'sellerDetails.location': `${area}`,
-  //         },
-  //       ],
-  //       'attributes.cost': { $lte: maxcost, $gte: mincost },
-  //     },
-  //   },
-
-  //   // {
-  //   //   $match: {
-  //   //     isFlipbook: true,
-
-  //   //     // 'attributes.area': { $lte: areaint },
-
-  //   //     'attributes.subCategory': `${subCategory}`,
-  //   //     'attributes.propertyStatus': `${propertyStatus}`,
-
-  //   //     //'attributes.bedroom': { $eq: bedroom }, //try this...
-
-  //   //     //  'sellerDetails.location': `${location}`,
-  //   //   },
-  //   // },
-
-  //   //  $group: { _id: null, count: { $sum: 1 } },
-  // ]);
-
-  let SData;
-  if (search.length > 0) {
-    /**************************************************** */
-    SData = await HouseQuery.create(req.body);
-    console.log(SData._id);
-
-    res.status(200).json({
-      status: 'success',
-      results: search.length,
-      queryId: SData._id,
-      search,
-    });
-
-    /**************************************************** */
-  } else {
-    res.status(200).json({
-      status: 'success',
-      results: search.length,
-      search,
-    });
-  }
-});
 exports.searchHouse = catchAsync(async (req, res) => {
-  let testbodt = req.body;
-  console.log(testbodt);
-  let mincost = req.body.cost.min;
-  let maxcost = req.body.cost.max;
-  console.log(mincost, maxcost);
   let attributes = req.body.attributes;
-  //console.log(attributes);
-  //let location = req.body.attributes.location;
-  let area = req.body.area;
-  // let area = req.body.attributes.area;
-  //  let areaint = parseInt(area);
-  // console.log(areaint);
+
   let mainCategory = attributes.mainCategory;
+  let query = [
+    {
+      isFlipbook: true,
+      'attributes.mainCategory': mainCategory,
+    },
+  ];
 
-  let propertyStatus = attributes.propertyStatus;
+  if (req.body.cost) {
+    let inta = parseInt(req.body.cost.min);
+    let intb = parseInt(req.body.cost.max);
+    let mincost = inta;
+    let maxcost = intb;
 
-  let subCategory = attributes.subCategory;
+    let abc = {
+      'attributes.cost': {
+        $lte: maxcost,
+        $gte: mincost,
+      },
+    };
+    query.push(abc);
+  }
 
-  //const att = attributes.console.log(attributes);
+  if (req.body.area) {
+    let area = {
+      'sellerDetails.location': req.body.area,
+    };
+    query.push(area);
+  }
 
-  let opticalfiber = attributes.opticalfiber;
-  let swimmingpool = attributes.swimmingpool;
-  let fireplace = attributes.fireplace;
-  let petsallowed = attributes.petsallowed;
-  let solarhotwater = attributes.solarhotwater;
-  let waterfront = attributes.waterfront;
-  let cctv = attributes.cctv;
-  let borehole = attributes.borehole;
-  let disabilityfeature = attributes.disabilityfeature;
-  let maturegarden = attributes.maturegarden;
-  let balcony = attributes.balcony;
-  let partyarea = attributes.partyarea;
+  if (req.body.attributes.propertyStatus) {
+    let propertyStatus = {
+      'attributes.propertyStatus': req.body.attributes.propertyStatus,
+    };
+    query.push(propertyStatus);
+  }
 
-  let gym = attributes.gym;
-  let bedroom = attributes.bedroom;
-  let bathrooms = attributes.bathrooms;
-  let steambath = attributes.steambath;
-  let lift = attributes.lift;
-  let bathtab = attributes.bathtab;
-  let parking = attributes.parking;
+  if (req.body.attributes.subCategory) {
+    let subCategory = {
+      'attributes.subCategory': req.body.attributes.subCategory,
+    };
+    query.push(subCategory);
+  }
 
-  let minliv = req.body.livingsize.min;
-  let maxliv = req.body.livingsize.max;
-  let mingarden = req.body.gardensize.min;
-  let maxgarden = req.body.gardensize.max;
-  let minkit = req.body.kitchensize.min;
-  let maxkit = req.body.kitchensize.max;
+  if (req.body.attributes.opticalfiber) {
+    let opticalfiber = {
+      'attributes.opticalfiber': true,
+    };
+    query.push(opticalfiber);
+  }
+  if (req.body.attributes.swimmingpool) {
+    let swimmingpool = {
+      'attributes.swimmingpool': true,
+    };
+    query.push(swimmingpool);
+  }
+  if (req.body.attributes.fireplace) {
+    let fireplace = {
+      'attributes.fireplace': true,
+    };
+    query.push(fireplace);
+  }
 
-  /********************Query************************************ */
+  if (req.body.attributes.petsallowed) {
+    let petsallowed = {
+      'attributes.petsallowed': true,
+    };
+    query.push(petsallowed);
+  }
+  if (req.body.attributes.solarhotwater) {
+    let solarhotwater = {
+      'attributes.solarhotwater': true,
+    };
+    query.push(solarhotwater);
+  }
 
-  /************************************************************** */
-  //main category, bedroom , subcategory, cost min max , attribute - checkbox number
+  if (req.body.attributes.waterfront) {
+    let waterfront = {
+      'attributes.waterfront': true,
+    };
+    query.push(waterfront);
+  }
+  if (req.body.attributes.cctv) {
+    let cctv = {
+      'attributes.cctv': true,
+    };
+    query.push(cctv);
+  }
+  if (req.body.attributes.borehole) {
+    let borehole = {
+      'attributes.borehole': true,
+    };
+    query.push(borehole);
+  }
+  if (req.body.attributes.disabilityfeature) {
+    let disabilityfeature = {
+      'attributes.disabilityfeature': true,
+    };
+    query.push(disabilityfeature);
+  }
+  if (req.body.attributes.maturegarden) {
+    let maturegarden = {
+      'attributes.maturegarden': true,
+    };
+    query.push(maturegarden);
+  }
+  if (req.body.attributes.balcony) {
+    let balcony = {
+      'attributes.balcony': true,
+    };
+    query.push(balcony);
+  }
+  if (req.body.attributes.partyarea) {
+    let partyarea = {
+      'attributes.partyarea': true,
+    };
+    query.push(partyarea);
+  }
+
+  if (req.body.attributes.gym) {
+    let gym = {
+      'attributes.gym': true,
+    };
+    query.push(gym);
+  }
+
+  if (req.body.attributes.bedroom) {
+    let intb = parseInt(req.body.attributes.bedroom);
+
+    let bedroom = {
+      'attributes.bedroom': intb,
+    };
+    query.push(bedroom);
+  }
+
+  if (req.body.attributes.bathrooms) {
+    let intb = parseInt(req.body.attributes.bathrooms);
+
+    let bathrooms = {
+      'attributes.bathrooms': intb,
+    };
+    query.push(bathrooms);
+  }
+  if (req.body.attributes.steambath) {
+    let intb = parseInt(req.body.attributes.steambath);
+
+    let steambath = {
+      'attributes.steambath': intb,
+    };
+    query.push(steambath);
+  }
+  if (req.body.attributes.lift) {
+    let intb = parseInt(req.body.attributes.lift);
+
+    let lift = {
+      'attributes.lift': intb,
+    };
+    query.push(lift);
+  }
+  if (req.body.attributes.bathtab) {
+    let intb = parseInt(req.body.attributes.bathtab);
+
+    let bathtab = {
+      'attributes.bathtab': intb,
+    };
+    query.push(bathtab);
+  }
+
+  if (req.body.attributes.parking) {
+    let intb = parseInt(req.body.attributes.parking);
+
+    let parking = {
+      'attributes.parking': intb,
+    };
+    query.push(parking);
+  }
+
+  if (req.body.livingsize) {
+    let inta = parseInt(req.body.livingsize.min);
+    let intb = parseInt(req.body.livingsize.max);
+
+    let minliv = inta;
+    let maxliv = intb;
+
+    let livingsize = {
+      'attributes.livingsize': { $lte: intb, $gte: intb },
+    };
+    query.push(livingsize);
+  }
+
+  if (req.body.gardensize) {
+    let inta = parseInt(req.body.gardensize.min);
+    let intb = parseInt(req.body.gardensize.max);
+
+    let minliv = inta;
+    let maxliv = intb;
+
+    let gardensize = {
+      'attributes.gardensize': { $lte: intb, $gte: intb },
+    };
+    query.push(gardensize);
+  }
+
+  if (req.body.kitchensize) {
+    let inta = parseInt(req.body.kitchensize.min);
+    let intb = parseInt(req.body.kitchensize.max);
+
+    let minliv = inta;
+    let maxliv = intb;
+
+    let kitchensize = {
+      'attributes.kitchensize': { $lte: intb, $gte: intb },
+    };
+    query.push(kitchensize);
+  }
+  let jsonto = JSON.stringify(query);
+  let par = JSON.parse(jsonto);
+  object = Object.assign({}, ...par);
+
   var search = await House.aggregate([
     {
-      $match: {
-        $or: [
-          {
-            'attributes.opticalfiber': { $in: [opticalfiber] },
-          },
-          {
-            'attributes.swimmingpool': { $in: [swimmingpool] },
-          },
-          {
-            'attributes.fireplace': { $in: [fireplace] },
-          },
-          {
-            'attributes.petsallowed': { $in: [petsallowed] },
-          },
-          {
-            'attributes.solarhotwater': { $in: [solarhotwater] },
-          },
-          {
-            'attributes.waterfront': { $in: [waterfront] },
-          },
-          {
-            'attributes.disabilityfeature': { $in: [disabilityfeature] },
-          },
-          {
-            'attributes.maturegarden': { $in: [maturegarden] },
-          },
-          {
-            'attributes.cctv': { $in: [cctv] },
-          },
-          {
-            'attributes.borehole': { $in: [borehole] },
-          },
-          {
-            'attributes.balcony': { $in: [balcony] },
-          },
-          {
-            'attributes.partyarea': { $in: [partyarea] },
-          },
-          {
-            'attributes.gym': { $in: [gym] },
-          },
-          // {
-          //   'attributes.gym': { $gte: 0, $lte: gym },
-          // },
-
-          {
-            'attributes.bathrooms': { $gte: 0, $lte: bathrooms },
-          },
-          {
-            'attributes.steambath': { $gte: 0, $lte: steambath },
-          },
-          {
-            'attributes.lift': { $gte: 0, $lte: lift },
-          },
-          {
-            'attributes.bathtab': { $gte: bathtab }, //or same as above
-          },
-          {
-            'attributes.parking': { $gte: 0, $lte: parking },
-          },
-          {
-            'attributes.bedroom': { $in: [bedroom] },
-          },
-          {
-            'attributes.mainCategory': `${mainCategory}`,
-          },
-          {
-            'sellerDetails.location': `${area}`,
-          },
-        ],
-      },
-    },
-
-    {
-      $match: {
-        isFlipbook: true,
-        'attributes.cost': { $lte: maxcost, $gte: mincost },
-        // 'attributes.area': { $lte: area },
-
-        'attributes.mainCategory': `${mainCategory}`,
-        'attributes.subCategory': subCategory,
-        'attributes.propertyStatus': `${propertyStatus}`,
-
-        //  'attributes.bedroom': { $eq: bedroom }, //try this...
-
-        'attributes.livingsize': { $lte: maxliv, $gte: minliv },
-        'attributes.kitchensize': { $lte: maxkit, $gte: minkit },
-        'attributes.gardensize': { $lte: maxgarden, $gte: mingarden },
-        //  'attributes.gym': { $gte: 0, $lte: gym },
-        //   'sellerDetails.location': `${location}`,
-      },
+      $match: object,
     },
   ]);
   let SData;
   if (search.length > 0) {
     SData = await HouseQuery.create(req.body);
 
-    //  console.log(SData);
-    console.log(SData._id);
-    let updateSdata = await HouseQuery.findByIdAndUpdate(
-      { _id: SData._id },
-      {
-        $set: {
-          page2: true,
-        },
-      }
-    );
-    console.log(updateSdata);
     res.status(200).json({
       status: 'success',
       results: search.length,
       search,
       queryId: SData._id,
     });
-    /**************************************************** */
   } else {
     res.status(200).json({
       status: 'success',
@@ -485,494 +254,222 @@ exports.searchHouse = catchAsync(async (req, res) => {
       search,
     });
   }
-}); //incomplete - radio on page 1 remaining
-
-exports.searchLandPage1 = catchAsync(async (req, res) => {
-  //  let location = req.body.location;
-
-  let sizeinacres = req.body.sizeinacres;
-  let minsizeinacres = sizeinacres.min;
-  let maxsizeinacres = sizeinacres.max;
-  let cost = req.body.cost;
-  let mincost = req.body.cost.min;
-  let maxcost = req.body.cost.max;
-  let area = req.body.area;
-  let attributes = req.body.attributes;
-  let leasefreehold = attributes.leasefreehold;
-  // let freehold = attributes.freehold;
-  // let lease = attributes.lease;
-  let mainCategory = attributes.mainCategory;
-
-  console.log(mainCategory);
-  var search = await Land.aggregate([
-    {
-      $match: {
-        $or: [
-          //$or
-          {
-            'attributes.mainCategory': { $in: [mainCategory] },
-          },
-          {
-            'attributes.leasefreehold': { $in: [leasefreehold] },
-          },
-          // {
-          //   'attributes.lease': { $in: [lease] },
-          // },
-          {
-            'sellerDetails.location': `${area}`,
-          },
-        ],
-      },
-    },
-
-    {
-      $match: {
-        isFlipbook: true,
-        'attributes.cost': { $lte: maxcost, $gte: mincost },
-        'attributes.sizeinacres': {
-          $lte: maxsizeinacres,
-          $gte: minsizeinacres,
-        },
-        'attributes.mainCategory': { $in: [mainCategory] },
-
-        //   'sellerDetails.location': `${location}`,
-      },
-    },
-  ]);
-
-  let SData;
-  if (search.length > 0) {
-    /**************************************************** */
-    SData = await LandQuery.create(req.body);
-    console.log(SData._id);
-
-    res.status(200).json({
-      status: 'success',
-      results: search.length,
-      queryId: SData._id,
-      search,
-    });
-
-    /**************************************************** */
-  } else {
-    res.status(200).json({
-      status: 'success',
-      results: search.length,
-      search,
-    });
-  }
-});
-
-exports.searchLandPage2 = catchAsync(async (req, res) => {
-  // let location = req.body.location;
-
-  let sizeinacres = req.body.sizeinacres;
-  let minsizeinacres = sizeinacres.min;
-  let maxsizeinacres = sizeinacres.max;
-  let cost = req.body.cost;
-  let mincost = req.body.cost.min;
-  let maxcost = req.body.cost.max;
-  let area = req.body.area;
-  let attributes = req.body.attributes;
-  let leasefreehold = attributes.leasefreehold;
-  // let freehold = attributes.freehold;
-  // let lease = attributes.lease;
-  let councilwater = attributes.councilwater;
-  let electricity = attributes.electricity;
-  let borehole = attributes.borehole;
-  let readyfence = attributes.readyfence;
-  let controlleddevelopment = attributes.controlleddevelopment;
-  let maturegarden = attributes.maturegarden;
-  let waterfront = attributes.waterfront;
-  let gated = attributes.gated;
-  let mainCategory = attributes.mainCategory;
-
-  let soilType = attributes.soilType;
-
-  let nature = attributes.nature;
-
-  let road = attributes.road;
-  var search = await Land.aggregate([
-    {
-      $match: {
-        $or: [
-          //$or
-          {
-            'attributes.mainCategory': { $in: [mainCategory] },
-          },
-          {
-            'attributes.soilType': { $lte: soilType },
-          },
-          {
-            'attributes.nature': { $lte: nature },
-          },
-          { 'attributes.road': { $lte: road } },
-          {
-            'attributes.maturegarden': { $in: [maturegarden] },
-          },
-          {
-            'attributes.leasefreehold': { $in: [leasefreehold] },
-          },
-          // {
-          //   'attributes.lease': { $in: [lease] },
-          // },
-          {
-            'attributes.councilwater': { $in: [councilwater] },
-          },
-          {
-            'attributes.electricity': { $in: [electricity] },
-          },
-          {
-            'attributes.controlleddevelopment': {
-              $in: [controlleddevelopment],
-            },
-          },
-          {
-            'attributes.borehole': { $in: [borehole] },
-          },
-          {
-            'attributes.readyfence': { $in: [readyfence] },
-          },
-          {
-            'attributes.waterfront': { $in: [waterfront] },
-          },
-          {
-            'attributes.gated': { $in: [gated] },
-          },
-          {
-            'sellerDetails.location': `${area}`,
-          },
-        ],
-      },
-    },
-
-    {
-      $match: {
-        isFlipbook: true,
-        // 'attributes.soilType': { $lte: soilType },
-        // 'attributes.nature': { $lte: nature },
-        // 'attributes.road': { $lte: road }, //3 - RADIO BUTTONS
-
-        'attributes.cost': { $lte: maxcost, $gte: mincost },
-        'attributes.sizeinacres': {
-          $lte: maxsizeinacres,
-          $gte: minsizeinacres,
-        },
-        //'sellerDetails.location': `${location}`,
-      },
-    },
-  ]);
-  let SData;
-  if (search.length > 0) {
-    SData = await LandQuery.create(req.body);
-
-    //  console.log(SData);
-    console.log(SData._id);
-    let updateSdata = await LandQuery.findByIdAndUpdate(
-      { _id: SData._id },
-      {
-        $set: {
-          page2: true,
-        },
-      }
-    );
-    console.log(updateSdata);
-    res.status(200).json({
-      status: 'success',
-      results: search.length,
-      search,
-      queryId: SData._id,
-    });
-    /**************************************************** */
-  } else {
-    res.status(200).json({
-      status: 'success',
-      results: search.length,
-      search,
-    });
-  }
-  // res.status(200).json({
-  //   status: 'success',
-  //   results: search.length,
-  //   search,
-  // });
 });
 
 exports.searchLandPage3 = catchAsync(async (req, res) => {
-  let sizeinacres = req.body.sizeinacres;
-  let minsizeinacres = sizeinacres.min;
-  let maxsizeinacres = sizeinacres.max;
-  let cost = req.body.cost;
-  let mincost = req.body.cost.min;
-  let maxcost = req.body.cost.max;
-  let area = req.body.area;
   let attributes = req.body.attributes;
 
-  let kmtoshoppingcenter = req.body.kmtoshoppingcenter;
-  let kmtoneighbour = req.body.kmtoneighbour;
-  let kmtotarmac = req.body.kmtotarmac;
-  let kmtowater = req.body.kmtowater;
-  let kmtoelectricity = req.body.kmtoelectricity;
-  console.log(kmtoelectricity);
-
-  let leasefreehold = attributes.leasefreehold;
-  // let freehold = attributes.freehold;
-  // let lease = attributes.lease;
-  let councilwater = attributes.councilwater;
-  let electricity = attributes.electricity;
-  let borehole = attributes.borehole;
-  let readyfence = attributes.readyfence;
-  let controlleddevelopment = attributes.controlleddevelopment;
-  let maturegarden = attributes.maturegarden;
-  let waterfront = attributes.waterfront;
-  let gated = attributes.gated;
-
-  let soilType = attributes.soilType;
-
-  let nature = attributes.nature;
-
-  let road = attributes.road;
-
-  // let soilType = attributes.soilType.toLowerCase();
-  // let nature = attributes.nature.toLowerCase();
-  // let road = attributes.road.toLowerCase();
   let mainCategory = attributes.mainCategory;
+  let query = [
+    {
+      isFlipbook: true,
+      'attributes.mainCategory': mainCategory,
+    },
+  ];
 
+  if (req.body.cost) {
+    let inta = req.body.cost.min;
+    let intb = req.body.cost.max;
+    let mincost = inta;
+    let maxcost = intb;
+
+    let abc = {
+      'attributes.cost': {
+        $lte: maxcost,
+        $gte: mincost,
+      },
+    };
+    query.push(abc);
+  }
+  if (req.body.sizeinacres) {
+    let inta = req.body.sizeinacres.min;
+    let intb = req.body.sizeinacres.max;
+    let mincost = inta;
+    let maxcost = intb;
+
+    let abc = {
+      'attributes.sizeinacres': {
+        $lte: maxcost,
+        $gte: mincost,
+      },
+    };
+    query.push(abc);
+  }
+
+  if (req.body.area) {
+    let area = {
+      'sellerDetails.location': req.body.area,
+    };
+    query.push(area);
+  }
+
+  if (req.body.kmtoshoppingcenter) {
+    let inta = parseInt(req.body.kmtoshoppingcenter);
+
+    let kmtoshoppingcenter = {
+      'attributes.kmtoshoppingcenter': inta,
+    };
+    query.push(kmtoshoppingcenter);
+  }
+  if (req.body.kmtoneighbour) {
+    let inta = parseInt(req.body.kmtoneighbour);
+
+    let kmtoneighbour = {
+      'attributes.kmtoneighbour': inta,
+    };
+    query.push(kmtoneighbour);
+  }
+  if (req.body.kmtotarmac) {
+    let inta = parseInt(req.body.kmtotarmac);
+
+    let kmtotarmac = {
+      'attributes.kmtotarmac': inta,
+    };
+    query.push(kmtotarmac);
+  }
+  if (req.body.kmtowater) {
+    let inta = parseInt(req.body.kmtowater);
+
+    let kmtowater = {
+      'attributes.kmtowater': inta,
+    };
+    query.push(kmtowater);
+  }
+  if (req.body.kmtoelectricity) {
+    let inta = parseInt(req.body.kmtoelectricity);
+
+    let kmtoelectricity = {
+      'attributes.kmtoelectricity': inta,
+    };
+    query.push(kmtoelectricity);
+  }
+  if (req.body.attributes.leasefreehold) {
+    let leasefreehold = {
+      'attributes.leasefreehold': req.body.attributes.leasefreehold,
+    };
+    query.push(leasefreehold);
+  }
+
+  if (req.body.attributes.councilwater) {
+    let councilwater = {
+      'attributes.councilwater': true,
+    };
+    query.push(councilwater);
+  }
+
+  if (req.body.attributes.electricity) {
+    let electricity = {
+      'attributes.electricity': true,
+    };
+    query.push(electricity);
+  }
+
+  if (req.body.attributes.borehole) {
+    let borehole = {
+      'attributes.borehole': true,
+    };
+    query.push(borehole);
+  }
+
+  if (req.body.attributes.readyfence) {
+    let readyfence = {
+      'attributes.readyfence': true,
+    };
+    query.push(readyfence);
+  }
+  if (req.body.attributes.controlleddevelopment) {
+    let controlleddevelopment = {
+      'attributes.controlleddevelopment': true,
+    };
+    query.push(controlleddevelopment);
+  }
+
+  if (req.body.attributes.waterfront) {
+    let waterfront = {
+      'attributes.waterfront': true,
+    };
+    query.push(waterfront);
+  }
+
+  if (req.body.attributes.gated) {
+    let gated = {
+      'attributes.gated': true,
+    };
+    query.push(gated);
+  }
+
+  if (req.body.attributes.soilType) {
+    let soilType = {
+      'attributes.soilType': req.body.attributes.soilType,
+    };
+    query.push(soilType);
+  }
+
+  if (req.body.attributes.nature) {
+    let nature = {
+      'attributes.nature': req.body.attributes.nature,
+    };
+    query.push(nature);
+  }
+
+  if (req.body.attributes.road) {
+    let road = {
+      'attributes.road': req.body.attributes.road,
+    };
+    query.push(road);
+  }
+
+  let jsonto = JSON.stringify(query);
+
+  let par = JSON.parse(jsonto);
+
+  object = Object.assign({}, ...par);
+  console.log(object);
   var search = await Land.aggregate([
     {
-      $match: {
-        $or: [
-          //$or
-          {
-            'attributes.mainCategory': { $in: [mainCategory] },
-          },
-          {
-            'attributes.soilType': { $lte: soilType },
-          },
-          {
-            'attributes.nature': { $lte: nature },
-          },
-          { 'attributes.road': { $lte: road } },
-          {
-            'attributes.maturegarden': { $in: [maturegarden] },
-          },
-          {
-            'attributes.leasefreehold': { $in: [leasefreehold] },
-          },
-          // {
-          //   'attributes.lease': { $in: [lease] },
-          // },
-          {
-            'attributes.councilwater': { $in: [councilwater] },
-          },
-          {
-            'attributes.electricity': { $in: [electricity] },
-          },
-          {
-            'attributes.controlleddevelopment': {
-              $in: [controlleddevelopment],
-            },
-          },
-          {
-            'attributes.borehole': { $in: [borehole] },
-          },
-          {
-            'attributes.readyfence': { $in: [readyfence] },
-          },
-          {
-            'attributes.waterfront': { $in: [waterfront] },
-          },
-          {
-            'attributes.gated': { $in: [gated] },
-          },
-          {
-            'sellerDetails.location': `${area}`,
-          },
-        ],
-      },
-    },
-
-    {
-      $match: {
-        isFlipbook: true,
-        'attributes.mainCategory': { $in: [mainCategory] },
-
-        // 'attributes.soilType': { $lte: soilType },
-        // 'attributes.nature': { $lte: nature },
-        // 'attributes.road': { $lte: road }, //3 - RADIO BUTTONS
-
-        'attributes.cost': { $lte: maxcost, $gte: mincost },
-        'attributes.sizeinacres': {
-          $lte: maxsizeinacres,
-          $gte: minsizeinacres,
-        },
-        'attributes.kmtoshoppingcenter': { $lte: kmtoshoppingcenter },
-        'attributes.kmtoneighbour': { $lte: kmtoneighbour },
-        'attributes.kmtotarmac': { $lte: kmtotarmac },
-        'attributes.kmtowater': { $lte: kmtowater },
-        'attributes.kmtoelectricity': { $lte: kmtoelectricity },
-
-        // 'sellerDetails.location': `${location}`,
-      },
+      $match: object,
     },
   ]);
 
   let SData;
   if (search.length > 0) {
     SData = await LandQuery.create(req.body);
+    if (
+      req.body.attributes.freehold === true &&
+      (req.body.attributes.lease === false || !req.body.attributes.lease)
+    ) {
+      console.log(' in free');
+      const updatesdata = await LandQuery.findByIdAndUpdate(
+        { _id: SData._id },
+        {
+          $set: {
+            'attributes.freehold': true,
+          },
+        }
+      );
+    }
+    if (
+      req.body.attributes.lease === true &&
+      (req.body.attributes.freehold === false || !req.body.attributes.freehold)
+    ) {
+      console.log(' in lease');
 
-    //  console.log(SData);
-    console.log(SData._id);
-    let updateSdata = await LandQuery.findByIdAndUpdate(
-      { _id: SData._id },
-      {
-        $set: {
-          page3: true,
-        },
-      }
-    );
-    console.log(updateSdata);
+      const updatesdata = await LandQuery.findByIdAndUpdate(
+        { _id: SData._id },
+        {
+          $set: {
+            'attributes.lease': true,
+          },
+        }
+      );
+    }
+
     res.status(200).json({
       status: 'success',
       results: search.length,
       search,
       queryId: SData._id,
     });
-    /**************************************************** */
-  } else {
-    res.status(200).json({
-      status: 'success',
-      results: search.length,
-      search,
-    });
-  }
-});
-
-exports.searchHotelPage1 = catchAsync(async (req, res) => {
-  let attributes = req.body.attributes;
-
-  let conferenceroom = req.body.conferenceroom; //conferenceroom number
-
-  let kmfromtarmac = req.body.kmfromtarmac;
-  let area = req.body.area;
-  //let area = areaC.toLowerCase();
-  let hotelname = req.body.Hotel;
-  let cls = attributes.class;
-  let locality = attributes.locality;
-  console.log(locality);
-  //let location = req.body.location;
-  let bedbreakfastcost = req.body.bedbreakfastcost;
-  let minbedbreakfastcost = bedbreakfastcost.min;
-  let maxbedbreakfastcost = bedbreakfastcost.max;
-  let cost = req.body.cost;
-  console.log(cls);
-
-  //this.pet = true;
-  var search = await Hotel.aggregate([
-    {
-      $match: {
-        $or: [
-          //$or
-          { 'propertyDetails.propertyName': `${hotelname}` },
-          { 'sellerDetails.location': `${area}` },
-          { 'attributes.class': `${cls}` },
-        ],
-      },
-    },
-
-    {
-      $match: {
-        isFlipbook: true,
-        //  'attributes.cost': { $lte: cost },
-        // 'attributes.area': { $lte: area },
-        'attributes.class': `${cls}`,
-        // 'propertyDetails.propertyName': `${hotelname}`,
-        // 'sellerDetails.location': `${area}`,
-        'attributes.locality': { $in: [locality] },
-        'attributes.kmfromtarmac': { $lte: kmfromtarmac },
-        'attributes.conferenceroom': { $lte: conferenceroom },
-        'attributes.bedbreakfastcost': {
-          $lte: maxbedbreakfastcost,
-          $gte: minbedbreakfastcost,
-        },
-        //{ $type: "string" }
-        //  'attributes.carpark': { $exists: true },
-
-        // [{ 'attributes.spa': { $in: [true] } }],
-        // $or: [{ 'attributes.disabilityaccess': { $in: [true] } }],
-        // $or: [{ 'attributes.barlounge': { $in: [true] } }],
-        // $or: [{ 'attributes.hairsalon': { $in: [true] } }],
-        // $or: [{ 'attributes.petsallowed': { $in: [true] } }],
-
-        // $or: [{ 'attributes.aircon': { $in: [true] } }],
-        // $or: [{ 'attributes.spa': { $in: [true] } }],
-        // $or: [{ 'attributes.disabilityaccess': { $in: [true] } }],
-        // $or: [{ 'attributes.barlounge': { $in: [true] } }],
-        // $or: [{ 'attributes.hairsalon': { $in: [true] } }],
-        // $or: [
-        //   { 'attributes.petsallowed': { $in: [true] } },
-        //   {
-        //     'attributes.carpark': { $exists: true },
-        //   },
-        // ],
-
-        // $or: [
-        //   {
-        //     'attributes.carpark': { $in: [true] },
-        //     'attributes.aircon': { $in: [true] },
-        //     'attributes.spa': { $in: [true] },
-        //     'attributes.disabilityaccess': { $in: [true] },
-        //     'attributes.barlounge': { $in: [true] },
-        //     'attributes.hairsalon': { $in: [true] },
-        //     'attributes.petsallowed': { $in: [true] },
-        //   },
-        // ],
-      },
-      // $match: {
-      //   attributes: {
-      //     $exists: [body],
-      //   },
-      // },
-    },
-
-    // {
-    // $match: {
-    //   'attributes.aircon': true,
-    //   // 'attributes.spa': true,
-    //   // 'attributes.freshoutdoors': true,
-    //   // // 'attributes.indoorpool': true,
-    //   // // 'attributes.disabilityaccess': true,
-    //   // 'attributes.barlounge': true,
-    //   // 'attributes.hairsalon': true,
-    //   // // 'attributes.petsallowed': true,\
-    // },
-    //},
-
-    //$gte: [<expression1>, <expression2> ] }
-    //$match: { $expr: { < aggregation expression> } } }
-    // {
-    //   $match: {
-    //     attributes: { $exists: true },
-    //     //'attributes.midrange': { $exists: true },
-    //   },
-    // },
-
-    //  $group: { _id: null, count: { $sum: 1 } },
-  ]);
-
-  let SData;
-  if (search.length > 0) {
-    SData = await HotelQuery.create(req.body);
-
-    //  console.log(SData);
-    console.log(SData._id);
-    res.status(200).json({
-      status: 'success',
-      results: search.length,
-      search,
-      queryId: SData._id,
-    });
-    /**************************************************** */
   } else {
     res.status(200).json({
       status: 'success',
@@ -984,103 +481,144 @@ exports.searchHotelPage1 = catchAsync(async (req, res) => {
 
 exports.searchHotelPage2 = catchAsync(async (req, res) => {
   let attributes = req.body.attributes;
-  let conferenceroom = req.body.conferenceroom; //conferenceroom number
-  let area = req.body.area;
-  //let area = areaC.toLowerCase();
-  let hotelname = req.body.Hotel;
-  let kmfromtarmac = req.body.kmfromtarmac;
-  //let area = req.body.area;
-  let cls = attributes.class;
-  let locality = attributes.locality;
-  // let location = req.body.location;
-  let bedbreakfastcost = req.body.bedbreakfastcost;
-  let minbedbreakfastcost = req.body.bedbreakfastcost.min;
-  let maxbedbreakfastcost = req.body.bedbreakfastcost.max;
-  // let cost = req.body.cost;
 
-  let pet = attributes.petsallowed;
-  let carpark = attributes.carpark;
-  let aircon = attributes.aircon;
-  let spa = attributes.spa;
-  let freshoutdoors = attributes.freshoutdoors;
-  let indoorpool = attributes.indoorpool;
-  let disabilityaccess = attributes.disabilityaccess;
-  let barlounge = attributes.barlounge;
-  let hairsalon = attributes.hairsalon;
+  let query = [
+    {
+      isFlipbook: true,
+    },
+  ];
+  if (attributes.class) {
+    let cls = {
+      'attributes.class': req.body.attributes.class,
+    };
+    query.push(cls);
+  }
+  if (attributes.locality) {
+    let locality = {
+      'attributes.locality': req.body.attributes.locality,
+    };
+    query.push(locality);
+  }
+  if (req.body.area) {
+    let area = {
+      'sellerDetails.location': req.body.area,
+    };
+    query.push(area);
+  }
+  if (req.body.Hotel) {
+    let hotelname = {
+      'propertyDetails.propertyName': req.body.Hotel,
+    };
+    query.push(hotelname);
+  }
+  if (req.body.conferenceroom) {
+    let inta = parseInt(req.body.conferenceroom);
 
-  //this.pet = true;
+    let abc = {
+      'attributes.conferenceroom': inta,
+    };
+    query.push(abc);
+  }
+  if (req.body.kmfromtarmac) {
+    let inta = parseInt(req.body.kmfromtarmac);
+
+    let abc = {
+      'attributes.kmfromtarmac': inta,
+    };
+    query.push(abc);
+  }
+  if (req.body.bedbreakfastcost) {
+    let inta = parseInt(req.body.bedbreakfastcost.max);
+    let intb = parseInt(req.body.bedbreakfastcost.min);
+
+    let maxcost = inta;
+    let mincost = intb;
+
+    let abc = {
+      'attributes.bedbreakfastcost': { $lte: maxcost, $gte: mincost },
+    };
+    query.push(abc);
+  }
+
+  if (attributes.freshoutdoors) {
+    let abc = {
+      'attributes.freshoutdoors': true,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.aircon) {
+    let abc = {
+      'attributes.aircon': true,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.petsallowed) {
+    let abc = {
+      'attributes.petsallowed': true,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.carpark) {
+    let abc = {
+      'attributes.carpark': true,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.spa) {
+    let abc = {
+      'attributes.spa': true,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.indoorpool) {
+    let abc = {
+      'attributes.indoorpool': true,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.disabilityaccess) {
+    let abc = {
+      'attributes.disabilityaccess': true,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.barlounge) {
+    let abc = {
+      'attributes.barlounge': true,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.hairsalon) {
+    let abc = {
+      'attributes.hairsalon': true,
+    };
+    query.push(abc);
+  }
+
+  let jsonto = JSON.stringify(query);
+
+  let par = JSON.parse(jsonto);
+
+  object = Object.assign({}, ...par);
+
   var search = await Hotel.aggregate([
     {
-      $match: {
-        $or: [
-          //$or
-          { 'propertyDetails.propertyName': `${hotelname}` },
-          { 'sellerDetails.location': `${area}` },
-          {
-            'attributes.carpark': { $in: [carpark] },
-          },
-          {
-            'attributes.petsallowed': { $in: [pet] },
-          },
-          {
-            'attributes.aircon': { $in: [aircon] },
-          },
-          {
-            'attributes.spa': { $in: [spa] },
-          },
-          {
-            'attributes.freshoutdoors': { $in: [freshoutdoors] },
-          },
-          {
-            'attributes.indoorpool': { $in: [indoorpool] },
-          },
-          {
-            'attributes.disabilityaccess': { $in: [disabilityaccess] },
-          },
-          {
-            'attributes.barlounge': { $in: [barlounge] },
-          },
-          {
-            'attributes.hairsalon': { $in: [hairsalon] },
-          },
-          { 'attributes.class': `${cls}` },
-        ],
-      },
-    },
-
-    {
-      $match: {
-        isFlipbook: true,
-        //  'attributes.cost': { $lte: cost },
-        //  'attributes.area': { $lte: area },
-        // 'propertyDetails.propertyName': `${hotelname}`,
-        // 'sellerDetails.location': `${area}`,
-        'attributes.class': { $lte: cls },
-        'attributes.locality': { $lte: locality },
-        'attributes.kmfromtarmac': { $lte: kmfromtarmac },
-        'attributes.conferenceroom': { $lte: conferenceroom },
-        'attributes.bedbreakfastcost': {
-          $lte: maxbedbreakfastcost,
-          $gte: minbedbreakfastcost,
-        },
-      },
+      $match: object,
     },
   ]);
+
   let SData;
   if (search.length > 0) {
     SData = await HotelQuery.create(req.body);
 
-    //  console.log(SData);
-    console.log(SData._id);
-    let updateSdata = await HotelQuery.findByIdAndUpdate(
-      { _id: SData._id },
-      {
-        $set: {
-          page2: true,
-        },
-      }
-    );
-    console.log(updateSdata);
     res.status(200).json({
       status: 'success',
       results: search.length,
@@ -1097,313 +635,203 @@ exports.searchHotelPage2 = catchAsync(async (req, res) => {
   }
 });
 
-exports.searchWarehousePage1 = catchAsync(async (req, res) => {
-  //  isSavedStatus: { type: Boolean, default: false },
-  let attributes = req.body.attributes;
-  let Type = attributes.Type;
-
-  let area = req.body.area;
-
-  let cost = req.body.cost;
-  let mincost = req.body.cost.min;
-  let maxcost = req.body.cost.max;
-
-  let sizeinfeet = req.body.sizeinfeet;
-  let minsizeinfeet = req.body.sizeinfeet.min;
-  let maxsizeinfeet = req.body.sizeinfeet.max;
-
-  let kmfromtarmac = req.body.kmfromtarmac;
-
-  console.log(kmfromtarmac);
-
-  var search = await WareHouse.aggregate([
-    {
-      $match: {
-        isFlipbook: true,
-        'attributes.Type': { $in: [Type] },
-        'attributes.cost': { $lte: maxcost, $gte: mincost },
-        'attributes.sizeinfeet': { $lte: maxsizeinfeet, $gte: minsizeinfeet },
-        'attributes.kmfromtarmac': { $lte: kmfromtarmac },
-        // 'attributes.area': { $lte: area },
-        //do this spelling tarmac
-      },
-    },
-    {
-      $match: {
-        $or: [
-          //$or
-          { 'sellerDetails.location': `${area}` },
-          { 'attributes.Type': { $in: [Type] } },
-        ],
-      },
-    },
-  ]);
-
-  //  console.log(req.user.id); //add login check
-
-  let SData;
-  if (search.length > 0) {
-    SData = await WarehouseQuery.create(req.body);
-
-    //  console.log(SData);
-    console.log(SData._id);
-    res.status(200).json({
-      status: 'success',
-      results: search.length,
-      search,
-      queryId: SData._id,
-    });
-    /**************************************************** */
-  } else {
-    res.status(200).json({
-      status: 'success',
-      results: search.length,
-      search,
-    });
-  }
-});
-exports.searchWarehousePage2 = catchAsync(async (req, res) => {
-  //let area = req.body.area;
-  let attributes = req.body.attributes;
-  let Type = attributes.Type;
-
-  let area = req.body.area;
-
-  let cost = req.body.cost;
-  let mincost = req.body.cost.min;
-  let maxcost = req.body.cost.max;
-
-  let sizeinfeet = req.body.sizeinfeet;
-  let minsizeinfeet = req.body.sizeinfeet.min;
-  let maxsizeinfeet = req.body.sizeinfeet.max;
-
-  let kmfromtarmac = req.body.kmfromtarmac; //tarmac change in frontend also.
-
-  let conferencefacilites = attributes.conferencefacilites;
-  let freshoutdoors = attributes.freshoutdoors;
-  let aircon = attributes.aircon;
-  let fullyfurnished = attributes.fullyfurnished;
-  let landscapegarden = attributes.landscapegarden;
-  let wifi = attributes.wifi;
-  let sharedsecretary = attributes.sharedsecretary;
-
-  var search = await WareHouse.aggregate([
-    {
-      $match: {
-        $or: [
-          //$or
-          { 'sellerDetails.location': `${area}` },
-          {
-            'attributes.conferencefacilites': { $in: [conferencefacilites] },
-          },
-          {
-            'attributes.freshoutdoors': { $in: [freshoutdoors] },
-          },
-          {
-            'attributes.aircon': { $in: [aircon] },
-          },
-          {
-            'attributes.fullyfurnished': { $in: [fullyfurnished] },
-          },
-          {
-            'attributes.sharedsecretary': {
-              $in: [sharedsecretary],
-            },
-          },
-          {
-            'attributes.landscapegarden': { $in: [landscapegarden] },
-          },
-          {
-            'attributes.wifi': { $in: [wifi] },
-          },
-          { 'attributes.Type': { $in: [Type] } },
-        ],
-      },
-    },
-
-    {
-      $match: {
-        isFlipbook: true,
-        //- RADIO BUTTONS
-        'attributes.Type': { $in: [Type] },
-        'attributes.cost': { $lte: maxcost, $gte: mincost },
-        // 'attributes.area': { $lte: area },
-        'attributes.sizeinfeet': { $lte: maxsizeinfeet, $gte: minsizeinfeet },
-        'attributes.kmfromtarmac': { $lte: kmfromtarmac },
-        //do this spelling tarmac
-      },
-    },
-  ]);
-
-  let SData;
-  if (search.length > 0) {
-    SData = await WarehouseQuery.create(req.body);
-
-    //  console.log(SData);
-    console.log(SData._id);
-    let updateSdata = await WarehouseQuery.findByIdAndUpdate(
-      { _id: SData._id },
-      {
-        $set: {
-          page2: true,
-        },
-      }
-    );
-    console.log(updateSdata);
-    res.status(200).json({
-      status: 'success',
-      results: search.length,
-      search,
-      queryId: SData._id,
-    });
-    /**************************************************** */
-  } else {
-    res.status(200).json({
-      status: 'success',
-      results: search.length,
-      search,
-    });
-  }
-});
 exports.searchWarehousePage3 = catchAsync(async (req, res) => {
   let attributes = req.body.attributes;
-  let Type = attributes.Type;
 
-  let area = req.body.area;
+  let mainCategory = attributes.mainCategory;
 
-  let cost = req.body.cost;
-  let mincost = cost.min;
-  let maxcost = cost.max;
+  let query = [
+    {
+      isFlipbook: true,
+      'attributes.mainCategory': mainCategory,
+    },
+  ];
+  let Type;
+  if (attributes.Type) {
+    Type = { 'attributes.Type': attributes.Type };
+    query.push(Type);
+  }
+  let area;
+  if (req.body.area) {
+    area = { 'sellerDetails.location': req.body.area };
+    query.push(area);
+  }
 
-  let sizeinfeet = req.body.sizeinfeet;
-  let minsizeinfeet = sizeinfeet.min;
-  let maxsizeinfeet = sizeinfeet.max;
-  let kmfromtarmac = req.body.kmfromtarmac; //tarmac change in frontend also.
+  let cost;
 
-  let conferencefacilites = attributes.conferencefacilites;
-  let freshoutdoors = attributes.freshoutdoors;
-  let aircon = attributes.aircon;
-  let fullyfurnished = attributes.fullyfurnished;
-  let landscapegarden = attributes.landscapegarden;
-  let wifi = attributes.wifi;
-  let sharedsecretary = attributes.sharedsecretary;
+  if (req.body.cost) {
+    let inta = parseInt(req.body.cost.max);
+    let intb = parseInt(req.body.cost.min);
 
-  // let check = attributes.zoning;
-  let zoning = attributes.zoning;
+    let maxcost = inta;
+    let mincost = intb;
 
-  let townLocation = attributes.townLocation;
+    let abc = { 'attributes.cost': { $lte: maxcost, $gte: mincost } };
 
-  let accessRoad = attributes.accessRoad;
+    query.push(abc);
+  }
+  if (req.body.sizeinfeet) {
+    let inta = parseInt(req.body.sizeinfeet.max);
+    let intb = parseInt(req.body.sizeinfeet.min);
 
-  let tenants = attributes.tenants;
+    let maxsizeinfeet = inta;
+    let minsizeinfeet = intb;
 
-  let elevator = attributes.elevator;
+    let abc = {
+      'attributes.sizeinfeet': { $lte: maxsizeinfeet, $gte: minsizeinfeet },
+    };
 
-  let security = attributes.security;
+    query.push(abc);
+  }
+  if (req.body.kmfromtarmac) {
+    let inta = parseInt(req.body.kmfromtarmac);
 
-  let vehicleTraffic = attributes.vehicleTraffic;
+    let abc = {
+      'attributes.kmfromtarmac': { $eq: inta },
+    };
+    query.push(abc);
+  }
 
-  let humanTraffic = attributes.humanTraffic;
+  if (attributes.conferencefacilites) {
+    let abc = {
+      'attributes.conferencefacilites': true,
+    };
+    query.push(abc);
+  }
 
-  let meetingRoom = attributes.meetingRoom;
+  if (attributes.freshoutdoors) {
+    let abc = {
+      'attributes.freshoutdoors': true,
+    };
+    query.push(abc);
+  }
 
-  let parking = attributes.parking;
+  if (attributes.aircon) {
+    let abc = {
+      'attributes.aircon': true,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.fullyfurnished) {
+    let abc = {
+      'attributes.fullyfurnished': true,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.landscapegarden) {
+    let abc = {
+      'attributes.landscapegarden': true,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.wifi) {
+    let abc = {
+      'attributes.wifi': true,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.sharedsecretary) {
+    let abc = {
+      'attributes.sharedsecretary': true,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.zoning) {
+    let abc = {
+      'attributes.zoning': attributes.zoning,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.townLocation) {
+    let abc = {
+      'attributes.townLocation': attributes.townLocation,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.accessRoad) {
+    let abc = {
+      'attributes.accessRoad': attributes.accessRoad,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.tenants) {
+    let abc = {
+      'attributes.tenants': attributes.tenants,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.elevator) {
+    let abc = {
+      'attributes.elevator': attributes.elevator,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.security) {
+    let abc = {
+      'attributes.security': attributes.security,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.vehicleTraffic) {
+    let abc = {
+      'attributes.vehicleTraffic': attributes.vehicleTraffic,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.humanTraffic) {
+    let abc = {
+      'attributes.humanTraffic': attributes.humanTraffic,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.meetingRoom) {
+    let abc = {
+      'attributes.meetingRoom': attributes.meetingRoom,
+    };
+    query.push(abc);
+  }
+
+  if (attributes.parking) {
+    let abc = {
+      'attributes.parking': attributes.parking,
+    };
+    query.push(abc);
+  }
+
+  let jsonto = JSON.stringify(query);
+
+  let par = JSON.parse(jsonto);
+
+  object = Object.assign({}, ...par);
 
   var search = await WareHouse.aggregate([
     {
-      $match: {
-        $or: [
-          //$or
-
-          {
-            'attributes.conferencefacilites': { $in: [conferencefacilites] },
-          },
-          {
-            'attributes.freshoutdoors': { $in: [freshoutdoors] },
-          },
-          {
-            'attributes.aircon': { $in: [aircon] },
-          },
-          {
-            'attributes.fullyfurnished': { $in: [fullyfurnished] },
-          },
-          {
-            'attributes.sharedsecretary': {
-              $in: [sharedsecretary],
-            },
-          },
-          {
-            'attributes.landscapegarden': { $in: [landscapegarden] },
-          },
-          {
-            'attributes.wifi': { $in: [wifi] },
-          },
-          { 'sellerDetails.location': `${area}` },
-          {
-            'attributes.zoning': { $in: [zoning] },
-            'attributes.townLocation': { $in: [townLocation] },
-            'attributes.accessRoad': { $in: [accessRoad] },
-            'attributes.tenants': { $in: [tenants] },
-            'attributes.elevator': { $in: [elevator] },
-            'attributes.security': { $in: [security] },
-            'attributes.vehicleTraffic': { $in: [vehicleTraffic] },
-            'attributes.humanTraffic': { $in: [humanTraffic] },
-            'attributes.meetingRoom': { $in: [meetingRoom] },
-            'attributes.parking': { $in: [parking] },
-          },
-          {
-            'attributes.Type': { $in: [Type] },
-          },
-        ],
-      },
-    },
-
-    {
-      $match: {
-        isFlipbook: true,
-        //- RADIO BUTTONS
-        'attributes.Type': { $in: [Type] },
-
-        // 'attributes.zoning': { $in: [zoning] },
-        // 'attributes.townLocation': { $in: [townLocation] },
-        // 'attributes.accessRoad': { $in: [accessRoad] },
-        // 'attributes.tenants': { $in: [tenants] },
-        // 'attributes.elevator': { $in: [elevator] },
-        // 'attributes.security': { $in: [security] },
-        // 'attributes.vehicleTraffic': { $in: [vehicleTraffic] },
-        // 'attributes.humanTraffic': { $in: [humanTraffic] },
-        // 'attributes.meetingRoom': { $in: [meetingRoom] },
-        // 'attributes.parking': { $in: [parking] },
-
-        'attributes.cost': { $lte: maxcost, $gte: mincost },
-        //  'attributes.area': { $lte: area },
-        'attributes.sizeinfeet': { $lte: maxsizeinfeet, $gte: minsizeinfeet },
-        'attributes.kmfromtarmac': { $lte: kmfromtarmac },
-        //do this spelling tarmac
-      },
+      $match: object,
     },
   ]);
   let SData;
   if (search.length > 0) {
     SData = await WarehouseQuery.create(req.body);
 
-    console.log(SData._id);
-    let updateSdata = await WarehouseQuery.findByIdAndUpdate(
-      { _id: SData._id },
-      {
-        $set: {
-          page3: true,
-        },
-      }
-    );
-    console.log(updateSdata);
     res.status(200).json({
       status: 'success',
       results: search.length,
       search,
       queryId: SData._id,
     });
-    /**************************************************** */
   } else {
     res.status(200).json({
       status: 'success',

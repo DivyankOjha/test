@@ -41,8 +41,8 @@ const landSchema = new mongoose.Schema({
     cost: Number,
     sizeinacres: { type: Number }, // need to set min max ??
 
-    freehold: { type: Boolean },
-    lease: { type: Boolean },
+    // freehold: { type: Boolean },
+    // lease: { type: Boolean },
 
     leasefreehold: String,
 
@@ -64,20 +64,7 @@ const landSchema = new mongoose.Schema({
     kmtowater: { type: Number },
     kmtoelectricity: { type: Number },
   },
-  // red: { type: Boolean },
-  // blackcotton: { type: Boolean },
-  // murram: { type: Boolean },
 
-  // residential: { type: Boolean },
-  // commercial: { type: Boolean },
-  // industrial: { type: Boolean },
-
-  // tarmac: { type: Boolean },
-  // murram: { type: Boolean },
-  // allweather: { type: Boolean },
-  // noroad: { type: Boolean },
-
-  //page 3
   sellerDetails: {
     sellername: String,
     sellerContactNumber: Number,

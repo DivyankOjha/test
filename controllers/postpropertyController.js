@@ -21,47 +21,35 @@ exports.addProperty = catchAsync(async (req, res, next) => {
   const newproperty = await postProperty.create(body);
 
   const propertyName = newproperty.email + '_' + newproperty._id;
-  // const propName = req.body.name;
-  // const propertyName = propName.replace(/\s/g, '_');
-  //console.log('prop ' + prop);
-  // console.log('prop ' + prop);
 
-  // console.log('prop: ' + prop[i]);
   var matches = await req.body.nationalidimage.match(
       /^data:([A-Za-z-+\/]+);base64,(.+)$/
     ),
     response = {};
-  //console.log(matches);
-  // if (matches.length !== 3) {
-  //   return new Error('Invalid input string');
-  // }
+
   response.type = matches[1];
-  //console.log('responseType:' + response.type);
+
   response.data = new Buffer.from(matches[2], 'base64');
   let decodedImg = response;
   let imageBuffer = decodedImg.data;
   let type = decodedImg.type;
   const name = type.split('/');
-  // console.log(name);
+
   const name1 = name[0];
-  // console.log(name1);
+
   let extension = mime.extension(type);
-  // console.log(extension);
+
   const rand = Math.ceil(Math.random() * 1000);
   // Random photo name with timeStamp so it will not overide previous images.
   const fileName = `${propertyName}_${Date.now()}_${rand}.${extension}`;
-  //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
-  // console.log(fileName);
   path3 = path.resolve(`./public/media/propertyimages/`);
 
   let localpath = `${path3}/${propertyName}/`;
-  // console.log(localpath);
 
   if (!fs.existsSync(localpath)) {
     fs.mkdirSync(localpath);
   }
-  // console.log(localpath);
 
   fs.writeFileSync(
     `${localpath}/` + 'National_id_' + fileName,
@@ -85,60 +73,38 @@ exports.addProperty = catchAsync(async (req, res, next) => {
   var prop = req.body.propertyimage;
 
   for (var i in prop) {
-    // console.log('prop: ' + prop[i]);
     var matches = await prop[i].match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
       response = {};
-    //console.log(matches);
-    // if (matches.length !== 3) {
-    //   return new Error('Invalid input string');
-    // }
+
     response.type = matches[1];
-    //console.log('responseType:' + response.type);
+
     response.data = new Buffer.from(matches[2], 'base64');
     let decodedImg = response;
     let imageBuffer = decodedImg.data;
     let type = decodedImg.type;
     const name = type.split('/');
-    // console.log(name);
+
     const name1 = name[0];
-    // console.log(name1);
+
     let extension = mime.extension(type);
-    // console.log(extension);
+
     const rand = Math.ceil(Math.random() * 1000);
     // Random photo name with timeStamp so it will not overide previous images.
     const fileName = `${propertyName}_${Date.now()}_${rand}.${extension}`;
-    //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
-    // console.log(fileName);
     path3 = path.resolve(`./public/media/propertyimages/`);
 
     let localpath = `${path3}/${propertyName}/`;
-    // console.log(localpath);
 
     if (!fs.existsSync(localpath)) {
       fs.mkdirSync(localpath);
     }
-    // console.log(localpath);
 
     fs.writeFileSync(`${localpath}/` + fileName, imageBuffer, 'utf8');
 
     const url = `${req.protocol}://${ip}/media/propertyimages/${propertyName}/${fileName}`;
 
     propertylinks.push(url);
-    //console.log(path3);
-
-    // console.log('url' + url);
-    // console.log('propertylinks: ' + propertylinks);
-    //   const imagePath = fs.writeFileSync(
-    //       path3 + '/' + fileName,
-    //       imageBuffer,
-    //       'utf8'
-    //   );
-    //   s const imagepath2 = fs.readFileSync(localpath);
-    //   const imagepath1 = fs.readFileSync(path3 + '/' + 'image.png');
-    //   console.log(path3 + '/' + 'image.png');
-    //   const url = `${req.protocol}://${req.get('host')}/media/${fileName}`;
-    //   console.log('url: ' + url);
   }
   const updating = await postProperty.findByIdAndUpdate(newproperty._id, {
     $set: { propertyimage: propertylinks },
@@ -148,79 +114,10 @@ exports.addProperty = catchAsync(async (req, res, next) => {
     propertylinks,
     urlpath,
   });
-  //   var match = prop[0];
-  //   console.log('match:' + match);
-  //   var matches = await req.body.image.match(
-  //       /^data:([A-Za-z-+\/]+);base64,(.+)$/
-  //     ),
-  //     response = {};
-  //   //console.log(matches);
-  //   if (matches.length !== 3) {
-  //     return new Error('Invalid input string');
-  //   }
-  //   response.type = matches[1];
-  //   console.log('responseType:' + response.type);
-  //   response.data = new Buffer.from(matches[2], 'base64');
-  //   let decodedImg = response;
-  //   let imageBuffer = decodedImg.data;
-  //   let type = decodedImg.type;
-  //   const name = type.split('/');
-  //   console.log(name);
-  //   const name1 = name[0];
-  //   console.log(name1);
-  //   let extension = mime.extension(type);
-  //   console.log(extension);
-  //const rand = Math.ceil(Math.random() * 1000);
-  //Random photo name with timeStamp so it will not overide previous images.
-  //const fileName = `${propertyname}_${Date.now()}_.${extension}`;
-  //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
-
-  // let fileName = name1 ++ '.' + extension;
-  // console.log(filename);
-  // let abc = 'abc';
-  // path3 = path.resolve(`./public/media/propertyimages/`);
-
-  // let localpath = `${path3}/${propertyname}/`;
-  //console.log(localpath);
-
-  // if (!fs.existsSync(localpath)) {
-  ////   fs.mkdirSync(localpath);
-  // }
-  //console.log(localpath);
-
-  // fs.writeFileSync(`${localpath}/` + fileName, imageBuffer, 'utf8');
-
-  // const url = `${req.protocol}://${req.get(
-  //  'host'
-  // )}/media/profilepictures/${propertyname}/${fileName}`;
-  // console.log(path3);
-  // const imagePath = fs.writeFileSync(
-  //   path3 + '/' + fileName,
-  //   imageBuffer,
-  //   'utf8'
-  // );
-  // console.log(path3 + '/' + req.body.image);
-  //s const imagepath2 = fs.readFileSync(localpath);
-  // const imagepath1 = fs.readFileSync(path3 + '/' + 'image.png');
-  // console.log(path3 + '/' + 'image.png');
-  // const url = `${req.protocol}://${req.get('host')}/media/${fileName}`;
-  // console.log('url: ' + url);
-  //   return res.status(200).json({
-  //     url,
-  //   });
-
-  // res.status(201).json({
-  //   status: 'success',
-  //   data: {
-  //     Property: newproperty,
-  //   },
-  // });
 });
 
 exports.getAllproperty = catchAsync(async (req, res) => {
-  const limit = parseInt(req.query.limit);
-  const skip = parseInt(req.query.skip);
-  const property = await postProperty.find().sort({ _id: -1 }); //.skip(skip).limit(limit);
+  const property = await postProperty.find().sort({ _id: -1 });
   res.status(200).json({
     status: 'success',
     results: property.length,
@@ -243,25 +140,15 @@ exports.getPostPropertybyId = catchAsync(async (req, res) => {
 
 //searching by email
 exports.searchPostPropertyInquiry = catchAsync(async (req, res, next) => {
-  //by subscriptionid/email
   let searchquery = req.body.searchquery;
   let str = searchquery;
   let substr = '@';
-  // console.log(str.includes(substr));
-  console.log(searchquery);
-  const limit = parseInt(req.query.limit);
-  const skip = parseInt(req.query.skip);
-
-  //const _id = searchquery;
-  //console.log('length' + _id.length);
-  //try {
-  // if (str.includes(substr)) {
 
   const data = await postProperty.find({
     $expr: {
       $regexMatch: {
         input: '$email',
-        regex: searchquery, //Your text search here
+        regex: searchquery,
         options: 'm',
       },
     },
@@ -283,19 +170,12 @@ exports.searchPostPropertyInquiry = catchAsync(async (req, res, next) => {
 
 exports.filterbydate = catchAsync(async (req, res) => {
   let { startDate, endDate } = req.body;
-  const limit = parseInt(req.query.limit);
-  const skip = parseInt(req.query.skip);
 
-  //console.log(endDate + 'T' + '00:00:00');
   const users = await postProperty
     .find({
       createdAt: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
-      // createdAt: { $lt: endDate },
     })
     .sort({ _id: -1 });
-  //.skip(skip)
-  //  .limit(limit);
-  // console.log('users: ' + users);
 
   res.status(200).json({
     status: 'success',
@@ -305,11 +185,10 @@ exports.filterbydate = catchAsync(async (req, res) => {
 });
 
 exports.postPropertyEmail = catchAsync(async (req, res) => {
-  console.log(req.body.reciever);
   const emailsettings = await Email.findById({
     _id: '5f2e3d86d15a133adc74df50',
   });
-  // console.log(emailsettings);
+
   let host = emailsettings.host;
   let user = emailsettings.username;
   let pass = emailsettings.password;
@@ -324,43 +203,19 @@ exports.postPropertyEmail = catchAsync(async (req, res) => {
 
   let idArr = [];
   idArr = req.body.reciever;
-  //console.log(idArr);
-  // let data = await postProperty.findById({
-  //   _id: idArr[0],
-  // });
-  //console.log(data);
+
   for (var i in idArr) {
-    console.log(idArr);
+   
     let inquiryemail = await postProperty.findById({
       _id: idArr[i],
     });
-    console.log(inquiryemail);
-    //if (req.body.reciever[i] >= req.body.reciever[0]) {
+
     var mailOptions = {
       from: `CUBOID <${emailsettings.username}>`,
       to: inquiryemail.email,
       subject: req.body.subject[0],
       html: `<p>${req.body.message[0]}</p>`,
     };
-    console.log(inquiryemail);
-    // if (req.body.reciever[i] >= req.body.reciever[0]) {
-    // var mailOptions = {
-    //   from: `CUBOID <${emailsettings.username}>`,
-    //   to: inquiryemail.email,
-    //   subject: req.body.subject[0],
-    //   html: `<p>${req.body.message[0]}</p>`,
-    // };
-    // console.log('if 1');
-    // }
-    // if (req.body.reciever[i] === req.body.reciever[0]) {
-    //   var mailOptions = {
-    //     from: `CUBOID <${emailsettings.username}>`,
-    //     to: inquiryemail.email,
-    //     subject: req.body.subject[0],
-    //     html: `<p>Hello ${req.body.message[0]}</p>`,
-    //   };
-    //   console.log('if 2');
-    // }
 
     transporter.sendMail(mailOptions, function (err) {
       if (err) {
@@ -370,12 +225,8 @@ exports.postPropertyEmail = catchAsync(async (req, res) => {
       }
     });
   }
-  //const inquiry = await Inquiry.find();
+
   res.status(200).json({
     status: 'success',
-    // results: inquiry.length,
-    // data: {
-    //   inquiry,
-    //},
   });
 });

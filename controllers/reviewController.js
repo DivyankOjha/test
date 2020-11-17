@@ -7,12 +7,10 @@ exports.postReview = catchAsync(async (req, res, next) => {
   const postReview = await Review.create(req.body);
 
   const finduser = await User.findById({ _id: postReview.userId });
-  // console.log(finduser.firstname);
-  // console.log(finduser.lastname);
+
   str1 = finduser.firstname;
   str2 = finduser.lastname;
   const newString = str1.concat(' ', str2);
-  //console.log(newString);
 
   const updateReview = await Review.updateOne(
     { _id: postReview._id },
@@ -20,9 +18,7 @@ exports.postReview = catchAsync(async (req, res, next) => {
       $set: { name: newString },
     }
   );
-  //console.log(finduser);
 
-  //console.log(updateReview);
   res.status(200).json({
     status: 'Success',
     review: postReview,
@@ -54,16 +50,13 @@ exports.getReviewByRating = catchAsync(async (req, res, next) => {
 exports.reviewIsactiveInactive = catchAsync(async (req, res, next) => {
   const _id = req.params.id;
   const review = await Review.findById({ _id });
-  // console.log(user);
-  // console.log(user._id);
+
   if (review.isActive) {
-    //console.log('hello');
     const review = await Review.findByIdAndUpdate(_id, {
       $set: { isActive: false },
     });
   }
   if (!review.isActive) {
-    //console.log('hello');
     const review = await Review.findByIdAndUpdate(_id, {
       $set: { isActive: true },
     });
@@ -75,7 +68,6 @@ exports.reviewIsactiveInactive = catchAsync(async (req, res, next) => {
 
 exports.deleteReview = catchAsync(async (req, res) => {
   var ids = req.body.deletereview;
-  // console.log('id' + ids);
 
   const deletemany = await Review.deleteMany({
     _id: { $in: ids },

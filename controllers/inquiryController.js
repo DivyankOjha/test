@@ -23,9 +23,7 @@ exports.Inquiry = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllInquiry = catchAsync(async (req, res) => {
-  const limit = parseInt(req.query.limit);
-  const skip = parseInt(req.query.skip);
-  const inquiry = await Inquiry.find().sort({ _id: -1 }); //.skip(skip).limit(limit);
+  const inquiry = await Inquiry.find().sort({ _id: -1 });
   res.status(200).json({
     status: 'success',
     results: inquiry.length,
@@ -36,7 +34,6 @@ exports.getAllInquiry = catchAsync(async (req, res) => {
 });
 
 exports.getInquirybyId = catchAsync(async (req, res) => {
-  console.log('Hello' + req.params.id);
   const inquiry = await Inquiry.findById({ _id: req.params.id });
   res.status(200).json({
     status: 'success',
@@ -74,28 +71,17 @@ exports.searchInquiry = catchAsync(async (req, res, next) => {
   let searchquery = req.body.searchquery;
   let str = searchquery;
   let substr = '@';
-  // console.log(str.includes(substr));
-  console.log(searchquery);
-  const limit = parseInt(req.query.limit);
-  const skip = parseInt(req.query.skip);
 
-  //const _id = searchquery;
-  //console.log('length' + _id.length);
-  //try {
-  //  if (str.includes(substr)) {
-  console.log('this is email');
   const data = await Inquiry.find({
     $expr: {
       $regexMatch: {
         input: '$email',
-        regex: searchquery, //Your text search here
+        regex: searchquery,
         options: 'm',
       },
     },
   });
-  //  .skip(skip)
-  //  .limit(limit);
-  //console.log(data);
+
   if (data.length < 1) {
     res.status(200).json({
       status: 'Not Found',
@@ -108,22 +94,13 @@ exports.searchInquiry = catchAsync(async (req, res, next) => {
       data: data,
     });
   }
-
-  // } catch (error) {
-  //console.log(error);
-  // res.status(404).json({
-  //   status: 'Not Found',
-  //   message: 'Inquiry Details Not Found! Try again.',
-  // });
-  // }
 });
 
 exports.InquiryEmail = catchAsync(async (req, res) => {
-  //console.log(req.body.reciever);
   const emailsettings = await Email.findById({
     _id: '5f2e3d86d15a133adc74df50',
   });
-  // console.log(emailsettings);
+
   let host = emailsettings.host;
   let user = emailsettings.username;
   let pass = emailsettings.password;
@@ -135,29 +112,16 @@ exports.InquiryEmail = catchAsync(async (req, res) => {
       pass: pass,
     },
   });
-  // const url = `http://54.164.209.42/login/${token}`;
-  //const url = `${req.protocol}://${req.get('host')}/api/login/${token}`;
-  //const url = `http://localhost:3002/api/users/confirmation/${token}`;
+
   for (var i in req.body.reciever) {
     let inquiryemail = await Inquiry.findById({ _id: req.body.reciever[i] });
-    console.log(inquiryemail.email);
-    // if (req.body.reciever[i] >= req.body.reciever[0]) {
+
     var mailOptions = {
       from: `CUBOID <${emailsettings.username}>`,
       to: inquiryemail.email,
       subject: req.body.subject[0],
       html: `<p>${req.body.message[0]}</p>`,
     };
-    console.log('if 1');
-    //  }
-    // if (req.body.subject[i] === req.body.subject[0]) {
-    //   var mailOptions = {
-    //     from: `CUBOID <${emailsettings.username}>`,
-    //     to: inquiryemail.email,
-    //     subject: req.body.subject[0],
-    //     html: `<p>Hello ${req.body.message[0]}</p>`,
-    //   };
-    // }
 
     transporter.sendMail(mailOptions, function (err) {
       if (err) {
@@ -169,29 +133,18 @@ exports.InquiryEmail = catchAsync(async (req, res) => {
       }
     });
   }
-  //const inquiry = await Inquiry.find();
+
   res.status(200).json({
     status: 'success',
-    // results: inquiry.length,
-    // data: {
-    //   inquiry,
-    // },
   });
 });
 
 exports.filterbydate = catchAsync(async (req, res) => {
   let { startDate, endDate } = req.body;
-  const limit = parseInt(req.query.limit);
-  const skip = parseInt(req.query.skip);
 
-  //console.log(endDate + 'T' + '00:00:00');
   const users = await Inquiry.find({
     createdAt: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
-    // createdAt: { $lt: endDate },
   }).sort({ _id: -1 });
-  //.skip(skip)
-  //  .limit(limit);
-  // console.log('users: ' + users);
 
   res.status(200).json({
     status: 'success',
@@ -202,8 +155,6 @@ exports.filterbydate = catchAsync(async (req, res) => {
 
 //Customer Inquiry
 exports.customerInquiry = catchAsync(async (req, res, next) => {
-  console.log(req.body);
-
   let findpropertyHouse = await House.findById({ _id: req.body.propertyID });
   let findpropertyLand = await Land.findById({ _id: req.body.propertyID });
   let findpropertyHotel = await Hotel.findById({
@@ -212,10 +163,8 @@ exports.customerInquiry = catchAsync(async (req, res, next) => {
   let findpropertyWarehouse = await WareHouse.findById({
     _id: req.body.propertyID,
   });
-  //  console.log(findpropertyHouse);
-  if (findpropertyHouse) {
-    console.log('found house');
 
+  if (findpropertyHouse) {
     let newInquiry = await Customer.create(req.body);
     let updatedata = await Customer.findByIdAndUpdate(
       { _id: newInquiry._id },
@@ -227,10 +176,9 @@ exports.customerInquiry = catchAsync(async (req, res, next) => {
         },
       }
     );
-    //console.log(newInquiry.userEmail);
-    console.log(req.body.userId);
+
     const finduser = await User.findById({ _id: req.body.userId });
-    console.log(finduser.email);
+
     str1 = finduser.firstname;
     str2 = finduser.lastname;
     const username = str1.concat(' ', str2);
@@ -253,8 +201,6 @@ exports.customerInquiry = catchAsync(async (req, res, next) => {
     });
   }
   if (findpropertyLand) {
-    console.log('found');
-
     const newInquiry = await Customer.create(req.body);
     let updatedata = await Customer.findByIdAndUpdate(
       { _id: newInquiry._id },
@@ -266,10 +212,9 @@ exports.customerInquiry = catchAsync(async (req, res, next) => {
         },
       }
     );
-    //console.log(newInquiry.userEmail);
-    console.log(req.body.userId);
+
     const finduser = await User.findById({ _id: req.body.userId });
-    console.log(finduser.email);
+
     str1 = finduser.firstname;
     str2 = finduser.lastname;
     const username = str1.concat(' ', str2);
@@ -283,7 +228,7 @@ exports.customerInquiry = catchAsync(async (req, res, next) => {
     await sendEmail({
       email: currentinquiry.sellerEmail,
       subject: `Hi, ${currentinquiry.sellerName}, i am customer and this is my inquiry`,
-      //  subject: 'Your password reset token (valid for 10 min)',
+
       message,
     });
     res.status(201).json({
@@ -292,8 +237,6 @@ exports.customerInquiry = catchAsync(async (req, res, next) => {
     });
   }
   if (findpropertyHotel) {
-    console.log('found');
-
     const newInquiry = await Customer.create(req.body);
     let updatedata = await Customer.findByIdAndUpdate(
       { _id: newInquiry._id },
@@ -305,10 +248,9 @@ exports.customerInquiry = catchAsync(async (req, res, next) => {
         },
       }
     );
-    //console.log(newInquiry.userEmail);
-    console.log(req.body.userId);
+
     const finduser = await User.findById({ _id: req.body.userId });
-    console.log(finduser.email);
+
     str1 = finduser.firstname;
     str2 = finduser.lastname;
     const username = str1.concat(' ', str2);
@@ -323,7 +265,7 @@ exports.customerInquiry = catchAsync(async (req, res, next) => {
     await sendEmail({
       email: currentinquiry.sellerEmail,
       subject: `Hi, ${currentinquiry.sellerName}, i am customer and this is my inquiry`,
-      //  subject: 'Your password reset token (valid for 10 min)',
+
       message,
     });
     res.status(201).json({
@@ -343,10 +285,9 @@ exports.customerInquiry = catchAsync(async (req, res, next) => {
         },
       }
     );
-    //console.log(newInquiry.userEmail);
-    console.log(req.body.userId);
+
     const finduser = await User.findById({ _id: req.body.userId });
-    console.log(finduser.email);
+
     str1 = finduser.firstname;
     str2 = finduser.lastname;
     const username = str1.concat(' ', str2);
@@ -361,7 +302,7 @@ exports.customerInquiry = catchAsync(async (req, res, next) => {
     await sendEmail({
       email: currentinquiry.sellerEmail,
       subject: `Hi, ${currentinquiry.sellerName}, i am customer and this is my inquiry`,
-      //  subject: 'Your password reset token (valid for 10 min)',
+
       message,
     });
     res.status(201).json({
@@ -384,28 +325,17 @@ exports.searchInquiryCustomer = catchAsync(async (req, res, next) => {
   let searchquery = req.body.searchquery;
   let str = searchquery;
   let substr = '@';
-  // console.log(str.includes(substr));
-  console.log(searchquery);
-  const limit = parseInt(req.query.limit);
-  const skip = parseInt(req.query.skip);
 
-  //const _id = searchquery;
-  //console.log('length' + _id.length);
-  //try {
-  //  if (str.includes(substr)) {
-  console.log('this is email');
   const data = await Customer.find({
     $expr: {
       $regexMatch: {
         input: '$userEmail',
-        regex: searchquery, //Your text search here
+        regex: searchquery,
         options: 'm',
       },
     },
   });
-  //  .skip(skip)
-  //  .limit(limit);
-  //console.log(data);
+
   if (data.length < 1) {
     res.status(200).json({
       status: 'Not Found',
@@ -418,28 +348,15 @@ exports.searchInquiryCustomer = catchAsync(async (req, res, next) => {
       data: data,
     });
   }
-
-  // } catch (error) {
-  //console.log(error);
-  // res.status(404).json({
-  //   status: 'Not Found',
-  //   message: 'Inquiry Details Not Found! Try again.',
-  // });
-  // }
 });
 exports.Customerfilterbydate = catchAsync(async (req, res) => {
   let { startDate, endDate } = req.body;
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
 
-  //console.log(endDate + 'T' + '00:00:00');
   const users = await Customer.find({
     createdAt: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
-    // createdAt: { $lt: endDate },
   }).sort({ _id: -1 });
-  //.skip(skip)
-  //  .limit(limit);
-  // console.log('users: ' + users);
 
   res.status(200).json({
     status: 'success',
@@ -449,11 +366,10 @@ exports.Customerfilterbydate = catchAsync(async (req, res) => {
 });
 
 exports.CustomerReplyEmail = catchAsync(async (req, res) => {
-  //console.log(req.body.reciever);
   const emailsettings = await Email.findById({
     _id: '5f2e3d86d15a133adc74df50',
   });
-  // console.log(emailsettings);
+
   let host = emailsettings.host;
   let user = emailsettings.username;
   let pass = emailsettings.password;
@@ -465,28 +381,16 @@ exports.CustomerReplyEmail = catchAsync(async (req, res) => {
       pass: pass,
     },
   });
-  // const url = `http://54.164.209.42/login/${token}`;
-  //const url = `${req.protocol}://${req.get('host')}/api/login/${token}`;
-  //const url = `http://localhost:3002/api/users/confirmation/${token}`;
+
   for (var i in req.body.reciever) {
     const inquiryemail = await Customer.findById({ _id: req.body.reciever[i] });
-    console.log(inquiryemail.userEmail);
-    // if (req.body.subject[i] > req.body.subject[0]) {
+
     var mailOptions = {
       from: `CUBOID <${emailsettings.username}>`,
       to: inquiryemail.userEmail,
       subject: req.body.subject[0],
       html: `<p>${req.body.message[0]}</p>`,
     };
-    //}
-    // if (req.body.subject[i] === req.body.subject[0]) {
-    //   var mailOptions = {
-    //     from: `CUBOID <${emailsettings.username}>`,
-    //     to: inquiryemail.userEmail,
-    //     subject: req.body.subject[0],
-    //     html: `<p>Hello ${req.body.message[0]}</p>`,
-    //   };
-    // }
 
     transporter.sendMail(mailOptions, function (err) {
       if (err) {
@@ -496,12 +400,8 @@ exports.CustomerReplyEmail = catchAsync(async (req, res) => {
       }
     });
   }
-  //const inquiry = await Inquiry.find();
+
   res.status(200).json({
     status: 'success',
-    // results: inquiry.length,
-    // data: {
-    //   inquiry,
-    // },
   });
 });

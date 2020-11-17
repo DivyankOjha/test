@@ -3,7 +3,6 @@ require('mongoose-currency').loadType(mongoose);
 const Currency = mongoose.Types.Currency;
 
 const landQuery = new mongoose.Schema({
-  //page1 in admin add property details
   location: {
     coordinates: {
       lattitude: { type: Number },
@@ -12,8 +11,7 @@ const landQuery = new mongoose.Schema({
     type: { type: String, default: 'Point' },
   },
   categoryType: { type: String, default: 'Land' },
-  page2: { type: Boolean, default: false },
-  page3: { type: Boolean, default: false },
+
   createdAt: { type: Date, default: Date.now },
 
   area: String,
@@ -25,7 +23,7 @@ const landQuery = new mongoose.Schema({
     min: Number,
     max: Number,
   },
-  //Attributes
+
   attributes: {
     mainCategory: String,
 

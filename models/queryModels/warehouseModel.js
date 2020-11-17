@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const warehouseQuery = new mongoose.Schema({
   //page1 in admin add property details
   categoryType: { type: String, default: 'Warehouse' },
-  page2: { type: Boolean, default: false },
-  page3: { type: Boolean, default: false },
+ 
   createdAt: { type: Date, default: Date.now },
   area: { type: String },
   cost: {

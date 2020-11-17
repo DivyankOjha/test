@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const houseQuery = new mongoose.Schema({
   categoryType: { type: String, default: 'House' },
-  page2: { type: Boolean, default: false },
+
   createdAt: { type: Date, default: Date.now },
   cost: {
     min: Number,

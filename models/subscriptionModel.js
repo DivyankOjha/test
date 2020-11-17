@@ -4,7 +4,8 @@ const subSchema = new mongoose.Schema({
   isStatus: { type: Boolean, default: true }, // Subscription order ID
 
   userID: { type: mongoose.Schema.ObjectId },
-
+  transactionid: String,
+  paymentstatus: String,
   subscriptionType: {
     buy: { type: Boolean, default: false },
     rent: { type: Boolean, default: false },

@@ -6,18 +6,11 @@ const Land = require('../../models/landModel');
 const Hotel = require('../../models/hotelModel');
 const Warehouse = require('../../models/warehouseModel');
 
-//let PropertyNames = [];
-//PropertyNames.length = 0;
-//console.log(PropertyNames.length);
-//PropertyNames.push(1);
-//console.log(PropertyNames);
-
 //including isFlipbook
 exports.getdata = catchAsync(async (req, res, next) => {
   let PropertyNames = [];
   let housedata = await House.find();
-  // console.log(housedata.length);
-  //console.log(housedata[0].isFlipbook);
+
   for (var i in housedata) {
     if (!housedata[i].isFlipbook) {
       let data = [];
@@ -30,10 +23,6 @@ exports.getdata = catchAsync(async (req, res, next) => {
       PropertyNames.push(data);
     }
   }
-
-  //   for (let i = 0; i <= housedata.length; i++) {
-  //     PropertyNames.push(housedata[i].propertyDetails.propertyName);
-  //   }
 
   const land = await Land.find();
   console.log(land[0].isFlipbook);
@@ -78,10 +67,9 @@ exports.getdata = catchAsync(async (req, res, next) => {
       PropertyNames.push(data3);
     }
   }
-  // console.log(PropertyNames);
+
   let sortedName = [];
   sortedName = PropertyNames.sort();
-  //console.log('sort:' + sortedName);
 
   res.status(200).json({
     status: 'success',
@@ -94,8 +82,7 @@ exports.getdata = catchAsync(async (req, res, next) => {
 exports.getdataEx = catchAsync(async (req, res, next) => {
   let PropertyNames = [];
   let housedata = await House.find();
-  // console.log(housedata.length);
-  //console.log(housedata[0].isFlipbook);
+
   for (var i in housedata) {
     let data = [];
     val1 = housedata[i].propertyDetails.propertyName;
@@ -106,10 +93,6 @@ exports.getdataEx = catchAsync(async (req, res, next) => {
     data.push(val3);
     PropertyNames.push(data);
   }
-
-  //   for (let i = 0; i <= housedata.length; i++) {
-  //     PropertyNames.push(housedata[i].propertyDetails.propertyName);
-  //   }
 
   const land = await Land.find();
   console.log(land[0].isFlipbook);
@@ -133,7 +116,7 @@ exports.getdataEx = catchAsync(async (req, res, next) => {
     data2.push(val2);
     val3 = hotel[i]._id;
     data2.push(val3);
-    console.log(data2);
+
     PropertyNames.push(data2);
   }
 
@@ -148,10 +131,9 @@ exports.getdataEx = catchAsync(async (req, res, next) => {
     data3.push(val3);
     PropertyNames.push(data3);
   }
-  // console.log(PropertyNames);
+
   let sortedName = [];
   sortedName = PropertyNames.sort();
-  //console.log('sort:' + sortedName);
 
   res.status(200).json({
     status: 'success',
@@ -162,15 +144,13 @@ exports.getdataEx = catchAsync(async (req, res, next) => {
 
 exports.ActiveInactive = catchAsync(async (req, res, next) => {
   const _id = req.params.id;
-  const property = await House.findById({ _id }); //house
+  const property = await House.findById({ _id });
   const land = await Land.findById({ _id });
   const hotel = await Hotel.findById({ _id });
   const warehouse = await Warehouse.findById({ _id });
-  // console.log(user);
-  // console.log(user._id);
+
   if (property) {
     if (property.isStatus) {
-      //console.log('hello');
       const currentProperty = await House.findByIdAndUpdate(property._id, {
         $set: { isStatus: false },
       });
@@ -179,7 +159,6 @@ exports.ActiveInactive = catchAsync(async (req, res, next) => {
       });
     }
     if (!property.isStatus) {
-      //console.log('hello');
       const currentProperty = await House.findByIdAndUpdate(property._id, {
         $set: { isStatus: true },
       });
@@ -190,7 +169,6 @@ exports.ActiveInactive = catchAsync(async (req, res, next) => {
   }
   if (land) {
     if (land.isStatus) {
-      //console.log('hello');
       const currentProperty = await Land.findByIdAndUpdate(land._id, {
         $set: { isStatus: false },
       });
@@ -199,7 +177,6 @@ exports.ActiveInactive = catchAsync(async (req, res, next) => {
       });
     }
     if (!land.isStatus) {
-      //console.log('hello');
       const currentProperty = await Land.findByIdAndUpdate(land._id, {
         $set: { isStatus: true },
       });
@@ -210,7 +187,6 @@ exports.ActiveInactive = catchAsync(async (req, res, next) => {
   }
   if (hotel) {
     if (hotel.isStatus) {
-      //console.log('hello');
       const currentProperty = await Hotel.findByIdAndUpdate(hotel._id, {
         $set: { isStatus: false },
       });
@@ -219,7 +195,6 @@ exports.ActiveInactive = catchAsync(async (req, res, next) => {
       });
     }
     if (!hotel.isStatus) {
-      //console.log('hello');
       const currentProperty = await Hotel.findByIdAndUpdate(hotel._id, {
         $set: { isStatus: true },
       });
@@ -230,7 +205,6 @@ exports.ActiveInactive = catchAsync(async (req, res, next) => {
   }
   if (warehouse) {
     if (warehouse.isStatus) {
-      //console.log('hello');
       const currentProperty = await Warehouse.findByIdAndUpdate(warehouse._id, {
         $set: { isStatus: false },
       });
@@ -239,7 +213,6 @@ exports.ActiveInactive = catchAsync(async (req, res, next) => {
       });
     }
     if (!warehouse.isStatus) {
-      //console.log('hello');
       const currentProperty = await Warehouse.findByIdAndUpdate(warehouse._id, {
         $set: { isStatus: true },
       });
@@ -252,75 +225,65 @@ exports.ActiveInactive = catchAsync(async (req, res, next) => {
 
 exports.getPropertyInNeighbourhood = catchAsync(async (req, res, next) => {
   const _id = req.params.id;
-  const house = await House.findById({ _id }); //house
+  const house = await House.findById({ _id });
   const land = await Land.findById({ _id });
   const hotel = await Hotel.findById({ _id });
   const warehouse = await Warehouse.findById({ _id });
-  // console.log(user);
-  // console.log(user._id);
+
   let property = [];
   if (house) {
-    // console.log(house.sellerDetails.nearestplace.placename);
     let placename = house.sellerDetails.nearestplace.placename;
-    // console.log(placename);
+
     const findinHouse = await House.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename,
           options: 'm',
         },
       },
     });
 
-    //  console.log(findinHouse);
     for (var i in findinHouse) {
-      // console.log(findinHouse[i]._id);
       property.push(findinHouse[i]._id);
     }
     const findinland = await Land.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename,
           options: 'm',
         },
       },
     });
 
-    // console.log(findinland);
     for (var i in findinland) {
-      // console.log(findinland[i]._id);
       property.push(findinland[i]._id);
     }
     const findinHotel = await Hotel.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename,
           options: 'm',
         },
       },
     });
 
-    //  console.log(findinHotel);
     for (var i in findinHotel) {
-      // console.log(findinHotel[i]._id);
       property.push(findinHotel[i]._id);
     }
     const findinWarehouse = await Warehouse.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename,
           options: 'm',
         },
       },
     });
 
-    //  console.log(findinWarehouse);
     for (var i in findinWarehouse) {
-      console.log(findinWarehouse[i]._id);
       property.push(findinWarehouse[i]._id);
     }
     res.status(200).json({
@@ -331,65 +294,57 @@ exports.getPropertyInNeighbourhood = catchAsync(async (req, res, next) => {
   }
 
   if (land) {
-    // console.log(house.sellerDetails.nearestplace.placename);
     let placename = house.sellerDetails.nearestplace.placename;
-    // console.log(placename);
+
     const findinHouse = await House.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename,
           options: 'm',
         },
       },
     });
 
-    //  console.log(findinHouse);
     for (var i in findinHouse) {
-      // console.log(findinHouse[i]._id);
       property.push(findinHouse[i]._id);
     }
     const findinland = await Land.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename,
           options: 'm',
         },
       },
     });
 
-    // console.log(findinland);
     for (var i in findinland) {
-      // console.log(findinland[i]._id);
       property.push(findinland[i]._id);
     }
     const findinHotel = await Hotel.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename,
           options: 'm',
         },
       },
     });
 
-    //  console.log(findinHotel);
     for (var i in findinHotel) {
-      // console.log(findinHotel[i]._id);
       property.push(findinHotel[i]._id);
     }
     const findinWarehouse = await Warehouse.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename,
           options: 'm',
         },
       },
     });
 
-    //  console.log(findinWarehouse);
     for (var i in findinWarehouse) {
       console.log(findinWarehouse[i]._id);
       property.push(findinWarehouse[i]._id);
@@ -401,65 +356,57 @@ exports.getPropertyInNeighbourhood = catchAsync(async (req, res, next) => {
     });
   }
   if (hotel) {
-    // console.log(house.sellerDetails.nearestplace.placename);
     let placename = house.sellerDetails.nearestplace.placename;
-    // console.log(placename);
+
     const findinHouse = await House.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename,
           options: 'm',
         },
       },
     });
 
-    //  console.log(findinHouse);
     for (var i in findinHouse) {
-      // console.log(findinHouse[i]._id);
       property.push(findinHouse[i]._id);
     }
     const findinland = await Land.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename,
           options: 'm',
         },
       },
     });
 
-    // console.log(findinland);
     for (var i in findinland) {
-      // console.log(findinland[i]._id);
       property.push(findinland[i]._id);
     }
     const findinHotel = await Hotel.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename,
           options: 'm',
         },
       },
     });
 
-    //  console.log(findinHotel);
     for (var i in findinHotel) {
-      // console.log(findinHotel[i]._id);
       property.push(findinHotel[i]._id);
     }
     const findinWarehouse = await Warehouse.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename,
           options: 'm',
         },
       },
     });
 
-    //  console.log(findinWarehouse);
     for (var i in findinWarehouse) {
       console.log(findinWarehouse[i]._id);
       property.push(findinWarehouse[i]._id);
@@ -471,67 +418,65 @@ exports.getPropertyInNeighbourhood = catchAsync(async (req, res, next) => {
     });
   }
   if (warehouse) {
-    // console.log(house.sellerDetails.nearestplace.placename);
     let placename = house.sellerDetails.nearestplace.placename;
-    // console.log(placename);
+
     const findinHouse = await House.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename,
           options: 'm',
         },
       },
     });
 
-    //  console.log(findinHouse);
     for (var i in findinHouse) {
-      // console.log(findinHouse[i]._id);
+     
       property.push(findinHouse[i]._id);
     }
     const findinland = await Land.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename, 
           options: 'm',
         },
       },
     });
 
-    // console.log(findinland);
+   
     for (var i in findinland) {
-      // console.log(findinland[i]._id);
+    
       property.push(findinland[i]._id);
     }
     const findinHotel = await Hotel.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename, 
           options: 'm',
         },
       },
     });
 
-    //  console.log(findinHotel);
+   
     for (var i in findinHotel) {
-      // console.log(findinHotel[i]._id);
+    
       property.push(findinHotel[i]._id);
     }
     const findinWarehouse = await Warehouse.find({
       $expr: {
         $regexMatch: {
           input: '$sellerDetails.nearestplace.placename',
-          regex: placename, //Your text search here
+          regex: placename, 
           options: 'm',
         },
       },
     });
 
-    //  console.log(findinWarehouse);
+ 
     for (var i in findinWarehouse) {
-      console.log(findinWarehouse[i]._id);
+    
       property.push(findinWarehouse[i]._id);
     }
     res.status(200).json({
@@ -542,97 +487,11 @@ exports.getPropertyInNeighbourhood = catchAsync(async (req, res, next) => {
   }
 });
 
-// exports.propertySearchByName = catchAsync(async (req, res, next) => {
-//   let searchquery = req.body.searchquery;
-//   console.log(searchquery);
-//   if (searchquery) {
-//     //console.log('this is username');
-//     const data = await House.find({});
-//     res.status(200).json({
-//       status: 'success',
-//       results: data.length,
-//       data: data,
-//     });
-//   }
-//   try {
-//   } catch (error) {
-//     //console.log(error);
-//     res.status(404).json({
-//       status: 'Property NOT FOUND',
-//       // message: error,
-//     });
-//   }
-// });
-
-// exports.propertySearchByName = catchAsync(async (req, res, next) => {
-//   let searchquery = req.body.searchquery;
-//   // let str = searchquery;
-//   // let substr = '@';
-//   // console.log(str.includes(substr));
-//   console.log(searchquery);
-
-//   //const _id = searchquery;
-//   //console.log('length' + _id.length);
-//   try {
-//     if (mongoose.Types.ObjectId.isValid(searchquery)) {
-//       //console.log('this is id');
-//       const house = await House.findById(searchquery);
-//       // console.log(house.length);
-//       res.status(200).json({
-//         status: 'success',
-//         results: house.length,
-//         data: house,
-//       });
-//     }
-//     // if (str.includes(substr)) {
-//     //   //console.log('this is email');
-//     //   const user = await House.findOne({ email: searchquery });
-//     //   console.log(user);
-//     //   res.status(200).json({
-//     //     status: 'success',
-//     //     results: user.length,
-//     //     data: user,
-//     //   });
-//     // }
-//     if (!mongoose.Types.ObjectId.isValid(searchquery)) {
-//       // console.log('this is propertyname');
-//       const house = await House.find({
-//         $expr: {
-//           $regexMatch: {
-//             //input: { $concat: ['$firstname', ' ', '$lastname'] },
-//             input: '$propertyDetails.propertyName',
-//             regex: searchquery, //Your text search here
-//             options: 'i',
-//           },
-//         },
-//       });
-//       if (house.length < 1) {
-//         //console.log('hello');
-//         res.status(404).json({
-//           message: 'Property Not Found! Try another keyword',
-//         });
-//       } else {
-//         res.status(200).json({
-//           status: 'success',
-//           results: house.length,
-//           data: house,
-//         });
-//       }
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     // res.status(404).json({
-//     //   status: 'Property NOT FOUND',
-//     //   message: error,
-//     // });
-//   }
-// });
-
 exports.deleteOneProperty = catchAsync(async (req, res) => {
-  console.log(req.params.id);
+
 
   propertyType = req.body.propertyType;
-  console.log(propertyType);
+
 
   if (propertyType === 'House') {
     const deleteOne = await House.deleteOne({ _id: req.params.id });
@@ -694,12 +553,11 @@ exports.deleteOneProperty = catchAsync(async (req, res) => {
   }
 });
 
-/*Delete Many Property */
 exports.deleteProperty = catchAsync(async (req, res) => {
   var ids = req.body.deleteuser;
-  // console.log('id' + ids);
+
   propertyType = req.body.propertyType;
-  // console.log(propertyType);
+
 
   if (propertyType === 'House') {
     const deletemany = await House.deleteMany({

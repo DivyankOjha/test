@@ -9,7 +9,7 @@ const { isNullOrUndefined } = require('util');
 
 exports.land = catchAsync(async (req, res, next) => {
   const newLand = await Land.create(req.body);
-  console.log(newLand.attributes);
+
   let mainCategory = newLand.attributes.mainCategory;
   let mainlower = mainCategory.toLowerCase();
   let nature = newLand.attributes.nature;
@@ -18,7 +18,6 @@ exports.land = catchAsync(async (req, res, next) => {
   let soillower = soilType.toLowerCase();
   let road = newLand.attributes.road;
   let roadlower = road.toLowerCase();
-  console.log(mainlower);
 
   const updating = await Land.findByIdAndUpdate(
     { _id: newLand._id },
@@ -39,43 +38,39 @@ exports.land = catchAsync(async (req, res, next) => {
         /^data:([A-Za-z-+\/]+);base64,(.+)$/
       ),
       response = {};
-    //console.log(matches);
+
     if (matches.length !== 3) {
       return new Error('Invalid input string');
     }
     response.type = matches[1];
-    console.log(response.type);
+
     response.data = new Buffer.from(matches[2], 'base64');
     let decodedImg = response;
     let imageBuffer = decodedImg.data;
     let type = decodedImg.type;
     const name = type.split('/');
-    console.log(name);
-    const name1 = name[0];
-    console.log(name1);
-    let extension = mime.extension(type);
-    console.log(extension);
-    const rand = Math.ceil(Math.random() * 1000);
-    //Random photo name with timeStamp so it will not overide previous images.
-    const fileName = `${newLand.sellerDetails.sellername}.${extension}`;
-    //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
-    // let fileName = name1 ++ '.' + extension;
+    const name1 = name[0];
+
+    let extension = mime.extension(type);
+
+    const rand = Math.ceil(Math.random() * 1000);
+
+    const fileName = `${newLand.sellerDetails.sellername}.${extension}`;
+
     console.log(fileName);
     let abc = 'abc';
     path3 = path.resolve(`./public/media/admin/land`);
 
     let localpath = `${path3}/${newLand._id}/`;
-    //console.log(localpath);
 
     if (!fs.existsSync(localpath)) {
       fs.mkdirSync(localpath);
     }
-    //console.log(localpath);
 
     fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
     ip = 'cuboidtechnologies.com';
-    //console.log(ip);
+
     const url = `https://${ip}/media/admin/land/${newLand._id}/${fileName}`;
 
     console.log(url);
@@ -94,7 +89,6 @@ exports.land = catchAsync(async (req, res, next) => {
 });
 
 exports.updateLand = catchAsync(async (req, res, next) => {
-  // console.log(req.params.id);
   let sellerlogo = req.body.sellerDetails.sellerlogo;
   if (
     req.body.sellerDetails.sellerlogo &&
@@ -113,49 +107,42 @@ exports.updateLand = catchAsync(async (req, res, next) => {
       );
     }
     if (!d) {
-      console.log(false);
       var matches = await req.body.sellerDetails.sellerlogo.match(
           /^data:([A-Za-z-+\/]+);base64,(.+)$/
         ),
         response = {};
-      //console.log(matches);
+
       if (matches.length !== 3) {
         return new Error('Invalid input string');
       }
       response.type = matches[1];
-      console.log(response.type);
+
       response.data = new Buffer.from(matches[2], 'base64');
       let decodedImg = response;
       let imageBuffer = decodedImg.data;
       let type = decodedImg.type;
       const name = type.split('/');
-      console.log(name);
-      const name1 = name[0];
-      console.log(name1);
-      let extension = mime.extension(type);
-      console.log(extension);
-      const rand = Math.ceil(Math.random() * 1000);
-      //Random photo name with timeStamp so it will not overide previous images.
-      const fileName = `${req.body.sellerDetails.sellername}.${extension}`;
-      //const fileName = `${req.user.firstname}_${Date.now()}_.${extension}`;
 
-      // let fileName = name1 ++ '.' + extension;
-      console.log(fileName);
+      const name1 = name[0];
+
+      let extension = mime.extension(type);
+
+      const rand = Math.ceil(Math.random() * 1000);
+
+      const fileName = `${req.body.sellerDetails.sellername}.${extension}`;
+
       let abc = 'abc';
       path3 = path.resolve(`./public/media/admin/land`);
 
       let localpath = `${path3}/${req.params.id}/`;
-      //console.log(localpath);
 
       if (!fs.existsSync(localpath)) {
         fs.mkdirSync(localpath);
       }
-      //console.log(localpath);
 
       fs.writeFileSync(`${localpath}` + fileName, imageBuffer, 'utf8');
       ip = 'cuboidtechnologies.com';
 
-      //console.log(ip);
       const url = `https://${ip}/media/admin/land/${req.params.id}/${fileName}`;
 
       console.log(url);
@@ -195,7 +182,7 @@ exports.updateLand = catchAsync(async (req, res, next) => {
   );
 
   let mainCategory = req.body.attributes.mainCategory;
-  //  let mainlower = mainCategory.toLowerCase();
+
   let nature = req.body.attributes.nature;
   let naturelower = nature.toLowerCase();
   let soilType = req.body.attributes.soilType;
@@ -214,17 +201,14 @@ exports.updateLand = catchAsync(async (req, res, next) => {
       },
     }
   );
-  //  console.log(gethouse);
+
   res.status(200).json({
     status: 'success',
-    //    results: gethouse.length,
     data: updating,
   });
 });
-//Pagination done
+
 exports.getAllland = catchAsync(async (req, res) => {
-  const limit = parseInt(req.query.limit);
-  const skip = parseInt(req.query.skip);
   const land = await Land.find(); //.skip(skip).limit(limit);
   res.status(200).json({
     status: 'success',
@@ -236,17 +220,10 @@ exports.getAllland = catchAsync(async (req, res) => {
 });
 exports.filterbydate = catchAsync(async (req, res) => {
   let { startDate, endDate } = req.body;
-  const limit = parseInt(req.query.limit);
-  const skip = parseInt(req.query.skip);
 
-  //console.log(endDate + 'T' + '00:00:00');
   const users = await Land.find({
     createdAt: { $gte: startDate, $lte: endDate + 'T' + '23:59:59' },
-    // createdAt: { $lt: endDate },
   });
-  //.skip(skip)
-  //  .limit(limit);
-  // console.log('users: ' + users);
 
   res.status(200).json({
     status: 'success',
@@ -256,53 +233,32 @@ exports.filterbydate = catchAsync(async (req, res) => {
 });
 
 exports.propertySearchByName = catchAsync(async (req, res, next) => {
-  const limit = parseInt(req.query.limit);
-  const skip = parseInt(req.query.skip);
   let searchquery = req.body.searchquery;
-  // let str = searchquery;
-  // let substr = '@';
-  // console.log(str.includes(substr));
+
   console.log(searchquery);
 
-  //const _id = searchquery;
-  //console.log('length' + _id.length);
   try {
     if (mongoose.Types.ObjectId.isValid(searchquery)) {
-      //console.log('this is id');
       const house = await Land.findById(searchquery);
-      // console.log(house.length);
       res.status(200).json({
         status: 'success',
         results: house.length,
         data: house,
       });
     }
-    // if (str.includes(substr)) {
-    //   //console.log('this is email');
-    //   const user = await Land.findOne({ email: searchquery });
-    //   console.log(user);
-    //   res.status(200).json({
-    //     status: 'success',
-    //     results: user.length,
-    //     data: user,
-    //   });
-    // }
+
     if (!mongoose.Types.ObjectId.isValid(searchquery)) {
-      // console.log('this is propertyname');
       const house = await Land.find({
         $expr: {
           $regexMatch: {
-            //input: { $concat: ['$firstname', ' ', '$lastname'] },
             input: '$propertyDetails.propertyName',
-            regex: searchquery, //Your text search here
+            regex: searchquery,
             options: 'm',
           },
         },
       });
-      //  .skip(skip)
-      // .limit(limit);
+
       if (house.length < 1) {
-        //console.log('hello');
         res.status(200).json({
           message: 'Property Not Found! Try another keyword',
         });
@@ -316,16 +272,10 @@ exports.propertySearchByName = catchAsync(async (req, res, next) => {
     }
   } catch (error) {
     console.log(error);
-    // res.status(404).json({
-    //   status: 'Property NOT FOUND',
-    //   message: error,
-    // });
   }
 });
 
 exports.ajaxSearch = catchAsync(async (req, res, next) => {
-  const limit = parseInt(req.query.limit);
-  const skip = parseInt(req.query.skip);
   let searchquery = req.body.searchquery;
   let lowersearchquery = searchquery.toLowerCase();
 
@@ -335,24 +285,11 @@ exports.ajaxSearch = catchAsync(async (req, res, next) => {
       {
         'sellerDetails.location': { $regex: lowersearchquery, $options: 'ism' },
       },
-      // {
-      //   'sellerDetails.nearestplace.placename': {
-      //     $regex: lowersearchquery,
-      //     $options: 'ism',
-      //   },
-      // },
     ],
   };
 
-  const searchResult = await Land.find(
-    query
-    // $expr: {
-    //   $regexMatch: {
-    //     input: '$sellerDetails.location',
-    //     regex: lowersearchquery, //Your text search here
-    //     options: 'm',
-    //   },
-    // },
+  const searchResult = await Land.find(query).distinct(
+    'sellerDetails.location'
   );
 
   res.status(200).json({

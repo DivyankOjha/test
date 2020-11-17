@@ -1,6 +1,5 @@
 const catchAsync = require('./../utils/catchAsync');
 const AllAttributes = require('../models/allAttributes.model');
-const { update } = require('../models/allAttributes.model');
 
 exports.postAttributes = catchAsync(async (req, res, next) => {
   const attributes = await AllAttributes.create({});
@@ -25,14 +24,8 @@ exports.setActiveInactiveAttributes = catchAsync(async (req, res, next) => {
     runValidators: true,
   });
 
-  //console.log(update1);
-  //console.log(attributes.house);
-  // console.log(user._id);
-  //console.log('test ' + update1);
-
   res.status(200).json({
     status: 'success',
     attributes,
   });
-  // if (attributes)
 });

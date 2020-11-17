@@ -38,7 +38,6 @@ const createSendToken = (user, statusCode, req, res) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-  //  console.log('email' + emailsettings.host);
   const newUser = await User.create(req.body);
   const emailsettings = await Email.findById({
     _id: '5f2e3d86d15a133adc74df50',
@@ -59,22 +58,13 @@ exports.signup = catchAsync(async (req, res, next) => {
   });
 
   const url = `https://cuboidtechnologies.com/login/${token}`;
-  //const url = `${req.protocol}://${req.get('host')}/api/login/${token}`;
-  //const url = `http://localhost:3002/api/users/confirmation/${token}`;
+
   var mailOptions = {
-    from: `CUBOID <noreply@CUBOID.com>`, //CUBOID <${emailsettings.username}>`,
+    from: `CUBOID <noreply@CUBOID.com>`,
     to: newUser.email,
     subject: 'Account Verification',
     html: `Please click this link to confirm you email: <a href="${url}">${url}</a>  <br>
     <p>click here to verify your email : <a href="${url}" target="_blank"><button style="background-color:rgb(72, 21, 192); color:aliceblue">Verify!</p>`,
-
-    // text:
-    //   'Hello,\n\n' +
-    //   'Please verify your account by clicking the link: \nhttp://' +
-    //   req.headers.host +
-    //   '/confirmation/' +
-    //   token +
-    //   '.\n',
   };
   transporter.sendMail(mailOptions, function (err) {
     if (err) {
@@ -83,34 +73,12 @@ exports.signup = catchAsync(async (req, res, next) => {
       console.log('Mail sent to: ' + newUser.email);
     }
   });
-  //  res
-  //    .status(200)
-  // .send('A verification email has been sent to ' + newUser.email + '.');
-  // .send('A verification email has been sent to ' + user.email + '.');
 
   createSendToken(newUser, 201, req, res);
-
-  // res.status(201).json({
-  //   status: 'success',
-  //   token,
-  //   data: {
-  //     user: newUser,
-  //   },
-  // });
 });
 exports.activateAccount = catchAsync(async (req, res, next) => {
-  //1. getting token and check if its there/exists
-
-  // if (
-  //   req.headers.authorization &&
-  //   req.headers.authorization.startsWith('Bearer')
-  // ) {
-  //   token = req.headers.authorization.split(' ')[1];
-  // }
   tokenparams = req.params.token;
   const token = tokenparams.toString();
-
-  console.log('token :  ' + token);
 
   if (!token) {
     return next(
@@ -119,7 +87,7 @@ exports.activateAccount = catchAsync(async (req, res, next) => {
   }
   //2. Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log(decoded);
+
   //3. check if user still exists
 
   const user = await User.findByIdAndUpdate(
@@ -133,8 +101,6 @@ exports.activateAccount = catchAsync(async (req, res, next) => {
     }
   );
 
-  console.log(user);
-
   if (!user) {
     return next(
       new AppError('The user belonging to the token does no longer exist', 200)
@@ -147,6 +113,7 @@ exports.activateAccount = catchAsync(async (req, res, next) => {
     );
   }
   return res.send({
+    status: 'success',
     message: 'verified',
   });
 });
@@ -160,8 +127,7 @@ exports.login = catchAsync(async (req, res, next) => {
   }
   // 2) Check if user exists && password is correct
   const user = await User.findOne({ email }).select('+password');
-  console.log(user.passsword);
-  //console.log(user.correctPassword(password, user.password));
+
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 200));
   }
@@ -191,7 +157,6 @@ exports.extSignup = catchAsync(async (req, res, next) => {
   // }
 
   const newUser = await User.create(req.body);
-  console.log(newUser._id);
 
   const user = await User.findByIdAndUpdate(
     {
@@ -203,8 +168,6 @@ exports.extSignup = catchAsync(async (req, res, next) => {
       },
     }
   );
-  console.log(user);
-  console.log('newUser:' + newUser);
 
   const token = signToken(newUser._id);
 
@@ -223,7 +186,6 @@ exports.extLogin = catchAsync(async (req, res, next) => {
   }
   // 2) Check if user exists && password is correct
   const user = await User.findOne({ email });
-  console.log(user._id);
 
   if (!user) {
     return next(new AppError('Incorrect email', 200));
@@ -235,22 +197,17 @@ exports.extLogin = catchAsync(async (req, res, next) => {
 
 exports.SignupLogin = catchAsync(async (req, res, next) => {
   const { firstname, lastname, email, imagepath } = req.body;
-  console.log(firstname, lastname, email, imagepath);
 
   if (!email) {
     return next(new AppError('Please provide email ', 400));
   }
   const user = await User.findOne({ email });
-  console.log(user);
 
   if (user) {
-    console.log('user found');
-    // res.status(200).json({ message: 'found' });
     createSendToken(user, 200, req, res);
   }
 
   if (!user) {
-    console.log('registering user');
     const user = await User.create(req.body);
     const updateuser = await User.findByIdAndUpdate(
       {
@@ -283,11 +240,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   ) {
     token = req.headers.authorization.split(' ')[1];
   }
-  // } else if (req.cookies.jwt) {
-  //   token = req.cookies.jwt;
-  // }
-
-  //console.log(('token', token));
 
   if (!token) {
     return next(
@@ -301,7 +253,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   // }
   //2. Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  //console.log(decoded);
+
   //3. check if user still exists
   const currentUser = await User.findById(decoded.id);
 
@@ -321,7 +273,6 @@ exports.protect = catchAsync(async (req, res, next) => {
 });
 
 exports.checkSubscripionStatus = catchAsync(async (req, res, next) => {
-  console.log(req.user.id);
   const checkSubscripion = await User.findById(req.user.id);
   if (!checkSubscripion.isSubscribed) {
     return next(
@@ -336,13 +287,11 @@ exports.checkSubscripionStatus = catchAsync(async (req, res, next) => {
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    // roles ['admin'] role='user'
     if (!roles.includes(req.user.role)) {
       return next(
         new AppError('You do not have permission to perform this action', 403)
       );
     }
-
     next();
   };
 };
@@ -359,24 +308,19 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   //3. send it to user's email
 
   const resetUrl = `https://cuboidtechnologies.com/reset-password/${resetToken}`;
-  // const resetUrl = `${req.protocol}://${req.get(
-  //   'host'
-  // )}/api/users/resetPassword/${resetToken}`;
 
-  //const message = `forgot your password? Submit a PATCH request with you new password and passwordconfirm to: ${resetUrl}.\nIf you didn't forget your password, Please ignore this email!`;
   const message = `<p>We have recieved a request to have your password reset for <b>Cuboid</b>. If you did not make this request, please ignore this email.  <br> 
       <br> To reset your password, please <a href = "${resetUrl}"> <b>Visit this link</b> </a> </p> <hr>  
       <h3> <b>Having Trouble? </b> </h3> 
       <p>If the above link does not work try copying this link into your browser. </p> 
       <p>${resetUrl}</p>  <hr>
       <h3><b> Questions? <b> </h3>
-      <p>Please let us know if there's anything we can help you with by replying to this email or by emailing <b>support@cuboid.com</b></p>
+      <p>Please let us know if there's anything we can help you with by replying to this email or by emailing <b>care@cuboidtechnologies.com</b></p>
       `;
   try {
     await sendEmail({
       email: user.email,
       subject: `Hi, ${user.firstname}, here's how to reset your password. (Valid for 10 mins)`,
-      //  subject: 'Your password reset token (valid for 10 min)',
       message,
     });
 
@@ -388,7 +332,6 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save({ validateBeforeSave: false });
-    console.log(err);
 
     return next(
       new AppError(
@@ -436,7 +379,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1) Get user from collection
   const user = await User.findById(req.user.id).select('+password');
-  console.log(user);
 
   // 2) Check if POSTed current password is correct
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
@@ -454,8 +396,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 });
 
 exports.editUserProfile = catchAsync(async (req, res, next) => {
-  //const user = await User.findById(req.user.id);
-  // console.log(user);
   const user = await User.findByIdAndUpdate(req.user.id, req.body, {
     new: true,
     runValidators: true,
@@ -471,37 +411,14 @@ exports.editUserProfile = catchAsync(async (req, res, next) => {
       user,
     },
   });
-  // if (user) {
-  //   const email = { $set: { email: req.body.email } };
-  //   const user = await User.updateOne(email);
-  //   createSendToken(user, 200, res);
-  // } else {
-  //   return next(new AppError('User not found!'));
-  // }
-
-  // const email = { $set: { email: req.body.email } };
-  // console.log(req.params.id);
-  // console.log(email);
-  // const user = await User.updateOne({ _id: req.params.id }, email);
-  //const user = await User.updateMany({ _id: req.params.id }, user1);
-
-  // user.name = req.body.name;
-  // user.email = req.body.email;
-  // user.mobilenumber = req.body.mobilenumber;
-  //await user.save();
-  // console.log(user);
-
-  //createSendToken(user, 200, res);
 });
 
 exports.reVerificationEmail = catchAsync(async (req, res, next) => {
-  //  console.log('email' + emailsettings.host);
-  console.log(req.body);
   const newUser = await User.findOne({ email: req.body.email });
   if (!newUser) {
     return next(new AppError('No user found with that email', 200));
   }
-  console.log(newUser);
+
   const emailsettings = await Email.findById({
     _id: '5f2e3d86d15a133adc74df50',
   });
@@ -511,7 +428,7 @@ exports.reVerificationEmail = catchAsync(async (req, res, next) => {
   let host = emailsettings.host;
   let user = emailsettings.username;
   let pass = emailsettings.password;
-  //const verify = verifyUser();
+
   var transporter = nodemailer.createTransport({
     service: host,
     auth: {
@@ -521,10 +438,9 @@ exports.reVerificationEmail = catchAsync(async (req, res, next) => {
   });
 
   const url = `https://cuboidtechnologies.com/login/${token}`;
-  //const url = `${req.protocol}://${req.get('host')}/api/login/${token}`;
-  //const url = `http://localhost:3002/api/users/confirmation/${token}`;
+
   var mailOptions = {
-    from: `CUBOID <noreply@CUBOID.com>`, //CUBOID <${emailsettings.username}>`,
+    from: `CUBOID <noreply@CUBOID.com>`,
     to: newUser.email,
     subject: 'Account Verification',
     html: `Please click this link to confirm you email: <a href="${url}">${url}</a>  <br>
@@ -537,18 +453,6 @@ exports.reVerificationEmail = catchAsync(async (req, res, next) => {
       console.log('Mail sent to: ' + newUser.email);
     }
   });
-  //  res
-  //    .status(200)
-  // .send('A verification email has been sent to ' + newUser.email + '.');
-  // .send('A verification email has been sent to ' + user.email + '.');
 
   createSendToken(newUser, 201, req, res);
-
-  // res.status(201).json({
-  //   status: 'success',
-  //   token,
-  //   data: {
-  //     user: newUser,
-  //   },
-  // });
 });
